@@ -24,6 +24,7 @@ runs/
 *.log
 scratch/
 tmp/
+results/raw/*mock*
 
 # --- Sistema ---
 .DS_Store

@@ -129,6 +129,9 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 ## 9. Estado y pendiente inmediato
 
 - **Hecho:** ruta elegida; documento principal (`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`);
-  marco teórico base (`paper/01_marco_teorico.md`); bibliografía (`paper/02_referencias.bib`); repo GitHub.
-- **Pendiente inmediato:** redactar **§1–§3** del paper con el marco teórico; correr el **paso 0** en el Nitro;
-  cerrar la **especificación** de las definiciones.
+  marco teórico base (`paper/01_marco_teorico.md`); **borradores §1–§3** (`paper/secciones/`);
+  bibliografía (`paper/02_referencias.bib`); repo GitHub y `AGENTS.md`;
+  **script del paso 0** (`src/paso0_go_no_go.py`, `--selftest` **OK**: matemática y proposiciones validadas).
+- **Pendiente inmediato:** correr el **paso 0 real en el Nitro** (`--inspect` → completar `Backend.probs()`
+  → `--model kev`); cerrar la **especificación** de las definiciones; revisar y pulir §1–§3 (quitar
+  `\cite` provisionales por el estilo final APA/IEEE).

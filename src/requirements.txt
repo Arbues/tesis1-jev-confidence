@@ -1,0 +1,22 @@
+# Paso 0 — dependencias (Acer Nitro / Mac Mini; NO hacen falta para --selftest)
+#
+# Instalar:  pip install -r src/requirements.txt
+# GPU NVIDIA 6 GB: las versiones CUDA de torch las instala pip por defecto.
+#
+# --- camino real (inferencia) ---
+torch>=2.3
+transformers>=4.44
+huggingface_hub>=0.24
+datasets>=2.20
+safetensors>=0.4
+
+# --- Laya (paquete oficial de la implementación de referencia) ---
+laya>=0.3.20
+
+# --- cuantización 4-bit para los modelos >6 GB (opcional, RTX 4050) ---
+# bitsandbytes>=0.43
+# accelerate>=0.33
+
+# --- notas ---
+# * `--selftest` NO necesita nada de esto: usa solo la stdlib de Python 3.
+# * Los pesos se descargan al caché local (~/.cache/huggingface) y NO se versionan.

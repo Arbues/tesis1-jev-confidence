@@ -1,11 +1,8 @@
 # Guía de trabajo para agentes (handoff)
 
-> **Nota:** este es el documento que pediste como "AGENTS.md o algo así". El nombre `AGENTS.md` está
-> protegido por el sistema (requiere aprobación explícita) y ese prompt expiró, así que quedó aquí como
-> `docs/guia-agentes.md`. Si quieres el `AGENTS.md` canónico —el que otros CLIs de agente auto-cargan—,
-> pídelo y aprueba el prompt cuando salga.
->
-> Para un agente **Hermes**, el archivo auto-cargado de este proyecto es **`.hermes.md`** y ya está actualizado.
+> **Nota:** ya existe el **`AGENTS.md` canónico** en la raíz (ese es el que auto-cargan los CLIs de agente).
+> Este documento queda como **versión resumida** de handoff. Para un agente **Hermes**, el archivo
+> auto-cargado del proyecto es **`.hermes.md`**.
 
 ---
 

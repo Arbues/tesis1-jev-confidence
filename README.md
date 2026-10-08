@@ -64,7 +64,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `README.md` | **este archivo** — punto de entrada y estado consolidado | vigente |
 | `STATE.json` | El mismo estado en formato máquina-legible para agentes | vigente |
 | `.hermes.md` | Contexto de proyecto que Hermes auto-carga al arrancar | vigente |
-| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib` | **vigente** |
+| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `secciones/` (borradores §1–§3) | **vigente** |
 | `docs/guia-agentes.md` | Guía de trabajo/handoff para agentes (AGENTS.md canónico pendiente de aprobación) | vigente |
 | **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`** | **DOCUMENTO PRINCIPAL VIGENTE**: la Ruta 1 (artefacto, diseño de medición, marco teórico, paso 0, plan) | **vigente** |
 | `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
@@ -80,7 +80,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 El repo tiene un **árbol de trabajo** para ir llenando poco a poco, sin ser rígido:
 
 ```
-paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, figures/, tables/)
+paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, secciones/ §1-§3, figures/, tables/)
 src/        CÓDIGO (librería jev-conf-metrics, pipeline) — se trabaja en el Acer Nitro
 results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz de transferencia)
 data/       Datasets descargados (los pesados NO se versionan)
