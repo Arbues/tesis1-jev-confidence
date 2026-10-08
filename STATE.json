@@ -209,7 +209,8 @@
   ],
 
   "archivos": {
-    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (privado) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
+    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PRIVADO; se pasa a publico al tener resultados o el MVP del framework) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
+    "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
     "paper": {
       "plan": "paper/00_plan_del_paper.md",
       "marco_teorico": "paper/01_marco_teorico.md",
