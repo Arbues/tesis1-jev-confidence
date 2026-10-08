@@ -1,0 +1,81 @@
+{
+  "fecha_utc": "2026-10-08T23:09:54.185901+00:00",
+  "python": "3.12.14",
+  "maquina": "Arbues-AxeNitro",
+  "modelos": {
+    "laya:convaiinnovations/laya:typed-decisions": {
+      "backend": "laya",
+      "model_id": "convaiinnovations/laya",
+      "subfolder": "typed-decisions",
+      "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "hf_sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "device": "cuda",
+      "cfg_model_name": "laya-typed-decisions",
+      "temperature": [
+        1.0148024559020996,
+        1.0374259948730469,
+        1.0575125217437744
+      ],
+      "temperature_by_options": {
+        "choice:3-5": 1.7601518630981445,
+        "choice:6-10": 1.0000158548355103,
+        "score:3-5": 1.2514300346374512,
+        "noul:2": 1.983399510383606,
+        "choice:11+": 0.10058280825614929,
+        "choice:2": 1.9063563346862793
+      },
+      "fine_tuned": true,
+      "dataset_sha": "e039ebffcc280174dd354227424fb2b249f191de"
+    },
+    "laya:convaiinnovations/laya:None": {
+      "backend": "laya",
+      "model_id": "convaiinnovations/laya",
+      "subfolder": null,
+      "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "hf_sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "device": "cuda",
+      "cfg_model_name": "rl-agent",
+      "temperature": [
+        1.6369030475616455,
+        1.2514300346374512,
+        1.983399510383606
+      ],
+      "temperature_by_options": {
+        "choice:3-5": 1.7601518630981445,
+        "choice:6-10": 1.0000158548355103,
+        "score:3-5": 1.2514300346374512,
+        "noul:2": 1.983399510383606,
+        "choice:11+": 0.10058280825614929,
+        "choice:2": 1.9063563346862793
+      },
+      "fine_tuned": null,
+      "dataset_sha": "e039ebffcc280174dd354227424fb2b249f191de"
+    },
+    "laya:convaiinnovations/laya:multilingual": {
+      "backend": "laya",
+      "model_id": "convaiinnovations/laya",
+      "subfolder": "multilingual",
+      "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "hf_sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "device": "cuda",
+      "cfg_model_name": "rl-agent",
+      "temperature": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "temperature_by_options": {},
+      "fine_tuned": null,
+      "dataset_sha": "e039ebffcc280174dd354227424fb2b249f191de"
+    },
+    "kev-http:jaredpalmer/kev-0.8b:None": {
+      "backend": "kev-http",
+      "base_url": "http://127.0.0.1:8008",
+      "model": "kev-latest",
+      "model_id": "jaredpalmer/kev-0.8b",
+      "hf_sha": "bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+      "repo_commit": "5e42a7a03f28134853dd3ff77461457e921e5ec1",
+      "dataset_sha": "e039ebffcc280174dd354227424fb2b249f191de"
+    }
+  }
+}
