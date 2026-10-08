@@ -68,7 +68,7 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 
 | # | Artefacto | Dónde vive | Estado |
 |---|---|---|---|
-| 1 | `spec` de las definiciones | `paper/01_marco_teorico.md` §5 | en progreso |
+| 1 | `spec` de las definiciones | `paper/03_especificacion_confidence.md` | **hecho** |
 | 2 | Librería `jev-conf-metrics` + tests | `src/jev_conf_metrics/` (Nitro) | por crear |
 | 3 | Matriz de transferencia | `results/matriz_transferencia.csv` (Nitro) | por medir |
 | 4 | Dataset de mediciones crudas | `results/mediciones_crudas.jsonl` (Nitro) | por medir |
@@ -131,6 +131,7 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 - **Hecho:** ruta elegida; documento principal (`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`);
   marco teórico base (`paper/01_marco_teorico.md`); **borradores §1–§3** (`paper/secciones/`);
   bibliografía (`paper/02_referencias.bib`); repo GitHub y `AGENTS.md`;
+  **especificación formal** de las definiciones (`paper/03_especificacion_confidence.md`);
   **script del paso 0** (`src/paso0_go_no_go.py`, `--selftest` **OK**: matemática y proposiciones validadas).
 - **Pendiente inmediato:** correr el **paso 0 real en el Nitro** (`--inspect` → completar `Backend.probs()`
   → `--model kev`); cerrar la **especificación** de las definiciones; revisar y pulir §1–§3 (quitar

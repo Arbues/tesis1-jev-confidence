@@ -214,9 +214,11 @@
     "paper": {
       "plan": "paper/00_plan_del_paper.md",
       "marco_teorico": "paper/01_marco_teorico.md",
-      "referencias": "paper/02_referencias.bib"
+      "referencias": "paper/02_referencias.bib",
+      "especificacion": "paper/03_especificacion_confidence.md (formaliza cada definicion, con proposiciones y tests de conformidad)",
+      "secciones": "paper/secciones/01_introduccion.md, 02_trabajos_relacionados.md, 03_marco_teorico.md (borradores)"
     },
-    "guia_agentes": "docs/guia-agentes.md (el AGENTS.md canonico quedo pendiente de aprobacion)",
+    "guia_agentes": "AGENTS.md (raiz, canonico) + docs/guia-agentes.md (version resumida)",
     "punto_de_entrada": "README.md",
     "estructura": "paper/ (el paper) · eje-2-jev-opensource/ (eje ACTIVO) · docs/ · eje-1-jepa/ (fuera de alcance) · contexto/ · audit/{saturacion,jev-oss}/ · _descartado/",
     "eje_2_jev_oss": {
