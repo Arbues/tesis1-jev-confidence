@@ -133,6 +133,33 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
   bibliografía (`paper/02_referencias.bib`); repo GitHub y `AGENTS.md`;
   **especificación formal** de las definiciones (`paper/03_especificacion_confidence.md`);
   **script del paso 0** (`src/paso0_go_no_go.py`, `--selftest` **OK**: matemática y proposiciones validadas).
-- **Pendiente inmediato:** correr el **paso 0 real en el Nitro** (`--inspect` → completar `Backend.probs()`
-  → `--model kev`); cerrar la **especificación** de las definiciones; revisar y pulir §1–§3 (quitar
-  `\cite` provisionales por el estilo final APA/IEEE).
+- **Pendiente:** correr el **paso 0 real en el Nitro** (`--inspect` → completar `Backend.probs()` →
+  `--model kev`); revisar y pulir §1–§3 (citas al estilo final APA/IEEE). El **alcance ya está congelado**
+  (§10). Lo único que toca al autor: el **DOI del pre-registro** (requiere su cuenta OSF/Zenodo).
+
+---
+
+## 10. Alcance congelado (04-oct-2026)
+
+Decisiones tomadas por el agente conforme a D1–D5 (el autor delegó la resolución del alcance).
+
+**10.1. Definiciones que ENTRAN en la matriz.** Las analíticas `C_max` (p_max), `C_Jev`, `C_ent` (Laya) y
+`C_mar` (margen); `C_noul` en el bloque `n = 2`. Transformaciones evaluadas: `AnyJev L0` y `L1` aplicadas
+sobre las anteriores.
+
+**10.2. Solo catálogo (fuera de la matriz).** `act_probability` (DEF-6; opaca, AUROC 0.30 → sin señal) y
+`open-decision-ai` (DEF-8; opaca).
+
+**10.3. Modelos (≤ 6 GB en el Nitro).** Laya 421M (base), Laya-typed-decisions, Kev-0.8B, tinyjev 596M.
+Extensión (Mac Mini / 4-bit): Kev-4B, jev-lite (Gemma 4 E4B), Jeff-1.
+
+**10.4. Datasets (ya etiquetados — D2).** Primarios: `LocalLLaMA/typed-decisions` (benchmark),
+`jaredpalmer/kev-suites`, `Banking77`, `CLINC150`, `SST-5` (ordinal), `alisawuffles/WANLI` (NLI).
+Extensión: `MedHallu`, `AG News`, `DAIR Emotion`.
+
+**10.5. Parámetros de la medición.** `q = 0.80` (principal), `0.50` y `0.95` (sensibilidad); reporte por
+cardinalidad `n`; métricas accuracy / Brier / NLL / ECE (igual ancho e igual masa) / AUROC por definición +
+`Δ` de transferencia; agregación con bootstrap (IC 95 %) y corrección FDR.
+
+**10.6. Lo único que necesita al autor.** (i) crear el **DOI del pre-registro** (OSF/Zenodo, su cuenta);
+(ii) correr el **paso 0** en el Nitro (o dar acceso). Nada de esto bloquea el clonado del repo.

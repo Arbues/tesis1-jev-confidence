@@ -228,14 +228,17 @@ Cada definición se acompaña de estas aserciones (semilla fija, `Δ_n` muestrea
 
 ---
 
-## 7. Decisiones abiertas (requieren al autor)
+## 7. Decisiones congeladas (04-oct-2026)
 
-| # | Decisión | Recomendación |
+El alcance se **congeló** conforme a D1–D5 (el autor delegó su resolución; el detalle completo está en
+`paper/00_plan_del_paper.md` §10).
+
+| # | Decisión | Resuelto |
 |---|---|---|
-| A1 | ¿Entra `act_probability` (DEF-6)? | **Solo catálogo**, no en la matriz (sin señal: AUROC 0.30) |
-| A2 | ¿Entran las mixtas (DEF-7 L1, DEF-8)? | **Sí** para `AnyJev L0/L1` (compatibles con D2). `open-decision-ai`: solo catálogo |
-| A3 | ¿Cardinalidades de la matriz? | Reportar por `n` separado; destacar el salto `n=2 → n≥3` |
-| A4 | Cobertura objetivo `q` | una principal (`0.80`) + `0.50` y `0.95` como sensibilidad |
+| A1 | `act_probability` (DEF-6) | **Solo catálogo** (opaca, AUROC 0.30 → sin señal). Fuera de la matriz |
+| A2 | Mixtas (DEF-7 L1, DEF-8) | `AnyJev L0/L1` **entran** (compatibles con D2). `open-decision-ai` (DEF-8): solo catálogo |
+| A3 | Cardinalidades | Reporte **por `n`**; se destaca el salto `n=2 → n≥3` (Proposición 3) |
+| A4 | Cobertura objetivo `q` | principal **0.80**; sensibilidad **0.50** y **0.95** |
 
 ---
 
