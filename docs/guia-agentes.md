@@ -70,11 +70,13 @@ src/ · results/         (por crear en el Nitro)
 
 ## 6. Cómo continuar (por dónde)
 
-1. **En el Nitro:** `git clone <repo>` y correr el **paso 0 go/no-go** (Laya 421M + Kev-0.8B, verificar
-   `output_tokens = 0`, reproducir un ECE sobre `typed-decisions`). Registrar versión + hash.
-2. **Congelar** definiciones, datasets y cobertura objetivo.
-3. **Librería + pipeline + matriz** (§4 del plan) → commitear artefactos con hash.
-4. **En el t440:** redactar §1–§3 del paper con `paper/01_marco_teorico.md`. Pre-registro con DOI antes de la corrida principal.
+1. **En el Nitro:** ✅ **paso 0 hecho el 08-oct-2026 → GO** (Laya 3 checkpoints + Kev-0.8B sobre
+   `typed-decisions`; `output_tokens = 0` verificado; 5 métricas publicadas reproducidas con |Δ| ≤ 0.003).
+   Informe: `results/paso0_informe.md`. El pipeline real es `src/paso0_go_no_go.py --model laya|kev|raw`.
+2. **Librería `jev-conf-metrics`** + tests (extraer lo ya validado en el script) → **matriz de transferencia**
+   → commitear artefactos con hash.
+3. **En el t440:** redactar §1–§3 del paper con `paper/01_marco_teorico.md`. **Pre-registro con DOI** antes de
+   la corrida principal — lo único que necesita el autor.
 
 ---
 

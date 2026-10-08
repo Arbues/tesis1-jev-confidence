@@ -72,6 +72,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `eje-2-jev-opensource/08_estudio_ecosistema.md` | Estudio de campo: 20+ modelos con pesos, taxonomía por rigor, tabla de calibración, huecos | vigente |
 | `audit/jev-oss/` | 13 READMEs crudos de las implementaciones + 2 categorías del índice curado | dato |
 | `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) + datos + scripts | ver §7 |
+| **`results/`** | **ARTEFACTOS de medición**: `raw/` = mediciones crudas del paso 0 (una fila por decisión, con `row_hash`) + resúmenes; `paso0_informe.md` = **informe go/no-go** | **vigente** |
 | `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
 | `eje-1-jepa/`, `_descartado/` | **EJE DESCARTADO — FUERA DE ALCANCE.** No leer, no usar, no proponer subrutas | descartado |
 
@@ -212,13 +213,13 @@ metrología.** De ahí D1 y la Ruta 1.
 | # | Paso | Nota |
 |---|---|---|
 | 0 | **Elegir la ruta** | ✅ hecho: **Ruta 1** (04-oct-2026) |
-| 1 | **Paso 0 go/no-go (medio día)**: descargar Laya 421M y Kev-0.8B, correr `choice`/`score`/`noul` verificando `output_tokens = 0`, y reproducir un ECE sobre `typed-decisions` | **Ejecutar en la 4050 o el Mac Mini**, nunca en el t440 |
-| 2 | **Congelar** la lista de definiciones y datasets, y la cobertura objetivo | Alcance (autor) |
-| 3 | **Especificación formal** de cada definición | Redacción (autor) |
-| 4 | **Librería** `jev-conf-metrics` + tests de conformidad | Automático |
-| 5 | **Pipeline de medición**: pesos abiertos + datasets ya etiquetados (cero etiquetado propio) | Automático |
-| 6 | **Matriz + dataset de mediciones crudas** (versión + hash por fila) | Entregable citable |
-| 7 | **Pre-registro con DOI** antes de la corrida principal | Hace creíble el desenlace |
+| 1 | **Paso 0 go/no-go** | ✅ **hecho: GO (08-oct-2026, Acer Nitro)**. Laya (3 checkpoints) + Kev-0.8B sobre las 2.000 decisiones de `typed-decisions`: `output_tokens = 0` verificado y **las 5 métricas publicadas reproducidas con \|Δ\| ≤ 0.003**. Informe: **`results/paso0_informe.md`** · artefactos crudos en `results/raw/`. Ver §13 |
+| 2 | **Congelar** la lista de definiciones y datasets, y la cobertura objetivo | Alcance (autor) — **ya congelado** en `paper/00_plan_del_paper.md` §10 |
+| 3 | **Especificación formal** de cada definición | ✅ hecho: `paper/03_especificacion_confidence.md` |
+| 4 | **Librería** `jev-conf-metrics` + tests de conformidad | Automático — el cálculo de las definiciones ya vive en `src/paso0_go_no_go.py` (falta extraerlo a librería con tests) |
+| 5 | **Pipeline de medición**: pesos abiertos + datasets ya etiquetados (cero etiquetado propio) | ✅ **funcionando** (`src/paso0_go_no_go.py`: Laya + Kev + control crudo) |
+| 6 | **Matriz + dataset de mediciones crudas** (versión + hash por fila) | Mediciones crudas del paso 0 ya en `results/raw/`; falta la **matriz de transferencia** |
+| 7 | **Pre-registro con DOI** antes de la corrida principal | **Lo único que necesita al autor** (cuenta OSF/Zenodo) |
 | 8 | **Fijar el título definitivo** al cerrar la especificación | Ver §2 |
 | 9 | **Estudio del objetivo RLCD** (scoring rules, REINFORCE, ruido) en paralelo | Nivel que el Taller convierte en teoría |
 
@@ -262,6 +263,46 @@ Naeini et al. 2015 (ECE) · Chow 1970 / Geifman & El-Yaniv 2017 (predicción sel
 
 **Cierres de septiembre (por qué el resultado es un artefacto):** arXiv:2609.38850 · `LakoreAI/sev` (RLCD) ·
 arXiv:2609.33209 · arXiv:2609.26758 · arXiv:2609.26550 · arXiv:2609.33843 (Laya) · arXiv:2609.30216 (*Jev in the Wild*).
+
+---
+
+## 13. Paso 0 — resultado (08-oct-2026, Acer Nitro)
+
+**GO.** Los tres criterios del paso 0 se cumplen y, de paso, el objeto de la Ruta 1 ya se ve en los datos.
+Informe completo: **`results/paso0_informe.md`** (se regenera con `python src/paso0_informe.py`).
+
+| criterio del paso 0 | resultado |
+|---|---|
+| Correr los tres primitivos en pesos abiertos | ✅ Laya (3 checkpoints) + Kev-0.8B sobre las **2.000 decisiones** de `typed-decisions` (split `test`, 400 casos) |
+| Verificar `output_tokens = 0` | ✅ en Laya, todas las filas · **Kev reporta ese campo con otro significado** (recuento de tokens de la respuesta serializada: 869.310 en total) |
+| Reproducir un número publicado | ✅ **las 5 métricas** del README de Laya, con **\|Δ\| ≤ 0.003** en `laya-typed-decisions` (ECE 0.213→**0.2157**, accuracy 0.766→**0.7685**, Brier 0.062→**0.0615**, soft acc 0.471→**0.4707**, score MAE 0.242→**0.2424**) |
+
+**Lo que ya se ve, y es el objeto de la tesis:** la misma corrida, las mismas 2.000 decisiones, el mismo
+modelo — el ECE cambia según la definición de `confidence`:
+
+| checkpoint | `p_max` | Jev `(n·p−1)/(n−1)` | entropía `1−H/log k` | margen |
+|---|---|---|---|---|
+| `laya-typed-decisions` | **0.216** | 0.426 | **0.577** | 0.511 |
+| `laya` (english) | 0.177 | 0.166 | 0.230 | 0.194 |
+| `laya-multilingual` | 0.318 | 0.255 | 0.212 | 0.244 |
+| `kev-0.8b` | **0.061** | 0.228 | 0.363 | 0.274 |
+
+Factor **2,7×** entre la definición más benévola y la más severa sobre el mismo dato.
+
+**Dos hallazgos de metrología que salen del código, no de un blog** (D4):
+
+1. **La `choice_confidence` de Kev ES la fórmula de Jev.** `(p_max − 1/K)/(1 − 1/K) ≡ (K·p_max − 1)/(K − 1)`,
+   verificado numéricamente. Estaban registradas como definiciones distintas → por la Proposición 1, **ese par
+   transfiere el umbral de forma exacta**.
+2. **El mismo campo `output_tokens` tiene tres significados**: Jev y Laya = 0 (no hay generación); Kev =
+   *«billing-style figure: tokens of the serialised answers»* (`kev/api.py:163`).
+
+**Entorno (D5):** `Arbues-AxeNitro` (WSL2) + RTX 4050 6 GB, costo $0. Detalle reproducible en
+`src/README.md` — ojo: el `torch` de PyPI es **cu130** y el driver del Nitro es 556.19 (**CUDA 12.5**);
+hay que instalar el build `cu126` o la GPU no arranca.
+
+**Pendiente inmediato:** el **DOI del pre-registro** (cuenta OSF/Zenodo del autor) y la **matriz de
+transferencia de umbrales** (`src/jev_conf_metrics/` + `results/matrix/`).
 
 ---
 

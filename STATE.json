@@ -1,8 +1,8 @@
 {
   "proyecto": "Tesis 1 - Ciencia de la Computacion (FC-UNI)",
   "autor": "Arbues Enrique Perez V.",
-  "ultima_actualizacion": "2026-10-04",
-  "estado": "RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
+  "ultima_actualizacion": "2026-10-08",
+  "estado": "PASO 0 EJECUTADO: GO (08-oct-2026, Acer Nitro). Laya (3 checkpoints) + Kev-0.8B medidos sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado y las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003. Informe: results/paso0_informe.md. RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
 
   "decision_2026_10_04": {
     "que_paso": "El autor eligio la RUTA 1 entre las rutas vigentes, tras un sondeo en vivo que reordeno el panorama.",
@@ -30,6 +30,40 @@
     ]
   },
 
+  "paso0_2026_10_08": {
+    "nota": "Paso 0 go/no-go ejecutado en el Acer Nitro (RTX 4050 6 GB, WSL2). Veredicto: GO. Informe completo regenerable: results/paso0_informe.md (lo genera src/paso0_informe.py desde results/raw/).",
+    "criterios": {
+      "primitivos_corren": "SI. Laya (3 checkpoints) y Kev-0.8B sobre LocalLLaMA/typed-decisions split=test: 400 casos / 2000 decisiones (4 flujos x 100 casos).",
+      "output_tokens_cero": "SI en Laya (todas las filas de los 3 checkpoints). En Kev NO: el mismo campo significa otra cosa (ver hallazgos).",
+      "ece_publicado_reproducido": "SI. Las 5 metricas del README de Laya en los 3 checkpoints. laya-typed-decisions: ECE 0.213 -> 0.2157; accuracy 0.766 -> 0.7685; Brier 0.062 -> 0.0615; soft acc 0.471 -> 0.4707; score MAE 0.242 -> 0.2424. |delta| <= 0.003 en las cinco."
+    },
+    "convenciones_descubiertas": {
+      "metricas_de_Laya": "soft accuracy y Brier se calculan CONTRA LA DISTRIBUCION COMPLETA DEL PROFESOR, no contra la etiqueta: soft acc = sum(p_modelo * p_profesor) y Brier = sum((p_modelo - p_profesor)^2). El ECE si se calcula sobre answer_confidence = max(p) con 15 bins de igual ancho (laya.common.ece_score, replicado en ece_laya()). Verificado por coincidencia exacta con los numeros publicados.",
+      "laya_multilingual_discrepa": "ECE +0.033 y score MAE +0.074 respecto a lo publicado. Es el checkpoint que NO trae temperaturas ajustadas (temperature=[1.0,1.0,1.0], temperature_by_options={}). Queda documentado, no corregido."
+    },
+    "hallazgos": [
+      "La choice_confidence de Kev ES la formula de Jev: (p_max - 1/K)/(1 - 1/K) == (K*p_max - 1)/(K - 1), verificado numericamente para K=2,3,4,7,12. Estaban registradas como definiciones distintas. Por la Proposicion 1, ese par transfiere el umbral de forma EXACTA.",
+      "La score_confidence de Kev es una TERCERA familia: max(0, 1 - E|nivel - moda| / D), dispersion ordinal. Kev declara que ambas formulas espejan el adaptador de referencia de TypeSafe (system-one-adapter 0.2.1).",
+      "Kev NO emite campo `confidence` en `noul` (igual que Jev): 400 de sus 2000 filas no lo tienen.",
+      "El campo output_tokens tiene TRES significados: Jev y Laya = 0 (no hay generacion); Kev = 'billing-style figure: tokens of the serialised answers' (kev/api.py:163) -> 869310 en total, max 480 por llamada.",
+      "El ECE de la MISMA corrida cambia por definicion. laya-typed-decisions: pmax 0.2157, Jev 0.4256, entropia 0.5766, margen 0.5109 (factor 2.7x entre extremos). kev-0.8b: pmax 0.0610, Jev 0.2283, entropia 0.3627, margen 0.2739. english: 0.1766 / 0.1661 / 0.2301 / 0.1941. multilingual: 0.3175 / 0.2551 / 0.2118 / 0.2436.",
+      "laya-typed-decisions trae una temperatura INVALIDA para choice:11+ (0.1006, un endurecedor ~10x) que el propio paquete rechaza y sustituye por 0.5 con un RuntimeWarning: 'Treat confidence from the affected entries as uncalibrated'."
+    ],
+    "entorno": {
+      "maquina": "Arbues-AxeNitro (WSL2), RTX 4050 Laptop 6 GB",
+      "python_torch": "Python 3.12.14 + torch 2.14.1+cu126",
+      "trampa": "El torch que instala PyPI es cu130 y el driver del Nitro es 556.19 (CUDA 12.5): 'CUDA initialization: The NVIDIA driver on your system is too old'. Hay que instalar torch==2.14.1+cu126 desde https://download.pytorch.org/whl/cu126 o la GPU no arranca.",
+      "kev": "No se carga con transformers (es LoRA + cabeza pointer sobre Qwen/Qwen3.5-0.8B-Base). Se sirve desde github.com/jaredpalmer/kev (commit 5e42a7a0) con `uv run --extra serve python -m kev.serve --run jaredpalmer/kev-0.8b --port 8008`; el script le habla por HTTP (/v1/systemone).",
+      "costo_usd": "0"
+    },
+    "artefactos": {
+      "informe": "results/paso0_informe.md",
+      "crudos": "results/raw/paso0_raw_{laya_typed-decisions,laya_english,laya_multilingual,kev_kev-latest}.jsonl (una fila por decision, con las 4 definiciones calculadas sobre la misma distribucion + model + model_revision + row_hash)",
+      "resumenes": "results/raw/paso0_summary_*.json",
+      "versiones": "results/raw/paso0_versions.json (sha del Hub por modelo + commit del repo kev)"
+    }
+  },
+
   "reglas_de_diseno_del_autor": {
     "D1_artefacto_no_hallazgo": "El resultado es un ARTEFACTO (instrumento, dataset de mediciones crudas, especificacion, tabla que se regenera con un comando) y no un HALLAZGO.",
     "D2_minimo_trabajo_manual": "Cero anotacion, cero etiquetado humano, cero crowdsourcing, cero kappa. El autor solo define alcance, decide y redacta. Prohibida toda ruta cuyo nucleo sea el unico hueco abierto (ground truth humano con kappa).",
@@ -49,6 +83,9 @@
       "Laya choice/score: 1 - H(p)/log k",
       "Laya noul: max(p,1-p)",
       "Laya answer_confidence: pmax",
+      "Kev choice_confidence: (pmax - 1/K)/(1 - 1/K) == la formula de Jev (IDENTIFICADA el 08-oct-2026)",
+      "Kev score_confidence: max(0, 1 - E|nivel - moda| / D) - familia ordinal, tercera clase",
+      "laya-multilingual: sin temperaturas ajustadas (T=1.0) - declararlo en la matriz",
       "Laya action.act_probability (cabeza aprendida)",
       "jev-lite: pmax",
       "AnyJev: raw / L0 / L1",
@@ -187,7 +224,11 @@
     "jebadiah: la temperatura de score aprendida de targets del profesor transfiere a typed-decisions pero empeora la calibracion en rubricas humanas",
     "Jev Does Not Play Dice: sobre un dado justo y oculto, Jev elige la cara 1 en 400 de 400",
     "AnyJev: un noul de spam da 0.62 con el contenido y 0.70 con N-A (prior de posicion); dividiendo por ese prior el juicio se invierte a 0.41",
-    "Laya expone una cabeza 'act' con act_probability que no tiene senal util (AUROC 0.30); se recomienda gatear con confidence (AUROC 0.77)"
+    "Laya expone una cabeza 'act' con act_probability que no tiene senal util (AUROC 0.30); se recomienda gatear con confidence (AUROC 0.77)",
+    "MEDIDO el 08-oct-2026: la choice_confidence de Kev es ALGEBRAICAMENTE la formula de Jev, (K*pmax-1)/(K-1); estaban registradas como definiciones distintas",
+    "MEDIDO el 08-oct-2026: el campo output_tokens tiene TRES significados (Jev/Laya = 0 porque no hay generacion; Kev = recuento de tokens de la respuesta serializada, 869310 en 2000 decisiones)",
+    "MEDIDO el 08-oct-2026: sobre la MISMA corrida de laya-typed-decisions (2000 decisiones), el ECE va de 0.2157 (pmax) a 0.5766 (entropia normalizada) - factor 2.7x por cambiar la definicion",
+    "MEDIDO el 08-oct-2026: las metricas publicadas de Laya (soft accuracy, Brier) se calculan contra la DISTRIBUCION DEL PROFESOR, no contra la etiqueta"
   ],
 
   "riesgo_principal": {
@@ -197,13 +238,13 @@
 
   "siguientes_pasos": [
     {"n": 0, "paso": "ELEGIDA la Ruta 1 (hecho el 04-oct-2026)", "documento": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md"},
-    {"n": 1, "paso": "PASO 0 go/no-go (medio dia): descargar Laya 421M y Kev-0.8B, correr los tres primitivos, verificar output_tokens = 0 y reproducir un ECE publicado sobre typed-decisions. EJECUTAR EN LA 4050 O EL MAC MINI", "criterio": "si falla tras 3 intentos, parar"},
-    {"n": 2, "paso": "Congelar la lista de definiciones y de datasets, y la cobertura objetivo", "responsable": "autor (alcance)"},
-    {"n": 3, "paso": "Especificacion formal de cada definicion", "responsable": "autor (redaccion)"},
-    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad", "responsable": "agente"},
-    {"n": 5, "paso": "Pipeline de medicion (pesos abiertos + datasets ya etiquetados)", "responsable": "agente"},
-    {"n": 6, "paso": "Matriz + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente"},
-    {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal"},
+    {"n": 1, "paso": "PASO 0 go/no-go: HECHO el 08-oct-2026 en el Acer Nitro -> GO. Laya (3 checkpoints) + Kev-0.8B sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado; las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003", "documento": "results/paso0_informe.md", "artefactos": "results/raw/"},
+    {"n": 2, "paso": "Congelar la lista de definiciones y de datasets, y la cobertura objetivo", "responsable": "autor (alcance)", "estado": "ya congelado en paper/00_plan_del_paper.md seccion 10"},
+    {"n": 3, "paso": "Especificacion formal de cada definicion", "responsable": "autor (redaccion)", "estado": "hecho: paper/03_especificacion_confidence.md"},
+    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad (extraer lo ya validado en src/paso0_go_no_go.py)", "responsable": "agente"},
+    {"n": 5, "paso": "Pipeline de medicion (pesos abiertos + datasets ya etiquetados)", "responsable": "agente", "estado": "funcionando en src/paso0_go_no_go.py (Laya + Kev + control crudo)"},
+    {"n": 6, "paso": "Matriz de transferencia + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente", "estado": "crudas del paso 0 hechas; falta la matriz"},
+    {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal", "estado": "UNICO PENDIENTE QUE NECESITA AL AUTOR (cuenta OSF/Zenodo)"},
     {"n": 8, "paso": "Fijar el titulo definitivo al cerrar la especificacion", "responsable": "autor"},
     {"n": 9, "paso": "Estudio del objetivo RLCD en paralelo - nivel que el Taller convierte en teoria"}
   ],
@@ -211,7 +252,8 @@
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PRIVADO; se pasa a publico al tener resultados o el MVP del framework) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
-    "alcance_congelado": "paper/00_plan_del_paper.md seccion 10 (04-oct-2026, decidido por el agente conforme a D1-D5): definiciones analiticas (pmax, Jev, entropia, margen) + AnyJev L0/L1 en la matriz; act_probability y open-decision-ai solo catalogo; modelos Laya 421M / Laya-typed-decisions / Kev-0.8B / tinyjev; datasets typed-decisions, kev-suites, Banking77, CLINC150, SST-5, WANLI; q=0.80 (+0.50/0.95). Unico pendiente del autor: DOI del pre-registro (OSF/Zenodo) y correr el paso 0 en el Nitro.",
+    "alcance_congelado": "paper/00_plan_del_paper.md seccion 10 (04-oct-2026, decidido por el agente conforme a D1-D5): definiciones analiticas (pmax, Jev, entropia, margen) + AnyJev L0/L1 en la matriz; act_probability y open-decision-ai solo catalogo; modelos Laya 421M / Laya-typed-decisions / Kev-0.8B / tinyjev; datasets typed-decisions, kev-suites, Banking77, CLINC150, SST-5, WANLI; q=0.80 (+0.50/0.95). El paso 0 ya se corrio (08-oct-2026); el UNICO pendiente del autor es el DOI del pre-registro (OSF/Zenodo).",
+    "resultados": "results/ - paso0_informe.md (informe go/no-go regenerable con src/paso0_informe.py) + raw/ (mediciones crudas del paso 0, una fila por decision con row_hash) + matrix/ (vacio; la matriz de transferencia esta por construir)",
     "paper": {
       "plan": "paper/00_plan_del_paper.md",
       "marco_teorico": "paper/01_marco_teorico.md",

@@ -177,19 +177,23 @@ propias) · arXiv:2609.33843 (el estado del arte más cercano a tu medición).
 
 ---
 
-## 10. Paso 0 — go/no-go (medio día)
+## 10. Paso 0 — go/no-go (medio día) · ✅ **HECHO: GO (08-oct-2026)**
 
-1. Descargar **Laya 421M** (`huggingface.co/convaiinnovations/laya`, Apache-2.0) y **Kev-0.8B**
-   (`huggingface.co/jaredpalmer/kev-0.8b`, Apache-2.0).
-2. Correr una inferencia de los tres primitivos (`choice`, `score`, `noul`) y verificar
-   `output_tokens = 0`.
-3. **Reproducir un número publicado:** el ECE de Laya sobre `LocalLLaMA/typed-decisions`. Se registran
-   **los dos** valores del ecosistema (card: 0.466 → 0.081 con refit; arXiv:2609.33843: 0.214 en el
-   checkpoint tal cual) y se documenta con cuál coincide la reproducción.
-4. Registrar versiones y hashes en `STATE.json`.
+Resultado en **`results/paso0_informe.md`** (regenerable con `src/paso0_informe.py`); mediciones crudas en
+`results/raw/`. Resumen:
 
-- Si [3] sale → arranca la ruta. Si falla tras 3 intentos → parar y cambiar de perspectiva (regla del autor).
-- **Ejecutar en la RTX 4050 o el Mac Mini**, nunca en el `thinkpad-t440` (sin GPU).
+1. ✅ Descargados y corridos **Laya** (los tres checkpoints, `convaiinnovations/laya`) y **Kev-0.8B**
+   (`jaredpalmer/kev-0.8b`, servido desde su repo) sobre las **2.000 decisiones** de `typed-decisions`.
+2. ✅ **`output_tokens = 0`** verificado en todas las filas de Laya. **Kev reporta ese mismo campo con otro
+   significado** (*billing-style*: tokens de la respuesta serializada) → hallazgo de metrología.
+3. ✅ **Reproducido el número publicado:** las 5 métricas del README de Laya en los tres checkpoints, con
+   **|Δ| ≤ 0.003** en `laya-typed-decisions` (ECE 0.213→**0.2157**, accuracy 0.766→**0.7685**).
+4. ✅ Versiones y hashes en `results/raw/paso0_versions.json` (sha del Hub por modelo + commit del repo de Kev).
+
+Hallazgo adicional: la **`choice_confidence` de Kev es algebraicamente la fórmula de Jev**
+(`(K·p_max−1)/(K−1)`) → por la Proposición 1, ese par **transfiere el umbral de forma exacta**.
+
+- **Ejecutado en el Acer Nitro (RTX 4050)**, nunca en el `thinkpad-t440` (sin GPU).
 
 ---
 

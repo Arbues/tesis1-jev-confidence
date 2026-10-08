@@ -132,10 +132,13 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
   marco teórico base (`paper/01_marco_teorico.md`); **borradores §1–§3** (`paper/secciones/`);
   bibliografía (`paper/02_referencias.bib`); repo GitHub y `AGENTS.md`;
   **especificación formal** de las definiciones (`paper/03_especificacion_confidence.md`);
-  **script del paso 0** (`src/paso0_go_no_go.py`, `--selftest` **OK**: matemática y proposiciones validadas).
-- **Pendiente:** correr el **paso 0 real en el Nitro** (`--inspect` → completar `Backend.probs()` →
-  `--model kev`); revisar y pulir §1–§3 (citas al estilo final APA/IEEE). El **alcance ya está congelado**
-  (§10). Lo único que toca al autor: el **DOI del pre-registro** (requiere su cuenta OSF/Zenodo).
+  **paso 0 ejecutado en el Acer Nitro (08-oct-2026) → GO** (`results/paso0_informe.md`): Laya (3 checkpoints)
+  y Kev-0.8B sobre las 2.000 decisiones de `typed-decisions`, `output_tokens = 0` verificado y **las 5
+  métricas publicadas de Laya reproducidas con |Δ| ≤ 0.003** (ECE 0.213→0.2157, accuracy 0.766→0.7685,
+  Brier 0.062→0.0615, soft acc 0.471→0.4707, score MAE 0.242→0.2424).
+- **Pendiente:** **librería `jev-conf-metrics`** + tests (extraer lo ya validado en `src/paso0_go_no_go.py`);
+  **matriz de transferencia**; revisar y pulir §1–§3 (citas al estilo final APA/IEEE). El **alcance ya está
+  congelado** (§10). Lo único que toca al autor: el **DOI del pre-registro** (requiere su cuenta OSF/Zenodo).
 
 ---
 
