@@ -1,0 +1,295 @@
+{
+  "proyecto": "Tesis 1 - Ciencia de la Computacion (FC-UNI)",
+  "autor": "Arbues Enrique Perez V.",
+  "ultima_actualizacion": "2026-10-04",
+  "estado": "RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
+
+  "decision_2026_10_04": {
+    "que_paso": "El autor eligio la RUTA 1 entre las rutas vigentes, tras un sondeo en vivo que reordeno el panorama.",
+    "ruta_elegida": "RUTA 1 - Metrologia y transferencia del campo confidence",
+    "razon": "Es la unica que sigue abierta como INSTRUMENTO (no como hallazgo), es artefacto puro (D1), no exige anotacion (D2), y su matematica cabe entera en el marco teorico. El autor confirmo que el aporte interno/teorico puede vivir en el marco teorico, no en el resultado.",
+    "equipos_disponibles": {
+      "mac_mini": "Apple Silicon, memoria unificada - sirve para modelos de 4B a 9B en 4-bit",
+      "acer_nitro": "RTX 4050 Laptop 6 GB - modelos pequenos (Laya 421M, Kev 0.8B, tinyjev) con encoder congelado y features cacheadas",
+      "thinkpad_t440": "SIN GPU (solo iGPU Intel). Corre Hermes: orquesta y redacta, NO ejecuta inferencia",
+      "nota": "Frontera de computo del autor = Mac Mini + RTX 4050. Nada mas, nada menos. Nada de nube."
+    }
+  },
+
+  "sondeo_2026_10_04": {
+    "nota": "Verificado en vivo. Cambia el riesgo de dos de las tres rutas del documento 10.",
+    "rutas_viejas_estado": {
+      "B_replica_RLCD": "CASI OCUPADA. Le Duc Minh, 'What RLCD's RL Term Actually Does' (26-sep-2026): reprodujo RLCD sobre Laya tensor-for-tensor, 30 corridas, ablaciones (CE-only vs RL+CE vs RL-only, barrido de sigma, de pesos de recompensa y de composicion), codigo + resultados por corrida + checkpoints publicados (github.com/LakoreAI/sev; HF LakoreAI/laya-typed-decisions-ce-1024; HF minhleduc/rlcd-e2-checkpoints). Conclusion: el termino RL es el gradiente de la entropia cruzada suavizada con ruido (lema de Stein) y hace la inferencia sobre-confianza; la unica palanca real fue el presupuesto de tokens de opcion.",
+      "C_cartografia": "CASI OCUPADA. arXiv:2609.30216 'Jev in the Wild: A Data-Driven Analysis of the Jev Model's Functionality, Applications and Ecosystem' (2170 proyectos de GitHub al 22-sep-2026, taxonomia, propositos, distribucion de atencion). Ademas awesomejev.com se refresca a diario y hay varios directorios curados (yibie/awesome-jev, BeatAPI 228 proyectos).",
+      "A_metrologia": "SIGUE ABIERTA como instrumento. Solo hay anecdotas (rohitghumare.com midio la formula de Jev sobre 30 tickets y hallo que la confidence de Laya difiere hasta 0.24) y medicion DENTRO de una sola definicion (arXiv:2609.33843, q=pmax, un modelo). La MATRIZ sistematica entre definiciones x modelos x datasets no existe."
+    },
+    "hallazgos_utiles": [
+      "Hay mas definiciones de confidence de las que decian las notas previas: Jev (n*pmax-1)/(n-1); Laya choice/score = 1 - H(p)/log k; Laya noul = max(p,1-p); Laya answer_confidence = pmax; Laya action.act_probability (cabeza aprendida, sin senal util, AUROC 0.30); jev-lite pmax; AnyJev raw/L0/L1; logit-classifier prior aprendido; open-decision-ai confidence propia.",
+      "Reconciliacion de la contradiccion 'Laya sobre-confiada vs sub-confiada': el model card (0.466 -> 0.081 con refit) es macro-ECE sobre sus suites; arXiv:2609.33843 mide el checkpoint TAL CUAL se distribuye (con su tabla de temperatura por numero de opciones plegada dentro del peso) y encuentra SUB-confianza (ECE 0.214; T=0.469 la lleva a 0.037) por un defecto de configuracion. No se contradicen: miden artefactos distintos.",
+      "Modelos/herramientas nuevos detectados: open-decision-ai (50M, ECE 0.047, abstencion), AnyJev (Nokia, Apache-2.0, capa sin entrenamiento), daf-jev (toolkit, Zenodo)."
+    ]
+  },
+
+  "reglas_de_diseno_del_autor": {
+    "D1_artefacto_no_hallazgo": "El resultado es un ARTEFACTO (instrumento, dataset de mediciones crudas, especificacion, tabla que se regenera con un comando) y no un HALLAZGO.",
+    "D2_minimo_trabajo_manual": "Cero anotacion, cero etiquetado humano, cero crowdsourcing, cero kappa. El autor solo define alcance, decide y redacta. Prohibida toda ruta cuyo nucleo sea el unico hueco abierto (ground truth humano con kappa).",
+    "D3_maxima_automatizacion": "Descarga de pesos, corridas de inferencia, metricas, tablas, figuras, BibTeX, libreria y pre-registro los hace el agente.",
+    "D4_referencias_y_comparaciones": "Cada cifra con su fuente; cada fila declara si fue medida aqui o es auto-reportada.",
+    "D5_costo_y_hardware": "Costo 0 USD. Equipos: Mac Mini + RTX 4050 Laptop 6 GB. El thinkpad-t440 no tiene GPU (orquesta). Nada de nube ni GPUs de 80 GB.",
+    "nota_matematica": "El autor aclaro que la matematica NO tiene que ser el nucleo del resultado: es suficiente con que este en el marco teorico del paper. El resultado de Tesis 1 puede ser metrologia/instrumento."
+  },
+
+  "ruta_elegida_ruta_1": {
+    "objeto": "El campo confidence en modelos de decision tipo Jev de pesos abiertos",
+    "problema": "El mismo campo tiene varias definiciones incompatibles y no existe estudio sistematico de transferencia de umbrales entre ellas",
+    "artefacto": "Especificacion formal + libreria jev-conf-metrics con tests de conformidad + matriz de transferencia de umbrales (definicion x definicion x modelo x dataset) + dataset de mediciones crudas + script regenerador + figura heatmap",
+    "por_que_sobrevive": "Es el instrumento, no el hallazgo; quien afirme que los umbrales no transfieren tendra que citar la matriz (patron Guo et al. 2017)",
+    "definiciones_a_cubrir": [
+      "Jev (n*pmax-1)/(n-1)",
+      "Laya choice/score: 1 - H(p)/log k",
+      "Laya noul: max(p,1-p)",
+      "Laya answer_confidence: pmax",
+      "Laya action.act_probability (cabeza aprendida)",
+      "jev-lite: pmax",
+      "AnyJev: raw / L0 / L1",
+      "logit-classifier: prior aprendido",
+      "open-decision-ai: confidence propia"
+    ],
+    "modelos": "Laya base 421M, Laya-typed-decisions 421M, Laya-multilingual 322M, Kev 0.5B/0.8B, Nimble-9B (4-bit), Jeff-1 (Qwen3-4B), jev-lite (Gemma 4 E4B), tinyjev 596M, chaoliangUNSW Jev-Style 2B, open-decision-150m, + control AnyJev/Qwen3-8B",
+    "datasets": "typed-decisions, kev-suites, WANLI, Banking77, CLINC150, MedHallu, AG News, SST-5, DAIR Emotion (todos ya etiquetados; cero anotacion propia)",
+    "documento": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md"
+  },
+
+  "objeto_de_estudio": {
+    "referencia_cerrada": {
+      "que_es": "Jev (TypeSafe System One), anunciado el 18-sep-2026. Modelo actual jev-1.13.0",
+      "fundador": "TypeSafe AI, fundada por Diogo Almeida (co-inventor de RLHF)",
+      "primitivos": {
+        "choice": "cual de N opciones; devuelve opcion + probabilities + confidence; limite 255 opciones",
+        "score": "donde en una escala ordenada; devuelve score fraccional + legend + probabilities + confidence; 2-10 niveles",
+        "noul": "es verdad esto; devuelve probabilidad 0.0-1.0; NO tiene campo confidence"
+      },
+      "mecanica": "No genera texto: termina la inferencia con un readout de los logits en la posicion de cada etiqueta y aplica softmax solo sobre las etiquetas permitidas. output_tokens = 0 por construccion. Latencia 70-500 ms. Precio 0.042 USD por millon de tokens de entrada, coste de salida cero",
+      "estado_compartido_preguntas_aisladas": "Todas las preguntas de una llamada se evaluan contra la misma codificacion del estado, en paralelo y sin verse entre si. Consecuencia: no hay distribucion conjunta",
+      "confidence": "En choice/score NO es la probabilidad ganadora: mide concentracion. Formula publicada (n*pmax - 1)/(n - 1)",
+      "sin_test_time_compute": "No hay bucle de decodificacion. Debilidades declaradas: aritmetica, conteo, comparacion de fechas, multi-hop, lectura literal",
+      "prompt_congelado": "Mover un salto de linea mueve los logits y con ellos los umbrales ya calibrados",
+      "lo_que_no_publica": "Ni paper, ni perdida, ni dataset, ni pesos, ni un solo numero de calibracion (ni ECE ni diagrama de fiabilidad)"
+    },
+    "RLCD": {
+      "nombre": "Reinforcement Learning for Calibrated Decisions",
+      "exploracion": "Ruido gaussiano de media cero inyectado en los logits, proyectado a media cero para no distorsionar el softmax",
+      "sigma": "Annealing de 1.0 a 0.3",
+      "recompensa": "Reglas de puntuacion estrictamente propias: log score con suelo -9.21 + 0.75 * spherical score; para score ordinal se resta el Ranked Probability Score",
+      "ventaja": "Media y desviacion de la recompensa sobre el grupo de candidatos ruidosos, estilo GRPO (8 candidatos)",
+      "actualizacion": "REINFORCE con baseline de grupo, sin cross-entropy supervisada (en la practica se anade CE suave contra distribuciones del profesor)",
+      "despues": "Se ajusta una temperatura con la red congelada minimizando cross-entropy",
+      "propiedad_buscada": "La recompensa esperada se maximiza solo si el modelo reporta sus probabilidades verdaderas",
+      "analisis_cerrado": "El termino RL equivale al gradiente de la cross-entropy suavizada con ruido (lema de Stein) y hace la inferencia sobre-confianza; la unica palanca real fue el presupuesto de tokens de opcion (LakoreAI/sev, 26-sep-2026)"
+    },
+    "laya": {
+      "que_es": "La implementacion de RLCD de referencia y el unico proyecto que publica el bucle completo",
+      "repo": "github.com/NandhaKishorM/laya",
+      "hf": "convaiinnovations/laya",
+      "licencia": "Apache-2.0",
+      "tamano": "421M (ModernBERT-large 395M + cabeza propia)",
+      "arquitectura_de_decision": "Cabeza que puntua un token [MASK] colocado en la opcion",
+      "encoder_congelable": "Si: las features se cachean y todo el barrido cabe en la RTX 4050 de 6 GB",
+      "numeros_declarados": "in-task macro accuracy 0.838 / macro ECE 0.060; zero-shot 0.651 / 0.207; intent routing 0.991 / ECE 0.009",
+      "dato_clave": "Macro-ECE 0.466 -> 0.081 refiteando una temperatura por (tipo de pregunta, numero de opciones). PERO arXiv:2609.33843 mide el checkpoint TAL CUAL se distribuye y lo encuentra SUB-confiado (0.214) por su tabla de temperatura plegada; T=0.469 -> 0.037",
+      "limites": "zero-shot typed-decisions 0.362; ordinal score el mas debil (SST-5 0.372); solo ingles el checkpoint base; khmer 0.000 de precision con 0.952 de confianza",
+      "confidence": "1 - entropia normalizada (choice/score); max(p,1-p) para noul (NO la formula de Jev)",
+      "predecesor": "arXiv:2503.23303 (SalesRLAgent, Nandakishor M, 30-mar-2025)"
+    },
+    "variantes": {
+      "laya-multilingual": "mmBERT-base, 322M, 1024 tokens (hasta 8192), 100+ idiomas",
+      "laya-typed-decisions": "421M, fine-tuned sobre el split de entrenamiento del benchmark"
+    }
+  },
+
+  "ecosistema_verificado": {
+    "escala": "152 repos (corte 25-sep) -> 2170 proyectos segun arXiv:2609.30216 (corte 22-sep); 20+ modelos con pesos, 2 datasets de entrenamiento abiertos, ~30 arneses independientes",
+    "modelos_por_rigor": {
+      "tier_A": {
+        "Laya": "Apache-2.0, 421M, receta completa",
+        "Kev": "github.com/jaredpalmer/kev, Apache-2.0, Qwen3.5/3.8, 0.5B a 27B (7 checkpoints), kev-0.8B entrena en 4 GB de VRAM",
+        "Nimble": "bespokelabsai/nimble, Qwen3.5-9B + LoRA, 2676 train + 324 retenidos publicados, sin licencia declarada",
+        "SemIf": "TheoLeeCJ/SemIf-OpenJev, MIT, temperatura por carga de trabajo con ECE fuera de muestra"
+      },
+      "tier_B": {
+        "Jeff-1": "GestaltLabs, LoRA Qwen3-4B, la comparacion en vivo mas rigurosa: 9730 filas humanas, Jeff 0.8183 vs Jev 0.8283, ECE 0.0807 vs 0.0932",
+        "jev-lite": "vagmi/jev-lite, QLoRA NF4 sobre Gemma 4 E4B, ECE 0.019; hallazgo: p_max gana a la entropia normalizada (AUROC 0.816)",
+        "jebadiah": "frontier-infra/jebadiah-9b-v0/v1, la temperatura de score aprendida de targets del profesor EMPEORA la calibracion en rubricas humanas; la v1 lo corrige"
+      },
+      "tier_C_sin_entrenamiento": ["daseinlabs/open-jev (MIT, Gemma 3 4B)", "anyjev (Nokia, Apache-2.0, niveles raw/L0/L1)", "logit-classifier (Qwen3-VL-4B)", "tydex (ECE 0.350 a 0.023 con T=2.7)", "tinyjev (596M)", "chaoliangUNSW/Jev-Style-Qwen3.5-2B (ECE 0.017)", "open-decision-ai (50M, ECE 0.047)"],
+      "descartar": ["openjevpro (PolyForm Noncommercial, no es open source)", "vagmi/jevlite (repo sin licencia)", "envios en bloque sin pruebas"]
+    },
+    "datasets": {
+      "LocalLLaMA/typed-decisions": "2000 decisiones / 4 flujos de trabajo, Apache-2.0 (el benchmark compartido)",
+      "jaredpalmer/kev-suites": "suites de evaluacion congeladas",
+      "nimble": "2676 train + 324 retenidos",
+      "alisawuffles/WANLI": "CC-BY-4.0",
+      "externos": "Banking77, CLINC150, MedHallu (1000 items), AG News, SST-5, DAIR Emotion"
+    },
+    "arneses": ["ASSAY-001", "jev-ood-calibration", "jev-acento", "jev-verify", "jev-orderby-bench", "jevcal", "DecisionBench", "Jev Does Not Play Dice", "AnyJev bench", "jev-fanout-bench", "jevals.com", "Jeff"]
+  },
+
+  "el_dato_central_del_eje": {
+    "hallazgo": "El ecosistema abierto refuto empiricamente la premisa central de Jev: donde hay calibracion, vino de un ajuste de temperatura post-hoc sobre datos propios, no del objetivo de entrenamiento",
+    "tabla_ece_verificada": {
+      "Jev_1_13_0": "NO PUBLICADO por TypeSafe",
+      "Laya_sin_refit": 0.466,
+      "Laya_con_refit": 0.081,
+      "Laya_in_task": 0.060,
+      "Laya_checkpoint_tal_cual": 0.214,
+      "Jeff_1": 0.0807,
+      "Jev_segun_Gestalt": 0.0932,
+      "jev_lite": 0.019,
+      "tydex_gemma4_31b": "0.350 a 0.023 con T=2.7"
+    },
+    "lectura": "En todos los proyectos que midieron con honestidad, la calibracion NO vino del metodo de entrenamiento: vino de un ajuste de temperatura post-hoc sobre datos etiquetados propios"
+  },
+
+  "deltas_2026_10_01_cierre_de_huecos": {
+    "hueco_1_por_que_RLCD_no_calibra": "CERRADO. arXiv:2609.38850 + reproduccion independiente (LakoreAI/sev) con el lema de Stein",
+    "hueco_2_metrologia_de_confidence": "PARCIALMENTE CERRADO. Estudio pre-registrado UCLA (DENTRO de una definicion). La transferencia ENTRE definiciones sigue abierta -> es el objeto de la RUTA 1",
+    "hueco_3_sesgo_de_posicion_y_etiqueta": "CERRADO. arXiv:2609.26758 + arXiv:2609.26550",
+    "hueco_4_ground_truth_humano_con_kappa": "ABIERTO pero excluido por D2 (anotacion manual)",
+    "hueco_5_descomposicion_del_error": "CERRADO en lo esencial",
+    "hueco_6_coherencia_negacion_axiomas": "CERRADO. arXiv:2609.33209",
+    "calibracion_de_Laya": "CERRADO. arXiv:2609.33843",
+    "cartografia_del_ecosistema": "OCUPADA. arXiv:2609.30216 (Jev in the Wild) + awesomejev.com",
+    "consecuencia": "El 'cuanto' y el 'por que' estan ocupados. Lo que queda libre es el INSTRUMENTO de metrologia. De ahi D1 y la RUTA 1"
+  },
+
+  "computo_y_costo": {
+    "gpu": "Mac Mini (Apple Silicon) + RTX 4050 Laptop 6 GB. Los modelos 4B-9B en 4-bit; los pequenos (Laya 421M, Kev 0.8B) en la 4050 con encoder congelado y features cacheadas",
+    "servidor": "thinkpad-t440 SIN GPU: solo orquesta y redacta",
+    "costo_monetario_usd": "0",
+    "cuello_real": "horas de inferencia, no dinero"
+  },
+
+  "cadena_de_decisiones": {
+    "elegido": "RUTA 1 (metrologia y transferencia del campo confidence) sobre el eje 2 (Jev/Laya), 04-oct-2026",
+    "descartados": [
+      {"candidato": "Eje 1 - JEPA / LeWM / DINO", "razon": "DESCARTADO POR INSTRUCCION EXPRESA del autor. Fuera de alcance"},
+      {"candidato": "Ruta B (replica controlada de RLCD)", "razon": "Casi ocupada por LakoreAI/sev (26-sep-2026): ablacion completa con codigo, 30 corridas y checkpoints. Riesgo alto"},
+      {"candidato": "Ruta C (cartografia del ecosistema)", "razon": "Casi ocupada por arXiv:2609.30216 (Jev in the Wild) + directorios refrescados a diario"},
+      {"candidato": "Eje 2, hueco 4 (ground truth humano con kappa)", "razon": "Unico hueco abierto pero exige anotacion manual, prohibida por D2"}
+    ]
+  },
+
+  "hechos_verificados_del_eje": [
+    "El ecosistema abierto refuto empiricamente la premisa central de Jev: TypeSafe no ha publicado ni un ECE",
+    "Hay varias definiciones incompatibles del campo confidence y cero estudios sistematicos de transferencia de umbrales entre ellas",
+    "Una sola distribucion de 3 opciones da tres numeros distintos segun la definicion (0.288 / 0.3199 / 0.5253)",
+    "Laya: el model card dice over-confident (0.466->0.081); el checkpoint tal cual se distribuye es SUB-confiado (0.214) por su tabla de temperatura plegada",
+    "jebadiah: la temperatura de score aprendida de targets del profesor transfiere a typed-decisions pero empeora la calibracion en rubricas humanas",
+    "Jev Does Not Play Dice: sobre un dado justo y oculto, Jev elige la cara 1 en 400 de 400",
+    "AnyJev: un noul de spam da 0.62 con el contenido y 0.70 con N-A (prior de posicion); dividiendo por ese prior el juicio se invierte a 0.41",
+    "Laya expone una cabeza 'act' con act_probability que no tiene senal util (AUROC 0.30); se recomienda gatear con confidence (AUROC 0.77)"
+  ],
+
+  "riesgo_principal": {
+    "riesgo": "Que la matriz ya exista o que aparezca rapido (el ecosistema muta a diario)",
+    "mitigacion": "Verificado el 04-oct-2026: no existe. La ruta vive de modelos con pesos versionados y hasheados, no de la ventana temporal; version + hash por fila; pre-registro con DOI antes de la corrida principal"
+  },
+
+  "siguientes_pasos": [
+    {"n": 0, "paso": "ELEGIDA la Ruta 1 (hecho el 04-oct-2026)", "documento": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md"},
+    {"n": 1, "paso": "PASO 0 go/no-go (medio dia): descargar Laya 421M y Kev-0.8B, correr los tres primitivos, verificar output_tokens = 0 y reproducir un ECE publicado sobre typed-decisions. EJECUTAR EN LA 4050 O EL MAC MINI", "criterio": "si falla tras 3 intentos, parar"},
+    {"n": 2, "paso": "Congelar la lista de definiciones y de datasets, y la cobertura objetivo", "responsable": "autor (alcance)"},
+    {"n": 3, "paso": "Especificacion formal de cada definicion", "responsable": "autor (redaccion)"},
+    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad", "responsable": "agente"},
+    {"n": 5, "paso": "Pipeline de medicion (pesos abiertos + datasets ya etiquetados)", "responsable": "agente"},
+    {"n": 6, "paso": "Matriz + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente"},
+    {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal"},
+    {"n": 8, "paso": "Fijar el titulo definitivo al cerrar la especificacion", "responsable": "autor"},
+    {"n": 9, "paso": "Estudio del objetivo RLCD en paralelo - nivel que el Taller convierte en teoria"}
+  ],
+
+  "archivos": {
+    "repositorio": "@Arbues · repo privado (se rellena al crearlo). Se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
+    "paper": {
+      "plan": "paper/00_plan_del_paper.md",
+      "marco_teorico": "paper/01_marco_teorico.md",
+      "referencias": "paper/02_referencias.bib"
+    },
+    "guia_agentes": "docs/guia-agentes.md (el AGENTS.md canonico quedo pendiente de aprobacion)",
+    "punto_de_entrada": "README.md",
+    "estructura": "paper/ (el paper) · eje-2-jev-opensource/ (eje ACTIVO) · docs/ · eje-1-jepa/ (fuera de alcance) · contexto/ · audit/{saturacion,jev-oss}/ · _descartado/",
+    "eje_2_jev_oss": {
+      "ruta_elegida": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md (DOCUMENTO PRINCIPAL VIGENTE)",
+      "rutas_propuestas": "eje-2-jev-opensource/10_tres_rutas_tesis1.md (registro de la eleccion)",
+      "fuentes": "eje-2-jev-opensource/FUENTES.md (49 fuentes verificadas)",
+      "estudio": "eje-2-jev-opensource/08_estudio_ecosistema.md"
+    },
+    "eje_1_jepa": "FUERA DE ALCANCE",
+    "descartado": "_descartado/09_ruta1_cartografia_ejecutable.md (ruta JEPA, descartada)",
+    "contexto": ["contexto/04_viabilidad_y_saturacion_ia.md", "contexto/03_portafolio_temas_cc.md", "contexto/00_veredicto_jev_typesafe.md", "contexto/02_tabla_costos_jev.csv"],
+    "auditorias": "audit/saturacion/ (3 informes + datos crudos + scripts)",
+    "readmes_crudos": "audit/jev-oss/ (13 READMEs)"
+  },
+
+  "tema": {
+    "nombre": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev (eje 2, RUTA 1)",
+    "titulo_provisional": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev",
+    "titulo_provisional_en": "Metrology and Threshold Transfer of the confidence Field in Open-Weight Jev-Type Decision Models",
+    "regla_de_estilo_titulo": "sin dos puntos, sin subtitulo, sin signos de interrogacion; frase nominal que declara propiedad + objeto + alcance + tipo de metodo",
+    "titulo_se_fija": "al cerrar la especificacion de la ruta",
+    "tipo_contribucion_tesis1": "instrumento / metrologia (artefacto, no hallazgo)",
+    "formato_tesis": "APA o IEEE (R.R. 1439-2023-UNI)"
+  },
+
+  "marco_teorico_minimo": [
+    "Calibracion, diagramas de fiabilidad, discriminacion vs calibracion (Guo et al. 2017)",
+    "Metricas: ECE (igual ancho vs igual masa), MCE, Brier, NLL (Naeini et al. 2015; Brier 1950)",
+    "Reglas de puntuacion estrictamente propias: log, spherical, RPS (Gneiting & Raftery 2007; Good 1952; Epstein 1969)",
+    "Estadisticos de confianza: pmax, margen, entropia H, entropia normalizada H/log k",
+    "Prediccion selectiva: cobertura, risk-coverage, AURC, abstencion (Chow 1970; Geifman & El-Yaniv 2017; Jitkrittum et al. 2023)",
+    "Calibracion post-hoc: temperature scaling, Platt, isotonic (Guo 2017; Zadrozny & Elkan 2002)",
+    "Conformal prediction (Vovk; Angelopoulos & Bates 2021)",
+    "El objeto: readout de logits, primitivos, output_tokens=0, sin distribucion conjunta",
+    "RLCD: ruido en logits, regla propia, REINFORCE con baseline, temperatura post-hoc",
+    "Estadistica de evaluacion: bootstrap, IC, pre-registro, FDR, tamano de muestra"
+  ],
+
+  "plan_tres_etapas": {
+    "tesis_1": {"aporte": "instrumento de metrologia del campo confidence (especificacion + libreria + matriz de transferencia)", "tipo": "artefacto / medicion"},
+    "tesis_2": {"aporte": "modificacion del objetivo de entrenamiento RLCD que induzca calibracion", "tipo": "algoritmica"},
+    "taller": {"aporte": "por que una regla estrictamente propia no basta: condiciones necesarias/suficientes y demostracion", "tipo": "teorica"}
+  },
+
+  "preferencias_usuario": {
+    "idioma": "espanol",
+    "estilo": "respuestas finales cortas; sin relleno; tablas y pasos; explicar simple si no entiende",
+    "aprendizaje": "mejor con imagenes y graficos de arquitectura",
+    "perspectiva_cc": "el aporte interno (matematica, mecanismos, codigo) se valora; puede vivir en el marco teorico, no necesariamente en el resultado",
+    "esfuerzo_manual": "minimizar lo que el autor debe hacer a mano (especialmente anotacion y etiquetado)",
+    "sobre_huecos": "el resultado no debe ser un hallazgo sino un artefacto",
+    "lectura_rapida": "confunde siglas parecidas (JEV vs JEPA). Confirmar el eje antes de reencuadrar",
+    "git": "rama separada -> PR -> squash merge; NUNCA push directo a main (aplica a los repos que SI son git; esta carpeta no lo es)",
+    "seguridad": "cero contrasenas o secrets en .env ni en repos",
+    "docker_servidor": "restart: always (no unless-stopped)",
+    "regla_3_fallos": "si un enfoque falla 3 veces, parar y cambiar de perspectiva",
+    "hardware": "Mac Mini (Apple Silicon) + Acer Nitro RTX 4050 Laptop 6 GB; el thinkpad-t440 no tiene GPU"
+  },
+
+  "glosario": {
+    "Jev": "TypeSafe System One. Modelo de DECISION, no de lenguaje: readout de logits, no genera texto. NADA que ver con JEPA",
+    "JEPA": "Joint-Embedding Predictive Architecture, familia de world models. FUERA DE ALCANCE",
+    "RLCD": "Reinforcement Learning for Calibrated Decisions. Ruido gaussiano en los logits + regla estrictamente propia + REINFORCE con baseline + temperatura post-hoc",
+    "regla_estrictamente_propia": "regla de puntuacion cuyo optimo es reportar la probabilidad verdadera (log, spherical, RPS)",
+    "readout": "terminar la inferencia leyendo los logits en la posicion de cada etiqueta, sin generar tokens",
+    "noul": "primitivo booleano de Jev (0.0 a 1.0); no tiene campo confidence",
+    "choice": "primitivo de eleccion entre N opciones (hasta 255)",
+    "score": "primitivo ordinal de 2 a 10 niveles",
+    "confidence": "campo con definiciones incompatibles: Jev (n*pmax-1)/(n-1); Laya 1-entropia normalizada; pmax; prior aprendido; etc.",
+    "ECE": "Expected Calibration Error",
+    "Brier": "puntuacion de Brier (error cuadratico de las probabilidades)",
+    "kappa": "acuerdo inter-anotador. NO EXISTE en este ecosistema; excluido por diseno (D2)",
+    "cobertura": "fraccion de casos que el modelo decide responder; 'accuracy on answered' es su companera",
+    "transferencia_de_umbral": "aplicar a la definicion B el umbral calibrado en la definicion A; cuanto se degrada cobertura/precision",
+    "typed_decisions": "LocalLLaMA/typed-decisions, el benchmark compartido (2000 decisiones, 4 flujos, Apache-2.0)"
+  }
+}

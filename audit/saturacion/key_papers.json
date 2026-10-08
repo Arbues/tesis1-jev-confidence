@@ -1,0 +1,452 @@
+[
+ {
+  "id": "2604.02837v1",
+  "title": "Towards Secure Agent Skills: Architecture, Threat Taxonomy, and Security Analysis",
+  "year": 2026,
+  "pub": "2026-04-03",
+  "authors": "Zhiyuan Li, Jingzheng Wu, Xiang Ling, Xing Cui",
+  "comment": "",
+  "abstract": "Agent Skills is an emerging open standard that defines a modular, filesystem-based packaging format enabling LLM-based agents to acquire domain-specific expertise on demand. Despite rapid adoption across multiple agentic platforms and the emergence of large community marketplaces, the security properties of Agent Skills have not been systematically studied. This paper presents the first comprehensive security analysis of the Agent Skills framework. We define the full lifecycle of an Agent Skill across four phases -- Creation, Distribution, Deployment, and Execution -- and identify the structural attack surface each phase introduces. Building on this lifecycle analysis, we construct a threat taxonomy comprising seven categories and seventeen scenarios organized across three attack layers, grounded in both architectural analysis and real-world evidence. We validate the taxonomy through analysis of five confirmed security incidents in the Agent Skills ecosystem. Based on these findings, we discuss defense directions for each threat category, identify open research challenges, and provide actionable recommendations for stakeholders. Our analysis reveals that the most severe threats arise from structural properties of the framework itself, including the absence of a data-instruction boundary, a single-approval persistent trust model, and the lack of mandatory marketplace security review, and cannot be addressed through incremental mitigations alone."
+ },
+ {
+  "id": "2606.03024v2",
+  "title": "SkillGuard: A Permission-Centric Framework for Agent Skill Security",
+  "year": 2026,
+  "pub": "2026-06-02",
+  "authors": "Shidong Pan, Xiaoyu Sun, Tianyi Zhang, Dianshu Liao",
+  "comment": "",
+  "abstract": "Skills extend LLM agents with reusable instructions, scripts, data, and tool bindings. This shift makes skills a new security principal in agent systems: a skill can alter the agent's reasoning before any tool is called, and it can also steer the agent toward actions with concrete side effects. However, current skill ecosystems lack a permission model that captures this dual role. Existing defenses either inspect skill files before use or constrain individual tool calls during execution, leaving the connection between skill-level intent, contextual influence, and runtime behavior weakly governed. In this paper, we present SkillGuard, a skill-centric permission framework that treats skills as permission-bearing executable artifacts. SkillGuard introduces a dual-plane governance model that jointly regulates context influence and action side effects through skill manifests, runtime permission control, user interaction, and policy enforcement. We evaluate the permission taxonomy expressiveness on 1,260 real-world skills, and 99.93% of observed protected objects are covered. In adversarial evaluations on SkillInject dataset, SkillGuard reduces attack success rate from 35.3% to 20.7% for contextual injections and from 36.7% to 18.0% for obvious injections, while decently maintaining benign task completion. These results suggest that SkillGuard, as a skill-centric permission framework, can provide a practical foundation for improving the security of agent skill ecosystems."
+ },
+ {
+  "id": "2608.11888v1",
+  "title": "Agent Skills Can Be Harmful: An Empirical Study of Skill-Induced Failures in LLM Agents",
+  "year": 2026,
+  "pub": "2026-08-12",
+  "authors": "Gen Dong, Yanjie Gao, Liqun Li, Tianyin Xu",
+  "comment": "",
+  "abstract": "Agent skills are the de facto mechanism for extending LLM agents with reusable guidance. A skill can shape the agent's task execution, including planning, tool use, problem-solving, and validation. Prior work reported mixed results of agent skills: some skills improve task success rates, while others have no effect, increase token use and execution time, and even reduce success rates. This paper presents a comprehensive analysis of skill-induced agent failures by attributing task failures and cost regressions to specific loaded skills. We introduce a differential analysis framework that attributes a failure or regression to a skill by comparing a target skill-guided run against a no-skill or semantically matched skill reference run that solves the same task, or solves it more cheaply. We instantiate this framework on SkillsBench and SWE-Skills-Bench, yielding 307 skill-induced failures, including 125 functional failures and 182 efficiency regressions. We also build SkillTriage, a taxonomy-guided attribution tool that normalizes paired cases, extracts differential evidence, and produces triage reports. Our major findings include: (1) Skill induced functional failures are rarely caused by obviously irrelevant skills; instead, seemingly relevant skills often make the agent incorrectly implement or omit task-required implementation elements. (2) Skill-induced efficiency regressions are not explained by prompt length alone. (3) The largest sources within Excessive Procedure are excessive verification and heavy implementation pipelines, contributing 67 and 30 cases, respectively. This shows that skills often turn validation checklists and construction recipes into mandatory work. Based on our findings, we propose research topics and tooling improvements for safer and more cost-aware skill reuse."
+ },
+ {
+  "id": "2606.00925v1",
+  "title": "Benchmarking Security Risk Detection and Verification in Open Agentic Skill Ecosystems",
+  "year": 2026,
+  "pub": "2026-05-30",
+  "authors": "Ismail Hossain, Sai Puppala, Zhuoran Lu, Sajedul Talukder",
+  "comment": "",
+  "abstract": "Open agent platforms allow community contributors to publish reusable skills that agents can invoke at runtime. This extensibility also creates a supply-chain risk: malicious contributors can hide harmful behavior inside skills that appear benign under superficial inspection. However, existing defenses are hard to evaluate because there is no benchmark that measures both malicious-skill detection and runtime verification. We present SkillVetBench, a two-stage security vetting benchmark for open agentic skill ecosystems. The first stage performs semantic vetting over each skill's natural-language specification to detect hidden malicious intent. The second stage executes flagged skills in an instrumented sandbox to observe runtime behavior and collect auditable evidence. We build a benchmark from confirmed malicious skills in the live OpenClaw ecosystem, including samples from the recent ClawHavoc supplychain campaign. Unlike static-only methods, SkillVetBench verifies detected threats with execution traces. Our experiments show that: (1) semantic-only and signature-based baselines are insufficient, missing up to 89\\% of malicious skills whose threats arise from natural-language instructions, multicomponent logic, or cross-component interactions; (2) runtime attacks are concentrated in a small set of high-permission primitives, especially exec, write\\_file, install\\_skill, and spawn; and (3) SkillVetBench provides case studies in which sandbox execution directly supports malicious verdicts with concrete runtime evidence."
+ },
+ {
+  "id": "2602.12430v4",
+  "title": "Agent Skills for Large Language Models: Architecture, Acquisition, Security, and the Path Forward",
+  "year": 2026,
+  "pub": "2026-02-12",
+  "authors": "Renjun Xu, Yang Yan",
+  "comment": "Accepted by Agent Skills '26 Workshop at ACM Conference on AI and Agentic Systems 2026",
+  "abstract": "The transition from monolithic language models to modular, skill-equipped agents marks a defining shift in how large language models (LLMs) are deployed in practice. Rather than encoding all procedural knowledge within model weights, agent skills -- composable packages of instructions, code, and resources that agents load on demand -- enable dynamic capability extension without retraining. It is formalized in a paradigm of progressive disclosure, portable skill definitions, and integration with the Model Context Protocol (MCP). This survey provides a comprehensive treatment of the agent skills landscape, as it has rapidly evolved during the last few months. We organize the field along four axes: (i) architectural foundations, examining the SKILL$.$md specification, progressive context loading, and the complementary roles of skills and MCP; (ii) skill acquisition, covering reinforcement learning with skill libraries, autonomous skill discovery (SEAgent), and compositional skill synthesis; (iii) deployment at scale, including the computer-use agent (CUA) stack, GUI grounding advances, and benchmark progress on OSWorld and SWE-bench; and (iv) security, where recent empirical analyses reveal that 26.1% of community-contributed skills contain vulnerabilities, motivating our proposed Skill Trust and Lifecycle Governance Framework -- a four-tier, gate-based permission model that maps skill provenance to graduated deployment capabilities. We identify seven open challenges -- from cross-platform skill portability to capability-based permission models -- and propose a research agenda for realizing trustworthy, self-improving skill ecosystems. Unlike prior surveys that broadly cover LLM agents or tool use, this work focuses specifically on the emerging skill abstraction layer and its implications for the next generation of agentic systems. Project repo: https://github.com/scienceaix/agentskills"
+ },
+ {
+  "id": "2606.15899v1",
+  "title": "SkillVetBench: LLM-as-Judge for Multi-Dimensional Security Risk Evaluation in Open-Source LLM Agent Skills",
+  "year": 2026,
+  "pub": "2026-06-14",
+  "authors": "Ismail Hossain, Sai Puppala, Md Jahangir Alam, Tanzim Ahad",
+  "comment": "The main research paper is submitted to NeurIPS 2027, it is in under review",
+  "abstract": "Open-source LLM agent ecosystems are growing rapidly, yet the security of community-contributed skills - modular tool definitions that extend agent capabilities - remains largely unvetted. The gap we fill: existing scanners operate at the code layer and are structurally blind to instruction-layer and multi-agent risk - natural-language directives that hijack an agent, exfiltrate data through encoded side channels, or chain harm across pipelines - so what is needed is a semantic, multi-dimensional vetting system rather than another signature matcher. We present SKILLVETBENCH, a live public leaderboard on Hugging Face that uses an LLM-as-Judge to vet agent skills. What is new: SARS (Skill Agentic Risk Score), a five-dimensional agentic-risk metric with a principled weighted formula for instruction-following systems. What is integrated: full CVSS v4.0 vector decomposition and a ClawHub dual-view that places our LLM-generated review beside the official marketplace verdict. What is demonstrated: drawing on our companion benchmark paper [ 1], the LLM-as-Judge stage achieves zero false negatives across 78 confirmed-malicious skills and zero false positives across 22 benign controls, while the best static baseline (SKILLSIEVE) still misses 15%; for instruction-layer categories such as Prompt Injection and Memory Poisoning, conventional tools miss between 89% and 100% of threats (e.g., CODEBERT detects none of nine memory-poisoning skills). Detection rates vary from 35% to 95% across four LLM evaluators, motivating ensemble scoring in production deployments."
+ },
+ {
+  "id": "2601.10338v1",
+  "title": "Agent Skills in the Wild: An Empirical Study of Security Vulnerabilities at Scale",
+  "year": 2026,
+  "pub": "2026-01-15",
+  "authors": "Yi Liu, Weizhe Wang, Ruitao Feng, Yao Zhang",
+  "comment": "",
+  "abstract": "The rise of AI agent frameworks has introduced agent skills, modular packages containing instructions and executable code that dynamically extend agent capabilities. While this architecture enables powerful customization, skills execute with implicit trust and minimal vetting, creating a significant yet uncharacterized attack surface. We conduct the first large-scale empirical security analysis of this emerging ecosystem, collecting 42,447 skills from two major marketplaces and systematically analyzing 31,132 using SkillScan, a multi-stage detection framework integrating static analysis with LLM-based semantic classification. Our findings reveal pervasive security risks: 26.1% of skills contain at least one vulnerability, spanning 14 distinct patterns across four categories: prompt injection, data exfiltration, privilege escalation, and supply chain risks. Data exfiltration (13.3%) and privilege escalation (11.8%) are most prevalent, while 5.2% of skills exhibit high-severity patterns strongly suggesting malicious intent. We find that skills bundling executable scripts are 2.12x more likely to contain vulnerabilities than instruction-only skills (OR=2.12, p<0.001). Our contributions include: (1) a grounded vulnerability taxonomy derived from 8,126 vulnerable skills, (2) a validated detection methodology achieving 86.7% precision and 82.5% recall, and (3) an open dataset and detection toolkit to support future research. These results demonstrate an urgent need for capability-based permission systems and mandatory security vetting before this attack vector is further exploited."
+ },
+ {
+  "id": "2603.28815v1",
+  "title": "SkillTester: Benchmarking Utility and Security of Agent Skills",
+  "year": 2026,
+  "pub": "2026-03-28",
+  "authors": "Leye Wang, Zixing Wang, Anjie Xu",
+  "comment": "Technical report, 13 pages, 2 figures, 9 tables. Project page: https://skilltester.ai. Code: https://github.com/skilltester-ai/skilltester",
+  "abstract": "This technical report presents SkillTester, a tool for evaluating the utility and security of agent skills. Its evaluation framework combines paired baseline and with-skill execution conditions with a separate security probe suite. Grounded in a comparative utility principle and a user-facing simplicity principle, the framework normalizes raw execution artifacts into a utility score, a security score, and a three-level security status label. More broadly, it can be understood as a comparative quality-assurance harness for agent skills in an agent-first world. The public service is deployed at https://skilltester.ai, and the broader project is maintained at https://github.com/skilltester-ai/skilltester."
+ },
+ {
+  "id": "2605.11770v1",
+  "title": "Behavioral Integrity Verification for AI Agent Skills",
+  "year": 2026,
+  "pub": "2026-05-12",
+  "authors": "Yuhao Wu, Tung-Ling Li, Hongliang Liu",
+  "comment": "",
+  "abstract": "Agent skills extend LLM agents with privileged third-party capabilities such as filesystem access, credentials, network calls, and shell execution. Existing safety work catches malicious prompts and risky runtime actions, but the skill artifact itself goes unverified. We formalize this as the behavioral integrity verification (BIV) problem: a typed set comparison between declared and actual capabilities over a shared taxonomy that bridges code, instructions, and metadata. The BIV framework instantiates this comparison by pairing deterministic code analysis with LLM-assisted capability extraction. The resulting structured evidence supports three downstream analyses: deviation taxonomy, root-cause classification, and malicious-skill detection. On 49,943 skills from the OpenClaw registry, the deviation taxonomy reveals a pervasive description-implementation gap: 80.0% of skills deviate from declared behavior, with four novel compound-threat categories surfaced. Root-cause classification finds that deviations are mostly oversight, not malice: 81.1% trace to developer oversight and 18.9% to adversarial intent, with 5.0% of skills carrying predicted multi-stage attack chains. On a 906-skill malicious-skill detection benchmark, BIV reaches an F1 of 0.946, outperforming state-of-the-art rule-based and single-pass LLM baselines. These results demonstrate behavioral integrity auditing for agent skills at scale."
+ },
+ {
+  "id": "2602.06547v4",
+  "title": "\"Do Not Mention This to the User\": Detecting and Understanding Malicious Agent Skills in the Wild",
+  "year": 2026,
+  "pub": "2026-02-06",
+  "authors": "Yi Liu, Zhihao Chen, Yanjun Zhang, Gelei Deng",
+  "comment": "Accepted to the 35th USENIX Security Symposium (USENIX Security 2026)",
+  "abstract": "LLM-based coding agents increasingly rely on third-party extensions called skills, which bundle natural language instructions and helper scripts that execute with full user privileges. Community registries have emerged to distribute these skills, but the security implications remain unstudied due to the absence of labeled threat data. This paper presents a systematic security analysis of 98,380 skills collected from two major registries. Through a combination of static pattern matching and dynamic behavioral verification, we identify 157 skills exhibiting confirmed malicious behavior, encompassing 632 distinct vulnerabilities across 13 attack techniques. Our analysis reveals that these threats are deliberate rather than accidental: each malicious skill contains an average of 4.03 vulnerabilities spanning multiple attack phases. We identify two dominant attack strategies with statistically significant negative correlation -- credential theft via remote code execution, and agent manipulation through adversarial instructions embedded in documentation. Over half of all confirmed cases originate from a single threat actor employing templated brand impersonation at scale. We further observe that attack sophistication correlates with concealment investment, with advanced skills universally employing undocumented capabilities while also exploiting platform-native trust mechanisms. Following responsible disclosure, registry maintainers removed all 157 (100%) of the reported skills. Our dataset and detection pipeline are publicly available to facilitate future research on securing LLM agent ecosystems."
+ },
+ {
+  "id": "2603.16572v2",
+  "title": "Context Matters: Repository-Aware Security Analysis of the Agent Skill Ecosystem",
+  "year": 2026,
+  "pub": "2026-03-17",
+  "authors": "Florian Holzbauer, David Schmidt, Gabriel Gegenhuber, Sebastian Schrittwieser",
+  "comment": "AgentSkills '26 Workshop: ACM Conference on AI and Agentic Systems (CAIS), Best Paper Award",
+  "abstract": "Agent skills extend local AI agents, such as Claude Code and OpenClaw, with additional functionality. Their growing popularity has led to dedicated marketplaces resembling mobile app stores, as well as automated scanners that assess whether skills are benign or malicious. However, scanner reports from individual marketplaces classify up to 46.8% of skills as malicious, raising concerns about false positives. We present the largest empirical security analysis of the AI agent skill ecosystem to date. We collect 238,180 unique skills from three major distribution platforms and GitHub, and analyze their contents, behavior, and repository context. Unlike existing scanner-based assessments, which evaluate skills largely in isolation, our repository-aware analysis checks whether a flagged skill is consistent with its surrounding GitHub project. This context substantially reduces the number of suspicious skills: only 0.52% remain suspicious after repository-aware analysis. Our results show that existing scanners can substantially overestimate maliciousness when repository context is ignored. At the same time, we identify previously undocumented real-world attack vectors, including the hijacking of skills hosted in abandoned GitHub repositories. Overall, our findings provide a more robust view of the agent-skill ecosystem's current risk surface and highlight the need for context-aware security evaluation."
+ },
+ {
+  "id": "2608.10906v3",
+  "title": "GitSkills: A Dataset of Agent Skills on GitHub",
+  "year": 2026,
+  "pub": "2026-08-11",
+  "authors": "Giuseppe Destefanis, Daniel Graziotin, Matteo Vaccargiu, Marco Ortu",
+  "comment": "G. Destefanis, D. Graziotin, M. Vaccargiu, and M. Ortu, \"GitSkills: A Dataset of Agent Skills on GitHub\", in Proceedings of the 24th IEEE/ACM International Conference on Mining Software Repositories (MSR '27). IEEE, Piscataway, NJ, USA, 2027, 3 pp. To appear",
+  "abstract": "An agent skill is a folder containing a SKILL.md file with instructions for a language-model agent, optionally accompanied by scripts and reference files. The agent loads the skill when it judges that a task matches the skill description. Anthropic introduced the format in October 2025 as an open specification. Nine months later, public GitHub repositories hold millions of skill files. Skills are unlike the artifacts that software engineering researchers usually mine: they are written mainly in natural language, a model selects them probabilistically at run time, and no compiler or type checker verifies the selection. Skills also have no central registry or package manager; developers reuse them by copying folders between repositories. How developers write, reuse, and maintain skills is therefore an empirical question, and no existing dataset records this population. We present GitSkills, a dataset of 3,797,117 SKILL.md files collected from 282,200 public repositories in July 2026. The dataset retains every file occurrence with its repository, path, and content hash. We group identical files into 1,877,981 distinct contents and enrich one representative per group with the full text, parsed front matter, folder contents, repository metadata, and, for a subset, the commit history of the file. A single self-contained SQLite file supports research on the adoption, reuse, structure, authorship, maintenance, and security of agent skills."
+ },
+ {
+  "id": "2604.25109v1",
+  "title": "Structured Security Auditing and Robustness Enhancement for Untrusted Agent Skills",
+  "year": 2026,
+  "pub": "2026-04-28",
+  "authors": "Lijia Lv, Xuehai Tang, Jie Wen, Jizhong Han",
+  "comment": "",
+  "abstract": "Agent Skills package SKILL.md files, scripts, reference documents, and repository context into reusable capability units, turning pre-load auditing from single-prompt filtering into cross-file security review. Existing guardrails often flag risk but recover malicious intent inconsistently under semantics-preserving rewrites. This paper formulates pre-load auditing for untrusted Agent Skills as a robust three-way classification task and introduces SkillGuard-Robust, which combines role-aware evidence extraction, selective semantic verification, and consistency-preserving adjudication. We evaluate SkillGuard-Robust on SkillGuardBench and two public-ecosystem extensions through five large evaluation views ranging from 254 to 404 packages. On the 404-package held-out aggregate, SkillGuard-Robust reaches 97.30% overall exact match, 98.33% malicious-risk recall, and 98.89% attack exact consistency. On the 254-package external-ecosystem view, it reaches 99.66%, 100.00%, and 100.00%, respectively. These results support a bounded conclusion: factorized package auditing materially improves frozen and public-ecosystem robustness, while harsher external-source transfer remains an open challenge."
+ },
+ {
+  "id": "2605.23951v1",
+  "title": "Methods for Formal Verification of Agent Skills: Three Layers Toward a Mechanically Checkable Capability-Containment Proof",
+  "year": 2026,
+  "pub": "2026-05-09",
+  "authors": "Alfredo Metere",
+  "comment": "",
+  "abstract": "The companion paper introduced a four-level verification lattice on agent-skill manifests (unverified, declared, tested, formal) and left the top level aspirational. This paper closes that gap. We give a precise semantics for skill behaviour faithful to how a skill is consumed by an LLM-driven runtime (a deterministic script-side reachable through a non-deterministic LLM-side), state the verification problem as a capability-containment property over that semantics, and present three composable methods that together raise a skill from declared or tested to formal: (1) sound static capability-containment analysis of the script-side via abstract interpretation over a small effect lattice; (2) a refinement type system for tool-call envelopes that mechanically rejects any call whose statically-inferred capability is not in the manifest's declared set; (3) SMT-bounded model checking against the parent paper's biconditional correctness criterion, with the bound chosen so any counter-example fitting the runtime's transaction-buffer horizon is exhibited as a concrete trace. We prove the three layers composed soundly cover the parent paper's threat model modulo a single residual (the LLM's freedom to refuse to act) that the parent paper's runtime biconditional catches at session boundary. The methods reuse existing well-engineered tools (Z3, Semgrep, CodeQL, refinement-type checkers, mechanised proof assistants) rather than asking operators to build new ones, and the proof-carrying artifact extends the existing SKILL.md convention. All three methods plus the bundle producer and re-checker ship as zero-dependency JavaScript modules in the open-source enclawed framework (https://github.com/metereconsulting/enclawed; project page https://www.enclawed.com/), with 53 unit tests and an end-to-end CLI demo on a sample skill."
+ },
+ {
+  "id": "2607.13987v1",
+  "title": "Agent Skill Security: Threat Models, Attacks, Defenses, and Evaluation",
+  "year": 2026,
+  "pub": "2026-07-15",
+  "authors": "Sanket Badhe, Priyanka Tiwari",
+  "comment": "",
+  "abstract": "Reusable skills are becoming a fundamental building block of Large Language Model (LLM) agents, enabling capabilities to be packaged, shared, and reused across diverse applications. However, existing security research primarily focuses on prompt injection and runtime execution, leaving security risks throughout the broader skill lifecycle largely unexplored. In this paper, we present SkillSec-Eval, a lifecycle-aware framework for systematically evaluating the security of reusable agent skills. We first characterize the skill lifecycle and develop a threat taxonomy spanning repository admission, semantic retrieval, planner selection, execution, and skill evolution. We then instantiate this taxonomy in SkillSec-Eval and conduct a comprehensive empirical evaluation using a repository of 327 real-world skills. Our study demonstrates that vulnerabilities arise at multiple lifecycle stages beyond execution, highlighting the need for lifecycle-aware security analysis of reusable agent skills."
+ },
+ {
+  "id": "2604.04989v1",
+  "title": "SkillAttack: Automated Red Teaming of Agent Skills through Attack Path Refinement",
+  "year": 2026,
+  "pub": "2026-04-05",
+  "authors": "Zenghao Duan, Yuxin Tian, Zhiyi Yin, Liang Pang",
+  "comment": "",
+  "abstract": "LLM-based agent systems increasingly rely on agent skills sourced from open registries to extend their capabilities, yet the openness of such ecosystems makes skills difficult to thoroughly vet. Existing attacks rely on injecting malicious instructions into skills, making them easily detectable by static auditing. However, non-malicious skills may also harbor latent vulnerabilities that an attacker can exploit solely through adversarial prompting, without modifying the skill itself. We introduce SkillAttack, a red-teaming framework that dynamically verifies skill vulnerability exploitability through adversarial prompting. SkillAttack combines vulnerability analysis, surface-parallel attack generation, and feedback-driven exploit refinement into a closed-loop search that progressively converges toward successful exploitation. Experiments across 10 LLMs on 71 adversarial and 100 real-world skills show that SkillAttack outperforms all baselines by a wide margin (ASR 0.73--0.93 on adversarial skills, up to 0.26 on real-world skills), revealing that even well-intended skills pose serious security risks under realistic agent interactions."
+ },
+ {
+  "id": "2606.14154v1",
+  "title": "SkillMutator: Benchmarking and Defending Language-and-Code Cross-modal Attacks on LLM Agent Skills",
+  "year": 2026,
+  "pub": "2026-06-12",
+  "authors": "Youngduk Kim, Minkyoo Song, Seungwon Shin",
+  "comment": "",
+  "abstract": "Large language model (LLM) agents increasingly extend their capabilities at runtime by loading Agent Skills, which pair natural-language specifications (SKILL.md) with executable scripts and resources. Because a skill's behavior relies on both natural-language instructions and executable code, assessing its safety requires cross-modal reasoning, creating a new language-and-code attack surface. Attackers can present a benign workflow in SKILL.md while embedding implicit directives that steer the agent to exfiltrate sensitive files, even if the scripts appear harmless. This attack surface remains understudied; prior work treats skills merely as prompt-injection vectors or static code artifacts, leaving attacks emerging from cross-modal interactions largely unmeasured. In our evaluation, open-source and commercial skill scanners detect only 2%-8% and 9%-17% of such attacks, respectively. To address this gap, we introduce SkillMutator, the first benchmark for install-time detection of language-and-code cross-modal attacks on Agent Skills. It emulates an adversarial mutation process across 13 attack categories, iteratively refining malicious skills using scanner feedback to make injected behaviors indistinguishable from legitimate workflows. We further propose a four-phase reasoning-trajectory distillation framework to distill frontier-teacher traces into smaller open-weight models. This produces a locally deployable scanner avoiding third-party data exposure and excessive API costs. On the strongest SkillMutator subset (n=76), our distilled model (Qwen2.5-Coder-7B-Instruct) improves detection from 17.1% to 88.2%, surpassing GPT-4o-mini (23.7%) and GPT-5.4-mini (79.0%), and reaching frontier-level GPT-5.4 (86.8%). These results show practical defense against cross-modal attacks is feasible without relying on costly frontier models."
+ },
+ {
+  "id": "2603.27204v2",
+  "title": "MalSkills: Detecting Malicious Skills in the Agentic Supply Chain via Neuro-symbolic Reasoning",
+  "year": 2026,
+  "pub": "2026-03-28",
+  "authors": "Shenao Wang, Junjie He, Yanjie Zhao, Yayi Wang",
+  "comment": "Accepted by ASE 2026",
+  "abstract": "Skills are increasingly used to extend LLM agents by packaging prompts, code, and configurations into reusable modules. As public registries and marketplaces expand, they form an emerging agentic supply chain, but also introduce a new attack surface for malicious skills. Detecting malicious skills is challenging because relevant evidence is often distributed across heterogeneous artifacts and must be reasoned in context. Existing static, LLM-based, and dynamic approaches each capture only part of this problem, making them insufficient for robust real-world detection. In this paper, we present MalSkills, a neuro-symbolic framework for malicious skills detection. MalSkills first extracts security-sensitive operations from heterogeneous artifacts through a combination of symbolic parsing and LLM-assisted semantic analysis. It then constructs the skill dependency graph that links artifacts, operations, operands, and value flows across the skill. On top of this graph, MalSkills performs neuro-symbolic reasoning to infer malicious patterns or previously unseen suspicious workflows. We evaluate MalSkills on a benchmark of 200 real-world skills against 5 state-of-the-art baselines. MalSkills achieves 93% F1, outperforming the baselines by 5--87 percentage points. We further apply MalSkills to analyze 150,108 skills collected from 7 public registries, flagging 620 potentially malicious skills. Through manual review, we confirm that 400 of them are indeed malicious, all of which were responsibly reported and are currently awaiting confirmation from the platforms and maintainers. These results demonstrate the practical potential of MalSkills in securing the agentic supply chain."
+ },
+ {
+  "id": "2606.11671v1",
+  "title": "Runtime Skill Audit: Targeted Runtime Probing for Agent Skill Security",
+  "year": 2026,
+  "pub": "2026-06-10",
+  "authors": "Tu Lan, Chaowei Xiao",
+  "comment": "",
+  "abstract": "Agent skills let LLM agents reuse instructions, resources, tools, and workflows, but they also create a new place for malicious behavior to hide. A skill may look benign in its documentation or code while becoming harmful only when it is invoked with particular user requests, local assets, persistent state, or multi-step tool interactions. This makes purely static vetting brittle. We present Runtime Skill Audit (RSA), a dynamic analysis method that audits skills by asking what the skill-mediated agent actually does under targeted runtime conditions. Instead of testing every skill with the same generic tasks, RSA profiles risk-relevant interfaces, prepares the execution context needed to exercise them, and assigns security labels from the resulting trace evidence. We instantiate RSA on OpenClaw and evaluate it on 100 skills against representative static baselines. RSA achieves 90.0\\% accuracy with an 88.0\\% true positive rate and an 8.0\\% false positive rate, improving accuracy by 13.0 percentage points over the best static baseline. Under self-evolving attacks, static detectors collapse after one or two rounds, while RSA continues to detect 19--20 out of 20 malicious skills across rounds."
+ },
+ {
+  "id": "2602.20156v3",
+  "title": "Skill-Inject: Measuring Agent Vulnerability to Skill File Attacks",
+  "year": 2026,
+  "pub": "2026-02-23",
+  "authors": "David Schmotz, Luca Beurer-Kellner, Sahar Abdelnabi, Maksym Andriushchenko",
+  "comment": "",
+  "abstract": "LLM agents are evolving rapidly, powered by code execution, tools, and the recently introduced agent skills feature. Skills allow users to extend LLM applications with specialized third-party code, knowledge, and instructions. Although this can extend agent capabilities to new domains, it creates an increasingly complex agent supply chain, offering new surfaces for prompt injection attacks. We identify skill-based prompt injection as a significant threat and introduce SkillInject, a benchmark evaluating the susceptibility of widely-used LLM agents to injections through skill files. SkillInject contains 202 injection-task pairs with attacks ranging from obviously malicious injections to subtle, context-dependent attacks hidden in otherwise legitimate instructions. We evaluate frontier LLMs on SkillInject, measuring both security in terms of harmful instruction avoidance and utility in terms of legitimate instruction compliance. Our results show that today's agents are highly vulnerable with up to 80% attack success rate with frontier models, often executing extremely harmful instructions including data exfiltration, destructive action, and ransomware-like behavior. They furthermore suggest that this problem will not be solved through model scaling or simple input filtering, but that robust agent security will require context-aware authorization frameworks. Our benchmark is available at https://www.skill-inject.com/."
+ },
+ {
+  "id": "2606.15242v1",
+  "title": "Benign in Isolation, Harmful in Composition: Security Risks in Agent Skill Ecosystems",
+  "year": 2026,
+  "pub": "2026-06-13",
+  "authors": "Yi Xie, Jiawei Du, Yu Cheng, Jiuan Zhou",
+  "comment": "",
+  "abstract": "Skills are becoming the capability layer through which LLM agents turn plans into actions, but their use introduces security risks such as data leakage, unauthorized operations, and tool misuse. Existing vetting usually evaluates each skill in isolation, while real agent tasks often invoke multiple skills in a shared execution context. This creates Skill Composition Risk (SCR): a skill that appears benign alone can become harmful when its outputs, trust signals, authorization cues, or side effects influence later invocations along an activated path. We introduce SCR-Bench to evaluate this risk in controlled, sandboxed skill environments. Rather than relying only on textual intent or surface behavior, SCR-Bench records downstream state changes and path-level outcomes across composed skill executions. It contains three sub-benchmarks: SCR-CapFlow for capability-flow composition, SCR-TrustLift for trust-transfer composition, and SCR-AuthBlur for authorization-confusion composition. Across SCR-Bench, composed paths expose risks that are largely absent under isolated evaluation. In SCR-CapFlow, attack success rate reaches 33.6 percent under composition, compared with near-zero isolated baselines. In SCR-TrustLift, attack success rate exceeds 96.5 percent on four of five backends. In SCR-AuthBlur, the risky-approval rate increases by 71.8 percent relative to the L0 isolated baseline under the L1 context setting. These results show that agent skill security should be assessed at the level of activated paths rather than isolated artifacts. SCR and SCR-Bench provide a foundation for path-aware risk evaluation and defense in LLM agent skill ecosystems. Benchmark: https://github.com/saint-viperx/SCR_Bench."
+ },
+ {
+  "id": "2605.00314v1",
+  "title": "Semia: Auditing Agent Skills via Constraint-Guided Representation Synthesis",
+  "year": 2026,
+  "pub": "2026-05-01",
+  "authors": "Hongbo Wen, Ying Li, Hanzhi Liu, Chaofan Shou",
+  "comment": "",
+  "abstract": "An agent skill is a configuration package that equips an LLM-driven agent with a concrete capability, such as reading email, executing shell commands, or signing blockchain transactions. Each skill is a hybrid artifact-a structured half declares executable interfaces, while a prose half dictates when and how those interfaces fire-and the prose is reinterpreted probabilistically on every invocation. Conventional static analyzers parse the structured half but ignore the prose; LLM-based tools read the prose but cannot reproducibly prove that a tainted input reaches a high-impact sink. We present Semia, a static auditor for agent skills. Semia lifts each skill into the Skill Description Language (SDL), a Datalog fact base that captures LLM-triggered actions, prose-defined conditions, and human-in-the-loop checkpoints. Synthesizing a fact base that is both structurally sound and semantically faithful to the original prose is the central challenge; we address it with Constraint-Guided Representation Synthesis (CGRS), a propose-verify-evaluate loop that refines LLM candidates until convergence. Security properties (e.g., indirect injection, secret leakage, confused deputies, unguarded sinks, etc.) over an agent skill can then be reduced to Datalog reachability queries. We evaluate Semia on 13,728 real-world skills from public marketplaces. Semia renders all of them auditable and finds that more than half carry at least one critical semantic risk. On a stratified sample of 541 expert-labeled skills, Semia achieves 97.7% recall and an F1 of 90.6%, substantially outperforming signature-based scanners and LLM baselines."
+ },
+ {
+  "id": "2607.01456v2",
+  "title": "From Anatomy to Smells: An Empirical Study of SKILL.md in Agent Skills",
+  "year": 2026,
+  "pub": "2026-07-01",
+  "authors": "David Boram Hong, Aaron Imani, Iftekhar Ahmed",
+  "comment": "",
+  "abstract": "Agent Skills provide on-demand domain knowledge to LLM agents without requiring model retraining. Each Agent Skill is defined by a mandatory SKILL$.$md file containing metadata and an unstructured Markdown body whose contents are left entirely to the skill author. Despite the rapid adoption of Agent Skills, little is known about how these files are authored or whether existing authoring guidelines are followed in practice. In this paper, we present the first systematic study of SKILL$.$md files as a software artifact. We qualitatively analyze 238 real-world skills and derive a taxonomy of 13 higher-level and 44 lower-level semantic components. We then conduct a multivocal literature review of 29 sources to identify best practices for authoring SKILL$.$md files and introduce skill smells as violations of these practices. Finally, we develop an automated detector and apply it to real-world skills, finding that over 99% of SKILL$.$md files contain at least one skill smell, and once introduced, skill smells rarely disappear as skills evolve. These findings reveal a substantial gap between recommended and actual authoring practices, motivating the development of automated techniques to remediate skill smells while increasing developer awareness of this emerging quality issue."
+ },
+ {
+  "id": "2608.09577v1",
+  "title": "ElasticBack: Stealthy Conditional Backdoor in LLM-Agent Skills via Coupled Trigger-Rule Optimization",
+  "year": 2026,
+  "pub": "2026-08-10",
+  "authors": "Hao Sui, Simeng Qin, Jie Liao, Xiaojun Jia",
+  "comment": "",
+  "abstract": "Agent skills, bundles of instructions and resources that an LLM agent loads on demand, form an emerging supply chain where a single poisoned skill can persistently compromise every agent that installs it. However, existing skill attacks either fire on every request or rely on fine-tuned weights or multiple skills, leaving a conditional and low-cost backdoor unexplored. In this work, we present ElasticBack, an effective conditional single-skill backdoor that plants a rule R in the skill document and a benign-looking trigger T in the user query, so the malicious payload fires only when both co-occur. ElasticBack binds the two sides through a trigger-as-switch construction, generating R via semantic-anchored rule injection. It then freezes R and evolves T against it with a stealth-constrained genetic search, so that effectiveness and stealth are optimized, keeping the backdoor weight-free and dormant on benign inputs. Extensive experiments across three target behaviors (50 skills each) and four agent LLMs show that ElasticBack attains a high attack success rate at a near-zero false-positive rate with preserved clean accuracy, transfers across models, and evades deployment-time defenses. These results motivate stronger defenses for the skill supply chain."
+ },
+ {
+  "id": "2608.08453v1",
+  "title": "What Keeps Agent Skills from Being Reusable? Evidence from 138K SKILL.md Files",
+  "year": 2026,
+  "pub": "2026-08-09",
+  "authors": "Chi Zhang, Yimin Liu, Xinze Chen, Ping Ji",
+  "comment": "11 pages, 4 figures",
+  "abstract": "Under the current standard, Agent Skills are SKILL.md files that combine instructions with supporting resources, enabling Large Language Model (LLM) agents to reuse procedures beyond a single conversation. Yet many public skills appear to originate from a single task, repository, or conversation, even when they are shared as reusable components. We analyze this gap across 138,133 public SKILL.md files from 20,556 repositories using a two-tier defect taxonomy grounded in the official specification and best-practice guidance. We find that 91.8% of skills contain at least one detected defect, with stable estimates across lenient and strict thresholds (88.8-94.6%). The dominant failures are ordinary packaging problems rather than exotic attacks: weak routing metadata, bloated or non-actionable bodies, and poor resource organization. A deterministic routing stress test over 20,000 skills shows the functional impact: skills with valid routing metadata are retrieved more reliably from startup descriptions than skills with routing defects. Defect rates vary by platform and provenance: specification-aware skills contain fewer defects, while AI-marked skills show more safety and portability problems. Lightweight enforcement and repair experiments support a quality-assured generation workflow combining spec-aware prompting, lightweight linting, automated repair, and safety gating."
+ },
+ {
+  "id": "2607.01136v1",
+  "title": "Skills Are Not Islands: Measuring Dependency and Risk in Agent Skill Supply Chains",
+  "year": 2026,
+  "pub": "2026-07-01",
+  "authors": "Changguo Jia, Tianqi Zhao, Runzhi He, Minghui Zhou",
+  "comment": "",
+  "abstract": "Agent skills package reusable operational knowledge for Large Language Model (LLM) agents, yet as they grow in scope, they become dependency-bearing artifacts whose identities, versions, and provenance remain implicit. This opacity already causes duplicated dependencies and inconsistent installations, exposing a gap that dependency management has yet to close. We introduce Agent Skill Supply Chains (ASSCs) to characterize mixed skill-package-service dependency graphs and help close this gap. Borrowing from Software Bill of Materials (SBOMs), we design SkillDepAnalyzer to capture natural-language dependency evidence and model skills as dependency-bearing artifacts. On the SKILL-DEP benchmark, SkillDepAnalyzer recovers skill metadata and dependency graphs accurately and comprehensively, substantially outperforming an LLM-based baseline and package-centric SBOM tools. Applying SkillDepAnalyzer to over 1.43 million skills, we obtain ASSCs and explore their structural diversity and security signals. We find four structural patterns: skill metadata is activation-ready but governance-poor; dependency graphs span skill, package, and service dependencies with concentrated reuse; recursive skill reuse expands dependency graphs and creates hidden package inventory; and skill dependency clusters form around related workflows. We also find that inspecting a skill alone misses security-relevant signals hiding in its dependencies. By analyzing ASSCs, we identify and report known malicious skills persisting in ASSCs to their developers. Based on these findings, we recommend typed dependency manifests, first-class dependency-cluster management, risk-warning audit commands for skill infrastructure maintainers, and lockfile-like records for skill developers."
+ },
+ {
+  "id": "2512.15144v3",
+  "title": "MCPZoo: A Large-Scale Dataset of Runnable Model Context Protocol Servers for AI Agent",
+  "year": 2025,
+  "pub": "2025-12-17",
+  "authors": "Mengying Wu, Pei Chen, Geng Hong, Baichao An",
+  "comment": "",
+  "abstract": "Model Context Protocol (MCP) enables agents to interact with external tools, yet empirical research on MCP is hindered by the lack of large-scale, accessible datasets. We present MCPZoo, the largest and most comprehensive dataset of MCP servers collected from multiple public sources, comprising 129,059 servers (56,053 distinct). MCPZoo includes 16,356 server instances that have been deployed and verified as runnable and interactable, supporting realistic experimentation beyond static analysis. The dataset provides unified metadata and access interfaces, enabling systematic exploration and interaction without manual deployment effort. MCPZoo is released as an open and accessible resource to support research on MCP-based systems and security analysis."
+ },
+ {
+  "id": "2604.16911v1",
+  "title": "Skilldex: A Package Manager and Registry for Agent Skill Packages with Hierarchical Scope-Based Distribution",
+  "year": 2026,
+  "pub": "2026-04-18",
+  "authors": "Sampriti Saha, Pranav Hemanth",
+  "comment": "8 pages, 1 figure, 5 tables. IEEE conference format",
+  "abstract": "Large Language Model (LLM) agents are increasingly extended at runtime via skill packages, structured natural-language instruction bundles loaded from a well-known directory. Community install tooling and registries exist, but two gaps persist: no public tool scores skill packages against Anthropic's published format specification, and no mechanism bundles related skills with the shared context they need to remain mutually coherent. We present Skilldex, a package manager and registry for agent skill packages addressing both gaps. The two novel contributions are: (1) compiler-style format conformance scoring against Anthropic's skill specification, producing line-level diagnostics on description specificity, frontmatter validity, and structural adherence; and (2) the skillset abstraction, a bundled collection of related skills with shared assets (vocabulary files, templates, reference documents) that enforce cross-skill behavioral coherence. Skilldex also provides supporting infrastructure: a three-tier hierarchical scope system, a human-in-the-loop agent suggestion loop, a metadata-only community registry, and a Model Context Protocol (MCP) server. The system is implemented as a TypeScript CLI (skillpm / spm) with a Hono/Supabase registry backend, and is open-source."
+ },
+ {
+  "id": "2605.11418v1",
+  "title": "Under the Hood of SKILL.md: Semantic Supply-chain Attacks on AI Agent Skill Registry",
+  "year": 2026,
+  "pub": "2026-05-12",
+  "authors": "Shoumik Saha, Kazem Faghih, Soheil Feizi",
+  "comment": "31 pages, 21 figures, 10 tables",
+  "abstract": "Autonomous AI agents increasingly extend their capabilities through Agent Skills: modular filesystem packages whose SKILL.md files describe when and how agents should use them. While this design enables scalable, on-demand capability expansion, it also introduces a semantic supply-chain risk in which natural-language metadata and instructions can affect which skills are admitted, surfaced, selected, and loaded. We study SKILL.md - only attacks across three registry-facing stages of the Agent Skill lifecycle, using real ClawHub skills and realistic registry mechanisms. In Discovery, short textual triggers can manipulate embedding-based retrieval and improve adversarial skill visibility, achieving up to 86% pairwise win rate and 80% Top-10 placement. In Selection, description-only framing biases agents toward functionally equivalent adversarial variants, which are selected in 77.6% of paired trials on average. In Governance, semantic evasion strategies cause malicious skills to avoid a blocking verdict in 36.5%-100% of cases. Overall, our results show that SKILL.md is not passive documentation but operational text that shapes which third-party capabilities agents find, trust, and use."
+ },
+ {
+  "id": "2604.06550v3",
+  "title": "SkillSieve: A Hierarchical Triage Framework for Detecting Malicious AI Agent Skills",
+  "year": 2026,
+  "pub": "2026-04-08",
+  "authors": "Yinghan Hou, Zongyou Yang",
+  "comment": "10 pages, 2 figures, 6 tables",
+  "abstract": "Agent skills combine natural-language instructions with executable code while inheriting an agent's filesystem, credential, and network access. Attacks can span prose and files, whereas regex and code-only analyzers cover only one modality. SkillSieve applies three progressively deeper layers: recall-oriented regex, AST, and metadata triage; four parallel LLM security sub-tasks; and an independent three-model jury with debate on disagreement. We evaluate 49,592 real ClawHub skills, a 390-skill labeled benchmark, and 100 adversarial samples across five evasion techniques on a 440 USD ARM board. The full pipeline achieves F1 = 0.929 (precision 0.912, recall 0.945) at an average cost of $0.006 per skill. An optional XGBoost fast path reduces Layer-2/3 calls by 32% with a 1.7-point F1 decrease while preserving recall. On 52 Feishu/Lark packages, Layer 2 reclassifies 13 of 14 Layer-1 flags as safe after contextual analysis; we also deploy the system as a Feishu chat bot. Code, labels, and aggregate results are open-sourced."
+ },
+ {
+  "id": "2605.03353v4",
+  "title": "SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents",
+  "year": 2026,
+  "pub": "2026-05-05",
+  "authors": "Yipeng Ouyang, Yi Xiao, Yuhao Gu, Xianwei Zhang",
+  "comment": "Accepted by the Agent Skills Workshop at ACM CAIS 2026. 20 pages, 6 figures. Project Homepage: https://skcc.nexa-lang.com/ Code Repo: https://github.com/Nexa-Language/Skill-Compiler/",
+  "abstract": "LLM agents increasingly rely on reusable skills (e.g., SKILL markdown files) to execute complex tasks, yet these artifacts lack portability: agent frameworks are highly sensitive to prompt formatting, leading to a large performance variation for the same skill. Nevertheless, most skills are authored once as format-agnostic Markdown, necessitating costly per-framework rewrites and also leaving security largely unaddressed, with widespread vulnerabilities in practice. To address this, we present SkCC, a compiler for LLM agents that introduces classical compilation design into agent skill development. SkCC centers on SkIR, a strongly-typed intermediate representation that decouples skill semantics from framework-specific formatting, thus enabling portable deployment across agent frameworks. Atop of this IR, a static Optimizer enforces security constraints, blocking vulnerabilities before deployment. Implemented as a four-phase pipeline, SkCC effectively reduces adaptation complexity from $O(m \\times n)$ to $O(m + n)$ across $m$ skills and $n$ frameworks. Experiments on SkillsBench demonstrate that SkCC delivers consistent and substantial gains over original counterparts, with pass rate increases from 21.1% to 33.3% on Claude Code and from 35.1% to 48.7% on Kimi CLI. Further, the design achieves sub-10ms compilation latency, 94.8% proactive security trigger rate, and 10-46% runtime token savings across frameworks."
+ },
+ {
+  "id": "2607.10113v1",
+  "title": "Dynamic Agent Skills: A Lifecycle Survey and Taxonomy of Evolving Skill Libraries",
+  "year": 2026,
+  "pub": "2026-07-11",
+  "authors": "Yubo Li",
+  "comment": "Accepted by TMLR (2026.07), OpenReview Link: https://openreview.net/forum?id=cjU3YbcRr8",
+  "abstract": "Large language model agents increasingly store reusable procedures outside the model. These reusable procedures are often called \\emph{skills}: they may be code functions, natural-language instructions, SKILL.md packages, workflow graphs, or learned adapters that a future agent can retrieve and invoke. This taxonomy-driven survey asks how such skill libraries change over time. Across a $124$-paper $2023$--$2026$ audit set, we synthesize dynamic skill systems as \\emph{lifecycle-managed, verified, evolving artifact stores}: agents collect evidence from interaction, propose skill updates, verify and admit candidates, organize them for retrieval and composition, repair or prune stale entries, and govern sharing through provenance and rollback. We organize the literature around three survey tools. First, a $\\text{six}$-sense taxonomy distinguishes the structurally different artifacts called ``skills'' in current papers. Second, an $\\text{eight}$-stage lifecycle architecture identifies the recurring design decisions behind evidence acquisition, proposal, verification/admission, storage, retrieval/composition, maintenance, distillation/portability, and governance. Third, a lightweight skill-record schema and $\\text{ten}$-operator vocabulary provide common terms for comparing library updates without elevating them into a separate method contribution. Using this structure, we synthesize evidence-graded patterns with explicit caveats: admission and repair are repeatedly important, verifier quality materially affects skill-aware RL, flat retrieval can degrade as libraries grow, and current benchmarks still under-report library trajectories, usage--utility gaps, and safety surfaces. We close with concrete reporting standards and open problems for evaluating dynamic skills as changing libraries rather than static prompt or tool collections."
+ },
+ {
+  "id": "2607.12340v1",
+  "title": "Skills That Don't Exist: A Large-Scale Study of Hallucinated Skill Recommendation in LLM Agents",
+  "year": 2026,
+  "pub": "2026-07-14",
+  "authors": "Weifeng Yuan, Wenbo Guo, Feng Dong, Haoyu Wang",
+  "comment": "",
+  "abstract": "LLM agents acquire new capabilities by downloading skills from open registries. Instead of browsing these catalogs manually, developers typically ask the agent to recommend and install a skill. This convenience hides a risk: agents frequently invent names for skills that exist in no registry. We term this flaw skill name hallucination. A fake name may seem harmless, but it opens the door to supply-chain attacks. Because registries rarely verify publishers, an adversary can prompt the agent, collect the fake names it returns, pre-register malicious skills under them, and wait for a victim to install the payload. We conducted the first large-scale measurement of skill name hallucination, evaluating 15,000 prompts across 12 configurations (4 standalone LLMs and 8 agents). We conservatively counted a name as hallucinated only if it was missing from all live registries and GitHub. The results reveal a systemic vulnerability: every configuration hallucinates. Rates average 36.0% for standalone LLMs and 36.9% for agents, rising to 43.1% on real-world developer questions. In total, the systems generated 5,669 distinct hallucinated names. Crucially, these names are not random noise. Agents repeat the same fake names across prompts and models, giving attackers highly reliable targets to hijack. Finally, we tested four model-level defenses and found a severe conflict between security and usability. The strongest, retrieval grounding, cut the hallucination rate from 40.8% to 3.2% but crippled usefulness: even the best-defended system recommended the correct skill only about one in six times. Skill name hallucination is thus a highly exploitable vulnerability requiring minimal attacker effort. Fixing it cannot rely on prompt engineering or model tuning alone. It demands ecosystem-wide structural changes: registry-level name reservations and verified recommendation pipelines."
+ },
+ {
+  "id": "2605.14460v1",
+  "title": "Exploiting LLM Agent Supply Chains via Payload-less Skills",
+  "year": 2026,
+  "pub": "2026-05-14",
+  "authors": "Xinyu Liu, Yukai Zhao, Xing Hu, Xin Xia",
+  "comment": "",
+  "abstract": "Autonomous agents powered by Large Language Models (LLMs) acquire external functionalities through third-party skills available in open marketplaces. Adopting these integrations broadens the potential attack surface, prompting a need for systematic security evaluation. Current auditing mechanisms are effective at identifying explicit code payloads and predefined threat contents through security scanning. These detection mechanisms are bypassed if malicious behaviors lack direct injection and are instead synthesized dynamically at runtime through the agent's inherent generative capabilities. Exploring this blind spot, we introduce Semantic Compliance Hijacking (SCH), a payload-less supply chain attack targeting autonomous coding environments. The SCH approach translates malicious goals into unstructured natural language instructions formatted as necessary compliance rules, leading the agent to generate and execute unauthorized code. To assess the real-world viability of this attack, we developed an automated pipeline to evaluate its effectiveness across a test matrix comprising three mainstream agent frameworks and three distinct foundation models using contextualized scenarios. The findings demonstrate the pervasive nature of this threat, with SCH achieving peak success rates of up to 77.67% for confidentiality breaches and 67.33% for Remote Code Execution (RCE) under the most vulnerable configurations. Furthermore, the introduction of Multi-Skill Automated Optimization (MS-AO) further boosted attack efficacy. By omitting recognizable Abstract Syntax Tree (AST) signatures and explicit harmful intents, the manipulated skill files maintained a 0.00% detection rate, evading current scanning tools. This research highlights an underexplored attack surface within agent supply chains, pointing to a necessary transition from signature-based detection models toward semantic intent validation."
+ },
+ {
+  "id": "2605.28588v1",
+  "title": "Technical Report: Exploring the Emerging Threats of the Agent Skill Ecosystem",
+  "year": 2026,
+  "pub": "2026-05-27",
+  "authors": "Luca Beurer-Kellner, Aleksei Kudrinskii, Marco Milanta, Kristian Bonde Nielsen",
+  "comment": "10 pages, technical report",
+  "abstract": "We analyzed 3,984 AI agent skills from major marketplaces and found 76 confirmed malicious payloads, including credential theft, backdoor installation, and data exfiltration. 13.4% of all skills contain at least one critical-level security issue and at least 8 manually confirmed malicious skills remain publicly available on clawhub.ai as of the date of publication. This report documents our methodology, presents a threat taxonomy based on real-world samples, and details the attack patterns we observed. As skill marketplaces grow rapidly and AI agents gain access to sensitive credentials and systems, automated security analysis is no longer optional."
+ },
+ {
+  "id": "2609.14079v1",
+  "title": "SkillSecurer: Detecting and Patching Prompt-Injection Vulnerabilities in AI Agent Skills",
+  "year": 2026,
+  "pub": "2026-09-12",
+  "authors": "Donato Mecca, Alberto Verna, Youness Bouchari, Nikhil Jha",
+  "comment": "",
+  "abstract": "Agent skills extend AI agents with reusable instructions, scripts, and configuration, but are also open to new attacks to influence an agent's decisions and actions. To address these risks, we present SkillSecurer, a fully agentic framework for generating, detecting, localising, and remediating security risks in agent skills. Its red agent generates context-compatible injections across nine threat types while recording the exact modification; its blue agent analyses complete skill packages, produces grounded evidence, and proposes patches. For controlled instances, a verifier compares findings and patches with the recorded injection, enabling injection-level evaluation. We thoroughly evaluate SkillSecurer by selecting the best backend LLM, comparing it with competitors, and manually cross-validating each evaluation stage. With its best performing backend, SkillSecurer is the only scanner to achieve a 100% injection detection rate. Next, we analyse popular skills from skills.sh, finding latent vulnerabilities in more than 17% of the skills examined. Testing some of those skills, we trigger actual incidents, showing the risks of running unverified skills. Our results show that context-aware LLM analysis can provide reliable injection localisation and actionable remediation beyond skill-level flagging alone."
+ },
+ {
+  "id": "2606.20631v1",
+  "title": "Harnessing Agent Skills: Architectural Patterns and a Reference Architecture for Skill-Mediated LLM Agents",
+  "year": 2026,
+  "pub": "2026-05-29",
+  "authors": "Boming Xia, Liming Zhu, Zhenchang Xing, Qinghua Lu",
+  "comment": "",
+  "abstract": "Agent skills externalise reusable agent-facing behavioural knowledge and guidance as persistent artefacts that can be discovered, activated, and interpreted by LLM agents. Although a skill artefact is static at rest, its architectural responsibilities arise in use, when the artefact is selected for a run, bound to context and authority constraints, interpreted by a stochastic agent, and recorded as run evidence. We call this run-specific relation skill-in-use. This paper studies agent skill harnessing: the architectural responsibilities that govern the transition from skill artefacts to skill-in-use, bound the executable consequences associated with skill-in-use, and capture evidence for attribution, verification, repair, and evolution. This paper provides a catalogue of ten empirically grounded architectural patterns (five core, five supporting) for skill harnessing and synthesises them into a reference architecture with four responsibility layers: Supply Chain, Mediation, Execution Control, and Evidence & Feedback. We evaluate the architecture through cross-instantiation across 8 selected systems. The resulting patterns and reference architecture provide a vocabulary and diagnostic frame for analysing skill-harnessing responsibilities across agent systems."
+ },
+ {
+  "id": "2609.17274v2",
+  "title": "After the Party: Growth, Governance, and Security Scanning in the OpenClaw Agent Skill Ecosystem",
+  "year": 2026,
+  "pub": "2026-09-15",
+  "authors": "Yunpeng Xiong, Ting Zhang",
+  "comment": "To appear in IEEE Digital Library as the 33rd Asia-Pacific Software Engineering Conference (APSEC 2026) conference proceedings. Accepted version, not camera ready version",
+  "abstract": "AI agents increasingly act through agent skills, i.e., natural-language instructions, that direct a host agent toward shell, network, credential, file, and process actions, and public registries distribute them at scale. In the first half of 2026, the OpenClaw AI agent went viral, and its public skill registry boomed: the observable stock nearly doubled in 91 days, and a majority of the listings visible in June were created in just two months. By the end of our study window, the wave had crested, and monthly listing creation and core-repository activity were falling from their spring peaks. This paper measures what the boom left behind, drawing on the OpenClaw Git history, its GitHub issues and pull requests, and three ClawHub registry snapshots. Attention is concentrated: the top 10% of skills received 46.93% of all downloads. No simple skill features (like size or download counts) remained a stable predictor of continued listing once creation cohort and skill age were controlled. Human scrutiny did not stay: 77.86% have zero stars and zero comments, while 85.06% of the readable skills carry privilege evidence. And automated cleanup is not ready: the three security scanners disagreed on 23,702 of the 61,990 skills they all cover. After human adjudication, weighted scanner sensitivity against the reference standard ranged from 21.67% to 61.06%. Governing fast-growing agent-skill registries cannot rely on simple metadata or single scanner scores; it requires robust, transparent measurement and independent validation."
+ },
+ {
+  "id": "2605.10990v1",
+  "title": "Skill Drift Is Contract Violation: Proactive Maintenance for LLM Agent Skill Libraries",
+  "year": 2026,
+  "pub": "2026-05-09",
+  "authors": "Linfeng Fan, Yuan Tian, Ziwei Li, Zhiwu Lu",
+  "comment": "",
+  "abstract": "LLM agents increasingly rely on reusable skill libraries, but these skills silently decay as the external services, packages, APIs, and configurations they reference evolve. Existing monitors detect such changes at the wrong granularity: they observe values, not the role those values play in a skill. A version string in a comment is noise; the same string in a pinned dependency is an operational obligation. We formulate skill drift as contract violation and introduce \\sgname{}, which extracts executable environment contracts from skill documents and validates only those role-bearing assumptions against known or live conditions. This distinction turns noisy monitoring into a precision-first maintenance signal. Contract-free CI probes produce 40\\% false positives, while \\sgname{} raises zero false alarms over 599 no-drift and hard-negative cases (Wilson 95\\% CI $[0,0.6]\\%$). In known-drift verification, \\sgname{} achieves 100\\% precision and 76\\% recall with the strongest backbone; in a pre-registered study over 49 real skills, it discovers live drift with 86\\% conservative precision. Violated contracts also make repair actionable, improving one-round success from 10\\% without localization to 78\\%. We release \\dbname{}, an 880-pair benchmark for skill degradation."
+ },
+ {
+  "id": "2606.01494v1",
+  "title": "ClawHub Security Signals: When VirusTotal, Static Analysis, and SkillSpector Disagree",
+  "year": 2026,
+  "pub": "2026-05-31",
+  "authors": "Vincent Koc, Patrick Erichsen, Jacob Tomlinson, Agustin Rivera",
+  "comment": "10 pages, 1 figure, 7 tables, 1 supplimentary dataset",
+  "abstract": "Agent skills extend AI agents with reusable instructions, tools, scripts, references, and workflows, establishing a security boundary distinct from both model safety and traditional package-malware detection. ClawHub Security Signals is a sanitized dataset of 67,453 latest public OpenClaw skill versions. Each row pairs redacted SKILL.md content and sanitized bundled files where present with a final ClawScan registry verdict and evidence from three scanner families: VirusTotal, static heuristic analysis, and NVIDIA SkillSpector. Rather than estimating malicious-skill prevalence, we study scanner disagreement. The three scanners rarely flag the same skills: any pair overlaps on at most 10.4% of their combined positives, only 0.69% of skills are flagged by all three, and 81.9% of flagged skills are identified by a single scanner. The disagreement is structured by attack surface. SkillSpector, which raises semantic agentic-risk advisories rather than malware-reputation signals, is positive for 19,209 of 25,504 suspicious rows (75.3%) but only 14 of 206 malicious rows (6.8%). The malicious-verdict region shows the inverse profile: 150 of 206 malicious rows (72.8%) are VirusTotal-positive, consistent with bundled-code malware evidence. These results show that agent-skill security requires layered governance, not single-scanner allow/block decisions. The corpus is released as a sanitized silver-standard dataset: labels are the registry's automated verdicts, not human-annotated ground truth, and the release represents an early, versioned snapshot intended to support the community while a human-annotated subset is developed. Further research is encouraged, including models tailored for skill-security triage."
+ },
+ {
+  "id": "2609.10962v1",
+  "title": "What a Random Draw from the MCP Registry Contains, and What Tool-Use Benchmarks Contain Instead",
+  "year": 2026,
+  "pub": "2026-09-10",
+  "authors": "Haseeb Mohammed Afsar",
+  "comment": "10 pages, 3 figures. Seeded, re-runnable pipeline and per-server outcomes: https://github.com/itguruhaseeb/mcp-probe ; archived at doi:10.5281/zenodo.21347997",
+  "abstract": "Studies of the Model Context Protocol (MCP) server ecosystem draw their samples in ways that quietly select for servers that work: reference sets, popularity lists, hand-curated frames, or pipelines that repair a server until it starts. We report what an unrepaired probability sample actually contains. From a 24,135-server registry census we draw 400 npm/stdio servers with a published seed and probe each one over the wire. Only 48.8% complete an initialize handshake, against 66.7% for a hand-curated frame measured with the same instrument, and the dominant failure is not missing credentials (13.3%) but servers that never start at all (37.5%). Among the 195 that do run, hard conformance is total: zero fatal JSON Schema violations across 2,766 advertised tools. Optional safety annotations are the real variance, and the tool-level omission rate on a random draw is 58.8% against 41.5% on the curated frame, so curation flatters this figure too. We then compare the tool descriptions these servers advertise against two tool-use benchmark corpora using one method held constant. Real MCP tools show 2.8% near-duplication at cosine 0.70, and all of it lies within single servers: cross-author near-duplication is 0.0% at every threshold tested. BFCL v4 shows 16.7%, of which 16.4 points lie between independently presented tasks. UltraTool shows 0.3%, cleaner than real tools, so this is a property of BFCL and not of synthetic corpora as a class. Separately, 68.8% of raw BFCL rows and 85.6% of raw UltraTool rows are exact name-plus-description repeats, against 0.4% for real MCP, so any statistic computed over these releases without global deduplication measures repetition rather than tools. All figures regenerate from released scripts and a published seed."
+ },
+ {
+  "id": "2606.19191v1",
+  "title": "PhantomSkill: Malicious Code Injection in Agent Skill Ecosystems",
+  "year": 2026,
+  "pub": "2026-06-17",
+  "authors": "Yu-Ting Lin, Chia-Mu Yu",
+  "comment": "",
+  "abstract": "Agent skills allow LLM-based coding agents to acquire domain-specific capabilities from third-party packages, but they also introduce a new supply-chain attack surface. We present PhantomSkill, an attack framework that hides malicious behavior in a skill's auxiliary resources rather than in its textual description. Its core technique, VulMask, rewrites overt malicious scripts into vulnerability-shaped implementations whose malicious behavior is activated only under attacker-controlled trigger conditions. This design shifts the visible signal from explicit malicious intent to ordinary-looking insecure code. Across representative host skills, attack goals, coding agents, generation models, and automated reviewers, VulMask preserves benign utility while reducing warning and malware-level detection compared with overt malicious scripts. Our results show that skill ecosystems require resource-level vetting, execution-time containment, and security policies that treat exploitable vulnerabilities in agent skills as potential malicious payloads."
+ },
+ {
+  "id": "2604.01687v3",
+  "title": "CoEvoSkills: Self-Evolving Agent Skills via Co-Evolutionary Verification",
+  "year": 2026,
+  "pub": "2026-04-02",
+  "authors": "Hanrong Zhang, Shicheng Fan, Henry Peng Zou, Yankai Chen",
+  "comment": "COLM accepted",
+  "abstract": "Anthropic proposes the concept of skills for LLM agents to tackle multi-step professional tasks that simple tool invocations cannot address. A tool is a single, self-contained function, whereas a skill is a structured bundle of interdependent multi-file artifacts. Currently, skill generation is not only label-intensive due to manual authoring, but also may suffer from human--machine cognitive misalignment, which can lead to degraded agent performance, as evidenced by evaluations on SkillsBench. Therefore, we aim to enable agents to autonomously generate skills. However, existing self-evolving methods designed for tools cannot be directly applied to skills due to their increased complexity. To address these issues, we propose CoEvoSkills, a self-evolving skills framework that enables agents to autonomously construct complex, multi-file skill packages. Specifically, CoEvoSkills couples a Skill Generator that iteratively refines skills with a Surrogate Verifier that co-evolves to provide informative and actionable feedback without access to ground-truth test content. On SkillsBench, CoEvoSkills outperforms five baselines on both Claude Code and Codex, and generalizes strongly to six additional LLMs. The code is publicly available at https://github.com/Zhang-Henry/CoEvoSkills."
+ },
+ {
+  "id": "2608.29596v1",
+  "title": "Towards a Systems Foundation for Agentic Skills: Architecture, Lifecycle, and Security",
+  "year": 2026,
+  "pub": "2026-08-30",
+  "authors": "Sanket Badhe, Deep Shah, Priyanka Tiwari, Nehal Kathrotia",
+  "comment": "",
+  "abstract": "Autonomous large language model (LLM) agents increasingly face reliability, context consumption, and execution stability bottlenecks when deployed on complex, long-horizon tasks. While monolithic prompt engineering and stateless tool-calling paradigms struggle to scale, the field is rapidly converging toward \\emph{agentic skills}: modular procedural abstractions that externalize execution knowledge into reusable, executable, and portable artifacts. This paper establishes a unified systems foundation and reference architecture for the agentic skills ecosystem. We formalize skills as externalized procedural knowledge bridging high-level cognitive planning with deterministic execution environments, and systematically delineate the architecture across a nine-stage lifecycle: autonomous discovery, authoring and representation formats, memory storage, dynamic retrieval and routing, composition and orchestration, execution and repair, lifelong adaptation, empirical evaluation, and security governance. We further examine marketplace dynamics, public registries, and emerging adversarial threat vectors, alongside runtime verification and defense mechanisms. Finally, we categorize system implementations across software engineering, operating system navigation, embodied robotics, and scientific discovery, while highlighting critical open challenges in continual learning and benchmark realism. This work establishes agentic skills as a foundational paradigm for building scalable, robust, and verifiable autonomous language agents."
+ },
+ {
+  "id": "2609.13353v1",
+  "title": "SkillAtlas: An Attack Trace Library for Agent Skills",
+  "year": 2026,
+  "pub": "2026-09-11",
+  "authors": "Yuxin Tian, Zenghao Duan, Liang Pang, Zhiyi Yin",
+  "comment": "Accepted at REALM @ EMNLP 2026 (non-archival workshop paper). 9 pages, 4 figures",
+  "abstract": "Agent skills are reusable units for language-model agents, but their risks emerge through model decisions, user context, tool calls, and execution feedback rather than through stable signatures or a single sandbox run. Existing static, dynamic, and benchmark-style evaluations rarely preserve public evidence that can be inspected, searched, and reused. We present SkillAtlas, a hosted attack trace library that converts private agent-skill security report bundles into reviewed, redacted, and searchable public cases. The library contains 3,014 cases, 6,589 traces, 151,131 steps, 233 affected skills, and 8 risk categories; 42.5% of successful cases first become successful after a non-success initial round, and trajectory-grounded labels improve pre-execution guard accuracy to 0.770."
+ },
+ {
+  "id": "2603.15401v1",
+  "title": "SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?",
+  "year": 2026,
+  "pub": "2026-03-16",
+  "authors": "Tingxu Han, Yi Zhang, Wei Song, Chunrong Fang",
+  "comment": "",
+  "abstract": "Agent skills, structured procedural knowledge packages injected at inference time, are increasingly used to augment LLM agents on software engineering tasks. However, their real utility in end-to-end development settings remains unclear. We present SWE-Skills-Bench, the first requirement-driven benchmark that isolates the marginal utility of agent skills in real-world software engineering (SWE). It pairs 49 public SWE skills with authentic GitHub repositories pinned at fixed commits and requirement documents with explicit acceptance criteria, yielding approximately 565 task instances across six SWE subdomains. We introduce a deterministic verification framework that maps each task's acceptance criteria to execution-based tests, enabling controlled paired evaluation with and without the skill. Our results show that skill injection benefits are far more limited than rapid adoption suggests: 39 of 49 skills yield zero pass-rate improvement, and the average gain is only +1.2%. Token overhead varies from modest savings to a 451% increase while pass rates remain unchanged. Only seven specialized skills produce meaningful gains (up to +30%), while three degrade performance (up to -10%) due to version-mismatched guidance conflicting with project context. These findings suggest that agent skills are a narrow intervention whose utility depends strongly on domain fit, abstraction level, and contextual compatibility. SWE-Skills-Bench provides a testbed for evaluating the design, selection, and deployment of skills in software engineering agents. SWE-Skills-Bench is available at https://github.com/GeniusHTX/SWE-Skills-Bench."
+ },
+ {
+  "id": "2607.27309v2",
+  "title": "SIGIL: Compiling Agent Skills into Typed Harnesses",
+  "year": 2026,
+  "pub": "2026-07-29",
+  "authors": "Jayanaka Dantanarayana, Savini Kashmira, Lingjia Tang, Jason Mars",
+  "comment": "",
+  "abstract": "Agent skills provide a reusable way to specify multi-step agent behavior, but they remain natural-language specifications interpreted by the model at runtime. As a result, required tool calls, ordering constraints, and checks may be skipped even when explicitly prescribed by the skill. We introduce Skill Compilation, a paradigm that translates natural-language skills into executable agent programs while preserving model judgment where semantic decisions are required. We realize this idea in SIGIL. SIGIL extracts source-grounded requirements, decomposes them using a closed Agent Instruction Set (AIS), composes them into AG-IR with explicit ownership, data flow, and control flow, and deterministically lowers validated AG-IR into executable code. Across 33 publicly available SKILL.md files and three runtime models, SIGIL increases mean Applicable-Mandate Compliance (AMC), the fraction of applicable skill requirements satisfied during execution, from 66.0% with direct skill execution to 88.6%. SIGIL also reduces total runtime token consumption by 2.40-5.95x. These results show that compiling procedural structure improves the reliability and efficiency of skill execution while retaining model judgment where it is needed."
+ },
+ {
+  "id": "2607.22520v1",
+  "title": "The Regression Tax: Decomposing Why Skills Help and Hurt LLM Agents",
+  "year": 2026,
+  "pub": "2026-07-24",
+  "authors": "Darshan Tank, Baran Nama",
+  "comment": "",
+  "abstract": "Adding procedural skills to an LLM agent is typically evaluated by average improvement in task success. However, this metric hides an important cost: skills can also make agents worse. We measure both sides by comparing agents with and without skills across nearly 6,000 runs spanning two office automation benchmarks and three model harness stacks. This allows us to distinguish two outcomes. A regression is a task solved without skills but failed after skills are added. A residual failure is a task that fails both with and without skills. We find that regressions are substantial enough that the best performing skills outperform others primarily by regressing less, not by gaining more. We identify three causes of regression: (i) skill description osmosis, a skill changes an agent's behavior simply by being present in context, even when it is never invoked; (ii) grounding displacement, a skill's prescribed procedure overrides how the agent interprets its inputs; and (iii) verification displacement, where the procedure suppresses checks the agent would otherwise perform on its outputs. Analysing persistent failures reveals the same underlying pattern. Existing skills overemphasize procedural guidance the stage least often responsible for failure while under supporting grounding and verification, the dominant sources of remaining errors. After correcting evaluation artifacts and studying traces, we find many regressions and persistent failures recoverable through better grounding and verification. Procedural skills should be evaluated by decomposing their net effect into gains and regressions, not by aggregate improvement alone. We identify three regression modes skills should avoid, and find that reliability depends more on grounding and verification than on procedural skill choice."
+ },
+ {
+  "id": "2603.22447v2",
+  "title": "Latent Reuse in Agent Skills: Multi-modal Clone Detection at Ecosystem Scale",
+  "year": 2026,
+  "pub": "2026-03-23",
+  "authors": "Jiaying Zhu, Lyuye Zhang, Wenbo Guo, Yang Liu",
+  "comment": "13 pages, ASE 2026",
+  "abstract": "An agent skill is a reusable package for extending an LLM agent, typically a SKILL.md file that combines YAML metadata, natural-language instructions, and executable code. Public repositories now host over two million skills, yet existing tools analyze each artifact in isolation, and registries do not track reuse created through copying, renaming, or adaptation. Detecting these links is difficult because reuse may appear in one channel while the others change; conventional single-channel clone detectors can therefore miss such adaptations. We present SkillReuse, a multi-modal clone detector that combines global lexical matching with channel-specific representations for YAML, prose, and code, then uses logistic regression to produce clone scores and interpretable clone-type labels. We also introduce SkillReuse-Bench, an annotated benchmark of 300 skill pairs spanning exact copies, renamed copies, adaptations, and semantic equivalents. On SkillReuse-Bench, SkillReuse reaches an F1 of 0.939 with 0.952 precision, improving over TF-IDF and delivering 4.2x higher recall on Type-4 semantic clones than MinHash. Applied to all 137,470 skills that pass the content filter, SkillReuse identifies 1.06 million clone pairs involving 66.8% of the analyzed skills; 95.3% of these pairs cross author boundaries. Among skills in the analyzed name-based clone families, 67% are superseded by a higher-quality variant. Tracing 938 security-relevant skills through the clone graph surfaces 16,587 clone links spanning 6,376 related skills that per-skill scanners alone would miss."
+ },
+ {
+  "id": "2607.18970v3",
+  "title": "Skillware: A Software Ontology and Engineering Lifecycle for Persistent Behavioral Artifacts",
+  "year": 2026,
+  "pub": "2026-07-21",
+  "authors": "Haodi Fan, Zucong Lan",
+  "comment": "26 pages, 6 figures, 5 tables",
+  "abstract": "Agent Skills have become persistent behavioral artifacts across independent AI agent systems. They combine natural-language task specifications with metadata and optional references, scripts, assets, hooks, package manifests, tests, and companion interfaces. Existing studies explain how Skills are specified, executed, maintained, and evolved, but lack an ontology that defines these artifacts as independent software objects. This paper introduces Skillware as the software abstraction that extends software engineering to persistent Behavioral Artifacts in agent systems. A Skill Artifact specifies reusable task behavior; a Skillware Unit manages that artifact as software through an independent identity and lifecycle. A compatible Agent Host activates the unit for runtime interpretation. Three necessary conditions operationalize category membership: behavioral primacy, independent software identity, and an Agent Host execution relationship. Lifecycle Continuity records whether the same unit identity persists through update, maintenance, rollback, and removal as a separate software-grade property. Evidence combines the Agent Skills specification, a frozen corpus of 138,133 content-deduplicated SKILL.md records associated with 20,556 repository identifiers, independent empirical studies, 15 category-boundary cases, and 13 fixed-revision engineering implementations. The evidence establishes a recurring artifact envelope, separable software identities, documented or reconstructed activation paths, and lifecycle engineering pressure. Skillware provides the software ontology and engineering lifecycle through which agent capabilities can become identifiable, composable, and maintainable software artifacts with an explicit basis for future evolution. Public design-pattern and evidence materials are available at https://github.com/MetaInFLow/skillware-patterns."
+ }
+]

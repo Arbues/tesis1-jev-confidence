@@ -1,0 +1,255 @@
+# README — Estado del proyecto de tesis (punto de entrada)
+
+> **Si eres un agente que acaba de abrir esta carpeta: lee este archivo completo antes de actuar.**
+> Contiene el contexto acumulado, las decisiones tomadas y sus razones. Última actualización: **04-oct-2026**.
+>
+> **Sesión nueva:** `.hermes.md` es el contexto de proyecto que Hermes auto-carga al arrancar, y `STATE.json`
+> es el punto de reentrada. Los dos son de lectura obligatoria antes de proponer o cambiar nada.
+
+---
+
+> ## ✅ RUTA ELEGIDA (04-oct-2026): **RUTA 1 — Metrología y transferencia del campo `confidence`**
+>
+> **Tema:** el ecosistema open-source de modelos de decisión tipo **Jev** (RLCD), con **Laya** como
+> implementación de referencia.
+> **Documento principal vigente:** **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`**.
+>
+> **Artefacto:** especificación formal + librería `jev-conf-metrics` + arnés de conformidad + **matriz de
+> transferencia de umbrales** entre las definiciones incompatibles de `confidence`, medida sobre modelos de
+> pesos abiertos, con dataset de mediciones crudas y script regenerador.
+>
+> **Por qué esta y no las otras dos:** un sondeo en vivo (04-oct-2026) mostró que la antigua ruta B (réplica
+> de RLCD) quedó casi ocupada por `LakoreAI/sev` y la antigua ruta C (cartografía) por `arXiv:2609.30216`
+> (*Jev in the Wild*). La metrología sigue libre como **tabla sistemática**.
+> **Equipos:** Mac Mini + RTX 4050 (6 GB). El servidor `thinkpad-t440` no tiene GPU (solo orquesta).
+
+---
+
+## 1. Qué es esta carpeta
+
+Carpeta de trabajo para elegir y desarrollar el tema de **Tesis 1** de Arbués Enrique Pérez V.,
+estudiante de **Ciencia de la Computación (FC-UNI, Perú)**. Es el primero de tres trabajos encadenados,
+cada uno publicable:
+
+| Etapa | Curso | Aporte | Tipo |
+|---|---|---|---|
+| **Tesis 1** | curso de tesis 1 | El instrumento + la caracterización empírica | Medición |
+| **Tesis 2** | curso de tesis 2 | El mecanismo (objetivo que induzca calibración) | Algorítmica |
+| **Taller** | taller de tesis (último) | **Las bases matemáticas** (condiciones + demostración) | **Teórica** |
+
+**Restricción de forma:** formato exigido **APA o IEEE** (R.R. 1439-2023-UNI). El Plan de Tesis tiene validez de 2 años.
+
+---
+
+## 2. ⚡ Estado en una línea
+
+**Tema: modelos de decisión tipo Jev (RLCD) — eje 2, confirmado 01-oct-2026.** Tesis 1 = **Ruta 1**, elegida
+bajo tres reglas: el resultado es un **artefacto** (no un hallazgo), el trabajo manual del autor es **mínimo**
+y lo automatizable **máximo**, y las referencias/comparaciones son **trazables**. El Taller convertirá esa
+evidencia en teoría del objetivo RLCD.
+
+**Título provisional:**
+> *Metrología y transferencia del campo `confidence` en modelos de decisión de pesos abiertos tipo Jev*
+> *Metrology and Threshold Transfer of the `confidence` Field in Open-Weight Jev-Type Decision Models*
+
+**Regla de estilo:** sin dos puntos, sin subtítulo, sin signos de interrogación. Frase nominal que declara
+propiedad + objeto + alcance + tipo de método. **El título definitivo se fija al cerrar la especificación.**
+
+---
+
+## 3. Índice de archivos
+
+| Archivo | Qué contiene | Estado |
+|---|---|---|
+| `README.md` | **este archivo** — punto de entrada y estado consolidado | vigente |
+| `STATE.json` | El mismo estado en formato máquina-legible para agentes | vigente |
+| `.hermes.md` | Contexto de proyecto que Hermes auto-carga al arrancar | vigente |
+| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib` | **vigente** |
+| `docs/guia-agentes.md` | Guía de trabajo/handoff para agentes (AGENTS.md canónico pendiente de aprobación) | vigente |
+| **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`** | **DOCUMENTO PRINCIPAL VIGENTE**: la Ruta 1 (artefacto, diseño de medición, marco teórico, paso 0, plan) | **vigente** |
+| `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
+| `eje-2-jev-opensource/FUENTES.md` | Inventario de las 49 fuentes del eje, verificadas con API | lectura obligatoria |
+| `eje-2-jev-opensource/08_estudio_ecosistema.md` | Estudio de campo: 20+ modelos con pesos, taxonomía por rigor, tabla de calibración, huecos | vigente |
+| `audit/jev-oss/` | 13 READMEs crudos de las implementaciones + 2 categorías del índice curado | dato |
+| `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) + datos + scripts | ver §7 |
+| `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
+| `eje-1-jepa/`, `_descartado/` | **EJE DESCARTADO — FUERA DE ALCANCE.** No leer, no usar, no proponer subrutas | descartado |
+
+---
+
+## 4. El tema: Jev, Laya y el ecosistema de modelos de decisión (eje 2)
+
+**La referencia cerrada — Jev (TypeSafe System One, `jev-1.13.0`, 18-sep-2026).** Modelo de **decisión**,
+no de lenguaje: termina la inferencia con un *readout* de los logits en la posición de cada etiqueta y
+aplica softmax **solo sobre las etiquetas permitidas**, así que `output_tokens = 0` por construcción. Tres
+primitivos: `choice` (≤255 opciones), `score` (2–10 niveles) y `noul` (booleano, **sin** campo `confidence`).
+Estado compartido y preguntas aisladas → **no hay distribución conjunta** (una pregunta y su negación pueden
+devolver 0.7 ambas). `confidence` **no es** la probabilidad ganadora: es concentración, `(n·p_max − 1)/(n − 1)`.
+TypeSafe **no ha publicado un solo ECE, ni la pérdida, ni los pesos**.
+
+**La implementación de referencia — Laya** (`NandhaKishorM/laya`, Apache-2.0, **421M** = ModernBERT-large
++ cabeza que puntúa un token `[MASK]` colocado en la opción). Es la única que publica el bucle **RLCD**
+completo. **Encoder congelable → features cacheadas → todo el barrido cabe en la RTX 4050.** Su `confidence`
+es `1 − entropía normalizada` (choice/score) — **no la fórmula de Jev**.
+
+**RLCD** = ruido gaussiano de media cero en los logits (σ 1.0 → 0.3) + regla de puntuación
+**estrictamente propia** (log con suelo −9.21 + 0.75·spherical; RPS para el `score` ordinal) + REINFORCE
+con baseline de grupo + temperatura post-hoc. En teoría reportar honestamente es la única estrategia
+óptima; en la práctica ningún proyecto lo logró.
+
+**El dato central:** el ecosistema abierto **refutó empíricamente la premisa de Jev**. Donde hay
+calibración, vino de un **ajuste de temperatura post-hoc sobre datos propios**, no del objetivo de
+entrenamiento. Y hay **varias definiciones incompatibles** del campo `confidence` (Jev, Laya entropía, Laya
+`noul`, `answer_confidence` = p_max, `act_probability`, prior aprendido) con **cero estudios de transferencia
+de umbrales entre ellas** → **ese es el objeto de la Ruta 1.**
+
+---
+
+## 5. La Ruta 1 en una tabla
+
+| | Detalle |
+|---|---|
+| **Problema** | El mismo campo `confidence` significa cosas distintas según el modelo, y un umbral calibrado sobre una definición no significa nada sobre otra, pero el ecosistema los porta como si fueran intercambiables |
+| **Artefacto final** | Especificación formal + librería `jev-conf-metrics` (con tests de conformidad) + **matriz de transferencia de umbrales** (definición × definición × modelo × dataset) + dataset de mediciones crudas + script regenerador |
+| **Por qué sobrevive** | Es el **instrumento**, no el hallazgo: quien afirme que los umbrales no transfieren tendrá que citar la matriz |
+| **Agente (automático)** | descarga de pesos, inferencia, cálculo de todas las definiciones, ECE/Brier/AUROC, la matriz, bootstrap + FDR, figuras, BibTeX, pre-registro, la librería |
+| **Autor (manual)** | definir el alcance (qué definiciones entran, qué cobertura) y **redactar**. **Cero etiquetado** |
+| **Costo / riesgo** | **$0** · riesgo **bajo** |
+| **Documento** | `eje-2-jev-opensource/11_ruta1_metrologia_confidence.md` |
+
+---
+
+## 6. La cadena de decisiones (qué se evaluó y por qué)
+
+| Candidato | Veredicto | Razón |
+|---|---|---|
+| **Jev / TypeSafe "System One"** | ✅ **eje elegido** | La premisa vieja ("no es open source") murió: 20+ modelos con pesos en días |
+| **Ruta 1 — Metrología de `confidence`** | ✅ **ELEGIDA (04-oct-2026)** | Artefacto puro, cero trabajo manual, riesgo bajo, densidad interna alta |
+| **Ruta B — Réplica controlada de RLCD** | ❌ descartada | Casi ocupada por `LakoreAI/sev` (26-sep: ablación completa, 30 corridas, checkpoints) |
+| **Ruta C — Cartografía del ecosistema** | ❌ descartada | Casi ocupada por `arXiv:2609.30216` (*Jev in the Wild*, 2.170 proyectos) |
+| **Eje 1 (JEPA/LeWM)** | ❌ descartado | **Instrucción expresa del autor.** Fuera de alcance; material en `eje-1-jepa/` |
+| **T-B modelo vs harness** | ❌ descartado | Versión ingenua redundante (243 papers); es comparación, no núcleo de CC |
+| **T-C seguridad de agent skills** | ❌ descartado | 8/10 saturado (el más saturado de los tres) |
+| **T-A orden cero (ZO)** | 🔶 alternativa | 6/10; abierto solo en A1/A3/A4 |
+
+> **Corrección de perspectiva del usuario (vigente):** valora el aporte **interno** (matemática, mecanismos,
+> código). **Actualización 04-oct-2026:** ese aporte puede vivir en el **marco teórico** sin ser el núcleo del
+> resultado — por eso Tesis 1 puede ser metrología/instrumento.
+
+---
+
+## 7. Auditorías de saturación (`audit/`)
+
+Ejecutadas con subagentes el 19-sep-2026:
+
+| Informe | Veredicto | Hallazgo clave |
+|---|---|---|
+| `audit/saturacion/auditoria_saturacion_zo.md` | **6/10** | Crecimiento 1.96× sobre 2025. Abierto: A1/A3/A4 |
+| `audit/saturacion/auditoria_saturacion_modelo_vs_harness.md` | **6/10** | La pregunta ya está contestada y replicada (HV=18.48 vs MV=2.37 pp²) |
+| `audit/saturacion/informe_saturacion_agent_skills.md` | **8/10** | Ningún escáner supera el baseline "marcar todo" |
+
+Datos crudos y scripts también en `audit/saturacion/`.
+
+---
+
+## 8. Auditoría de huecos (por qué el resultado es un artefacto)
+
+Verificado en vivo el 01-oct-2026 (ampliado el 04-oct-2026). **Las filas de eje 2 (Jev/Laya) son las que importan.**
+
+| Hueco | Quién lo ocupó | Veredicto |
+|---|---|---|
+| Por qué RLCD no produce calibración | `arXiv:2609.38850` + reproducción con el lema de Stein | cerrado |
+| Ablación controlada de RLCD (CE vs RL, σ, recompensa) | **`LakoreAI/sev`** (26-sep-2026): 30 corridas, código, checkpoints | cerrado |
+| Coherencia / negación / axiomas | `arXiv:2609.33209` | cerrado |
+| Sesgo de posición / etiqueta | `arXiv:2609.26758` + `arXiv:2609.26550` | cerrado |
+| Cartografía del ecosistema | **`arXiv:2609.30216`** (*Jev in the Wild*) + awesomejev.com | cerrado |
+| Metrología de `confidence` **dentro** de una definición | estudio pre-registrado UCLA (0.77–0.95 para 80 % de cobertura) | cerrado |
+| Calibración de Laya | `arXiv:2609.33843` (checkpoint tal cual: sub-confianza 0.214; T=0.469 → 0.037) | cerrado |
+| **Transferencia de umbrales ENTRE definiciones** | **nadie** | **ABIERTO → objeto de la Ruta 1** |
+| Ground truth humano con kappa | **nadie** | abierto, pero **excluido por D2** (anotación manual) |
+
+**Conclusión:** el "*cuánto*" y el "*por qué*" están ocupados. **Lo que queda libre es el instrumento de
+metrología.** De ahí D1 y la Ruta 1.
+
+---
+
+## 9. Convenciones y preferencias del usuario (respetar siempre)
+
+- **Idioma:** español. En el chat, **corto**; si no entiende, reformular en lenguaje llano. Los `.md` entregados, detallados.
+- **Formato:** respuestas con **tablas y pasos**; aprende mejor con **diagramas de arquitectura**.
+- **Formato de tesis:** **APA o IEEE** (R.R. 1439-2023-UNI).
+- **Aporte interno** (matemática, mecanismos, código) valorado; puede vivir en el marco teórico.
+- **Git:** rama separada → PR → squash merge; **nunca push directo a main** (solo en repos que son git; **esta carpeta no lo es**).
+- **Seguridad:** cero contraseñas o secrets en `.env` ni en repos; en docs, solo placeholders.
+- **Docker en el servidor:** `restart: always`.
+- **Si un enfoque falla 3 veces: parar y cambiar de perspectiva.**
+- **Hardware:** **Mac Mini** (Apple Silicon) + **Acer Nitro, RTX 4050 Laptop 6 GB**. Servidor `thinkpad-t440` **sin GPU**.
+
+---
+
+## 10. Siguientes pasos concretos
+
+| # | Paso | Nota |
+|---|---|---|
+| 0 | **Elegir la ruta** | ✅ hecho: **Ruta 1** (04-oct-2026) |
+| 1 | **Paso 0 go/no-go (medio día)**: descargar Laya 421M y Kev-0.8B, correr `choice`/`score`/`noul` verificando `output_tokens = 0`, y reproducir un ECE sobre `typed-decisions` | **Ejecutar en la 4050 o el Mac Mini**, nunca en el t440 |
+| 2 | **Congelar** la lista de definiciones y datasets, y la cobertura objetivo | Alcance (autor) |
+| 3 | **Especificación formal** de cada definición | Redacción (autor) |
+| 4 | **Librería** `jev-conf-metrics` + tests de conformidad | Automático |
+| 5 | **Pipeline de medición**: pesos abiertos + datasets ya etiquetados (cero etiquetado propio) | Automático |
+| 6 | **Matriz + dataset de mediciones crudas** (versión + hash por fila) | Entregable citable |
+| 7 | **Pre-registro con DOI** antes de la corrida principal | Hace creíble el desenlace |
+| 8 | **Fijar el título definitivo** al cerrar la especificación | Ver §2 |
+| 9 | **Estudio del objetivo RLCD** (scoring rules, REINFORCE, ruido) en paralelo | Nivel que el Taller convierte en teoría |
+
+**Riesgo a vigilar:** que aparezca la matriz (el ecosistema muta a diario). **Mitigación:** pre-registro con
+DOI temprano; el valor del instrumento sobrevive igual.
+
+---
+
+## 11. Glosario mínimo
+
+| Término | Significado |
+|---|---|
+| **Jev** | TypeSafe System One — modelo de decisión con *readout* de logits; **no genera texto**. **NADA que ver con JEPA** |
+| **choice / score / noul** | los tres primitivos de Jev (elección / ordinal / booleano) |
+| **RLCD** | Reinforcement Learning for Calibrated Decisions — ruido en logits + regla propia + REINFORCE con baseline + temperatura post-hoc |
+| **regla estrictamente propia** | regla de puntuación cuyo óptimo es reportar la probabilidad verdadera (log, spherical, RPS) |
+| **`confidence`** | campo con **definiciones incompatibles**: Jev `(n·p_max−1)/(n−1)`; Laya `1−entropía normalizada`; `p_max`; prior aprendido… |
+| **transferencia de umbral** | aplicar a la definición B el umbral calibrado en A; cuánto se degradan cobertura y precisión |
+| **ECE / Brier** | Expected Calibration Error / puntuación de Brier |
+| **cobertura** | fracción de casos que el modelo decide responder; su compañera es *accuracy on answered* |
+| **kappa** | acuerdo inter-anotador; **no existe** en este ecosistema (excluido por D2) |
+| **CC** | Ciencia de la Computación (la carrera) |
+| **typed-decisions** | `LocalLLaMA/typed-decisions`, el benchmark compartido (2.000 decisiones, Apache-2.0) |
+
+---
+
+## 12. Fuentes principales (eje 2)
+
+**El objeto:** `docs.typesafe.ai/primitives/choice` · `typesafe.ai/blog/introducing-system-one-models-and-jev` ·
+`archerhume.com/posts/jevs-architecture-unmasked` · `navinpai.github.io/decoding-jev/` · `note.com/wayne_chang`.
+
+**Modelos y pesos:** `github.com/NandhaKishorM/laya` + `convaiinnovations/laya` (421M) · `jaredpalmer/kev` (+ kev-0.8b) ·
+`bespokelabsai/nimble` · `TheoLeeCJ/SemIf-OpenJev` · `GestaltLabs/Jeff-1` · `vagmi/jev-lite` · `frontier-infra/jebadiah-9b-v0/v1` ·
+AnyJev (Nokia) · `open-decision-ai`.
+
+**Metrología (marco teórico):** Guo et al. 2017 (calibración) · Gneiting & Raftery 2007 (reglas propias) ·
+Naeini et al. 2015 (ECE) · Chow 1970 / Geifman & El-Yaniv 2017 (predicción selectiva) · Angelopoulos & Bates 2021 (conformal) ·
+`laya.studio/glossary/entropy-based-confidence` · rohitghumare.com (fórmula de Jev medida).
+
+**Datasets:** `LocalLLaMA/typed-decisions` · `jaredpalmer/kev-suites` · `alisawuffles/WANLI` · Banking77 · CLINC150 · MedHallu.
+
+**Cierres de septiembre (por qué el resultado es un artefacto):** arXiv:2609.38850 · `LakoreAI/sev` (RLCD) ·
+arXiv:2609.33209 · arXiv:2609.26758 · arXiv:2609.26550 · arXiv:2609.33843 (Laya) · arXiv:2609.30216 (*Jev in the Wild*).
+
+---
+
+> **Registro histórico (eje descartado):** el material del **eje 1 (JEPA/LeWM/DINO)** — incluida su corrección
+> crítica del 25-sep-2026 — vive en `eje-1-jepa/` y `_descartado/`. Quedó **FUERA DE ALCANCE** por instrucción
+> expresa del autor (confusión Jev/JEPA). **No trabajar sobre él ni proponer subrutas.**
+
+---
+
+*Fin del estado consolidado. Si actualizas algo en esta carpeta, actualiza también este README
+y `STATE.json` — son el punto de reentrada para el siguiente agente.*

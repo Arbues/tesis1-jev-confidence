@@ -1,0 +1,30 @@
+# --- Entornos y cachés ---
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.cache/
+
+# --- Modelos y artefactos pesados (se descargan, no se versionan) ---
+models/
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.gguf
+*.onnx
+.cache/huggingface/
+
+# --- Salidas de cómputo locales (se commitean solo las finales con hash) ---
+runs/
+*.log
+scratch/
+tmp/
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
