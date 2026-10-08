@@ -480,6 +480,34 @@ def selftest():
     print(f"[ok] transferencia FALLIDA ent→pmax (n={n0}): τ_ent={tau_e:.3f} daría cobertura "
           f"{cov_e_on_pm:.3f} en pmax (≠ 0.80) — la matriz lo cuantifica")
 
+    # --- T6 / Proposición 3: con n=2 las CINCO definiciones ordenan igual => transferencia exacta
+    def _rank(confs):
+        order = sorted(range(len(confs)), key=lambda i: confs[i])
+        r = [0] * len(confs)
+        for pos, idx in enumerate(order):
+            r[idx] = pos
+        return r
+
+    pis = [0.5 + 0.5 * i / 999 for i in range(1000)]
+    p2 = [[x, 1.0 - x] for x in pis]
+    defs2 = {
+        "pmax": [conf_pmax(p) for p in p2],
+        "jev": [conf_jev(p) for p in p2],
+        "ent": [conf_ent(p) for p in p2],
+        "mar": [conf_margin(p) for p in p2],
+        "noul": [conf_noul(x) for x in pis],
+    }
+    base = _rank(defs2["pmax"])
+    for k, v in defs2.items():
+        assert _rank(v) == base, k
+    print("[ok] T6/Prop.3 (n=2): las 5 definiciones ordenan idéntico -> transferencia EXACTA")
+
+    # --- T8: `noul` simétrico y nunca por debajo de 0.5
+    for x in pis:
+        assert abs(conf_noul(x) - conf_noul(1.0 - x)) < 1e-12
+        assert conf_noul(x) >= 0.5 - 1e-12
+    print("[ok] T8: C_noul simétrico (C(π)=C(1−π)) y >= 0.5")
+
     print("\nSELFTEST OK — la matemática del marco teórico es consistente.")
     return 0
 

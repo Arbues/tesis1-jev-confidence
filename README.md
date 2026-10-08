@@ -64,7 +64,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `README.md` | **este archivo** — punto de entrada y estado consolidado | vigente |
 | `STATE.json` | El mismo estado en formato máquina-legible para agentes | vigente |
 | `.hermes.md` | Contexto de proyecto que Hermes auto-carga al arrancar | vigente |
-| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `secciones/` (borradores §1–§3) | **vigente** |
+| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `03_especificacion_confidence.md` (especificación formal), `secciones/` (borradores §1–§3) | **vigente** |
 | `docs/guia-agentes.md` | Guía de trabajo/handoff para agentes (AGENTS.md canónico pendiente de aprobación) | vigente |
 | **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`** | **DOCUMENTO PRINCIPAL VIGENTE**: la Ruta 1 (artefacto, diseño de medición, marco teórico, paso 0, plan) | **vigente** |
 | `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
