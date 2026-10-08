@@ -75,6 +75,26 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
 | `eje-1-jepa/`, `_descartado/` | **EJE DESCARTADO — FUERA DE ALCANCE.** No leer, no usar, no proponer subrutas | descartado |
 
+### 3-bis. Estructura de trabajo y regla de orden
+
+El repo tiene un **árbol de trabajo** para ir llenando poco a poco, sin ser rígido:
+
+```
+paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, figures/, tables/)
+src/        CÓDIGO (librería jev-conf-metrics, pipeline) — se trabaja en el Acer Nitro
+results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz de transferencia)
+data/       Datasets descargados (los pesados NO se versionan)
+notes/      Apuntes, borradores y lluvia de ideas (aquí sí, suelto está bien)
+docs/       Guías (incluye guia-agentes.md)
+```
+
+**Regla de orden (para que nada quede suelto en la raíz):** la **raíz** es solo para los archivos de
+entrada (`README.md`, `STATE.json`, `.hermes.md`, `AGENTS.md`, `.gitignore`) y las carpetas. Todo lo nuevo
+va a su carpeta → código a `src/`, resultados a `results/`, texto a `paper/`, ideas a `notes/`, datos a
+`data/`. Si dudas, crea una subcarpeta con nombre claro **dentro** de la que corresponda, no en la raíz.
+
+> **Visibilidad:** repo **privado** por ahora; se pasa a **público** cuando existan resultados o el MVP del framework.
+
 ---
 
 ## 4. El tema: Jev, Laya y el ecosistema de modelos de decisión (eje 2)
