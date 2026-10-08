@@ -209,7 +209,7 @@
   ],
 
   "archivos": {
-    "repositorio": "@Arbues · repo privado (se rellena al crearlo). Se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
+    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (privado) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "paper": {
       "plan": "paper/00_plan_del_paper.md",
       "marco_teorico": "paper/01_marco_teorico.md",
