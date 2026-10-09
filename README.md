@@ -340,9 +340,10 @@ cardinalidad). Error absoluto medio del porte de umbral:
 checkpoints de Laya (ventana de 512 tokens: solo caben 126 opciones) — el límite documentado de Jev (≤ 255)
 no es alcanzable en esta implementación.
 
-**Pendiente inmediato (actualizado):** el **DOI del pre-registro** — `paper/04_pre_registro.md` está listo
-para subir a Zenodo (cuenta del autor). Después, la **corrida confirmatoria** sobre el conjunto completo
-(lo medido aquí es un piloto declarado en el propio pre-registro) y la redacción §4–§7 en el t440
+**Pre-registro publicado:** DOI **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026).
+
+**Pendiente inmediato (actualizado):** la **corrida confirmatoria** sobre el conjunto completo (lo medido
+arriba es un piloto declarado en el propio pre-registro) y la redacción §4–§7 en el t440
 (ver `docs/handoff-t440.md`).
 
 ---

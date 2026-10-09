@@ -2,6 +2,7 @@
   "proyecto": "Tesis 1 - Ciencia de la Computacion (FC-UNI)",
   "autor": "Arbues Enrique Perez V.",
   "ultima_actualizacion": "2026-10-08",
+  "pre_registro": {"doi": "10.5281/zenodo.23266795", "repositorio": "Zenodo", "archivo": "paper/04_pre_registro.md", "fecha": "2026-10-08", "nota": "PUBLICADO por el autor. Congela el metodo antes de la corrida confirmatoria: definiciones, modelos, datasets, cross-fitting K=5, q, bootstrap, FDR y los dos portes. Declara que el paso 0 y el piloto ya se habian ejecutado."},
   "estado": "PASO 0 EJECUTADO: GO (08-oct-2026, Acer Nitro). Laya (3 checkpoints) + Kev-0.8B medidos sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado y las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003. Informe: results/paso0_informe.md. RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
 
   "decision_2026_10_04": {

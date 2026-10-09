@@ -73,7 +73,7 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 | 3 | Matriz de transferencia | `results/matrix/matriz_transferencia.csv` | **medida** (3.672 celdas) |
 | 4 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | **medido** (17.600 filas, con `row_hash`) |
 | 5 | Script regenerador | `src/matriz/{medir,matriz,figura,informe_matriz}.py` + `correr_*.sh` | **hecho** |
-| 6 | Pre-registro con DOI | `paper/04_pre_registro.md` → OSF/Zenodo | **escrito**, falta publicar |
+| 6 | Pre-registro con DOI | `paper/04_pre_registro.md` → Zenodo | ✅ **publicado: 10.5281/zenodo.23266795** |
 | 7 | Paper (IEEE) | `paper/` | §1–§3 borrador; §4–§7 dependen de la corrida confirmatoria |
 
 **Desviación de rutas respecto a la versión anterior de esta tabla:** los artefactos viven bajo
@@ -144,7 +144,7 @@ lo describen `README.md` §5 y `.hermes.md` §5. Las figuras (`heatmap_*.png/pdf
   en `paper/04_pre_registro.md`); revisar y pulir §1–§3 y redactar §4–§7 (citas al estilo final APA/IEEE) —
   en el t440, sin GPU, con `docs/handoff-t440.md`. El **alcance está congelado** (§10) y la **librería y la
   matriz están hechas** (`src/jev_conf_metrics/`, `src/matriz/`, `results/matrix/`). Lo único que toca al
-  autor: **publicar el pre-registro y darme el DOI** (cuenta OSF/Zenodo).
+  autor: nada — el pre-registro ya está publicado (DOI **10.5281/zenodo.23266795**).
 
 ---
 

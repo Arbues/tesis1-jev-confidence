@@ -1,8 +1,8 @@
 # Pre-registro — Metrología y transferencia del campo `confidence`
 
 *Tesis 1, Ruta 1. Borrador para publicar en Zenodo (autor: Arbués Enrique Pérez V., FC-UNI).*
-*Estado: **listo para subir**. Al publicarlo, este archivo NO se modifica: los cambios van en una
-versión nueva.*
+*Estado: **PUBLICADO**. DOI: **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026).*
+*Una vez publicado, este archivo NO se modifica: los cambios van en una versión nueva.*
 
 ---
 
