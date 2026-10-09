@@ -69,6 +69,38 @@ Error absoluto medio del porte, por subconjunto de celdas:
 
 **Cómo leer esto.** El porte con mapa tiene un suelo que no es culpa del mapa: si el umbral cae sobre un valor **empatado** (salidas saturadas), la cobertura salta y ni el mapa puede dar exactamente `q`. Por eso la comparación limpia es la del subconjunto sin empates dominantes, y por eso `delta_mapa` debe leerse **contra `delta` de la misma celda**, nunca como un cero absoluto. La columna `n_empates_tau` de la matriz dice, en cada celda, cuántos ítems comparten el umbral.
 
+### 3b. El promedio NO es el resumen: la estructura está en el par de definiciones
+
+La distribución de `Δ` es **bimodal**, no centrada: hay pares que coinciden (y entonces transferir es gratis) y pares que fallan en grande. Por eso el titular es el **par**, no la media global.
+
+| A → B | celdas | \|Δ\| **mediana** | \|Δ\| media | ¿tiene mapa? |
+|---|---|---|---|---|
+| margin → jev | 45 | **0.0023** | 0.0224 | sí |
+| jev → margin | 45 | **0.0024** | 0.0245 | sí |
+| jev → pmax | 297 | **0.0799** | 0.1675 | sí |
+| ent → jev | 45 | **0.1837** | 0.1974 | sí |
+| ent → margin | 45 | **0.1837** | 0.1974 | sí |
+| margin → pmax | 45 | **0.2000** | 0.2336 | sí |
+| ent → pmax | 45 | **0.2000** | 0.2447 | sí |
+| pmax → jev | 297 | **0.3131** | 0.3388 | sí |
+| margin → ent | 45 | **0.3817** | 0.4041 | sí |
+| jev → ent | 45 | **0.3817** | 0.4042 | sí |
+| pmax → margin | 45 | **0.5277** | 0.5590 | sí |
+| pmax → ent | 45 | **0.7667** | 0.6834 | sí |
+
+Dos coincidencias **por identidad matemática**, no por azar: (i) a `n = 2`, `C_jev` y `C_mar` son la MISMA función (`2·p_max − 1`), así que su porte directo ya da 0; (ii) a cardinalidad alta, `C_jev = (n·p−1)/(n−1) → p`, así que `jev` y `pmax` convergen y sus umbrales casi coinciden. En el extremo opuesto, `pmax → ent` es el peor par: cambia la FORMA de la función, no solo la escala.
+
+**Fracción de celdas que transfieren bien (|Δ| < 0.01), por cardinalidad:**
+
+| n | celdas con mapa | \|Δ\| mediana | % con \|Δ\| < 0.01 |
+|---|---|---|---|
+| 2 | 540 | 0.2288 | 14 % |
+| 3 | 90 | 0.1980 | 0 % |
+| 4 | 90 | 0.4018 | 0 % |
+| 5 | 180 | 0.2081 | 0 % |
+| 77 | 90 | 0.0068 | 57 % |
+| 151 | 54 | 0.0131 | 41 % |
+
 ## 4. Dónde el umbral NO viaja (nivel `raw`, q = 0.80, tras FDR)
 
 | modelo | dataset | n | A → B | Δ | IC95 % | cobertura B | precisión A | precisión B |

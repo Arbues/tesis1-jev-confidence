@@ -178,6 +178,39 @@ def main(argv=None):
                  "celda**, nunca como un cero absoluto. La columna `n_empates_tau` de la matriz dice, en "
                  "cada celda, cuántos ítems comparten el umbral.")
         w.append("")
+        w.append("### 3b. El promedio NO es el resumen: la estructura está en el par de definiciones")
+        w.append("")
+        w.append("La distribución de `Δ` es **bimodal**, no centrada: hay pares que coinciden (y entonces "
+                 "transferir es gratis) y pares que fallan en grande. Por eso el titular es el **par**, no "
+                 "la media global.")
+        w.append("")
+        w.append("| A → B | celdas | \\|Δ\\| **mediana** | \\|Δ\\| media | ¿tiene mapa? |")
+        w.append("|---|---|---|---|---|")
+        _pares = {}
+        for r in con_mapa:
+            _pares.setdefault((r["A"], r["B"]), []).append(abs(float(r["delta"])))
+        for (a, b), vals in sorted(_pares.items(), key=lambda kv: sum(kv[1]) / len(kv[1])):
+            tiene = "sí" if any(r["delta_mapa"] not in ("", None)
+                                for r in con_mapa if (r["A"], r["B"]) == (a, b)) else "no"
+            w.append(f"| {a} → {b} | {len(vals)} | **{sorted(vals)[len(vals)//2]:.4f}** | "
+                     f"{sum(vals)/len(vals):.4f} | {tiene} |")
+        w.append("")
+        w.append("Dos coincidencias **por identidad matemática**, no por azar: (i) a `n = 2`, `C_jev` y "
+                 "`C_mar` son la MISMA función (`2·p_max − 1`), así que su porte directo ya da 0; (ii) a "
+                 "cardinalidad alta, `C_jev = (n·p−1)/(n−1) → p`, así que `jev` y `pmax` convergen y sus "
+                 "umbrales casi coinciden. En el extremo opuesto, `pmax → ent` es el peor par: cambia la "
+                 "FORMA de la función, no solo la escala.")
+        w.append("")
+        w.append("**Fracción de celdas que transfieren bien (|Δ| < 0.01), por cardinalidad:**")
+        w.append("")
+        w.append("| n | celdas con mapa | \\|Δ\\| mediana | % con \\|Δ\\| < 0.01 |")
+        w.append("|---|---|---|---|")
+        import statistics as _st
+        for n in sorted({int(r["n"]) for r in con_mapa}):
+            sub = [abs(float(r["delta"])) for r in con_mapa if int(r["n"]) == n]
+            bien = sum(1 for x in sub if x < 0.01)
+            w.append(f"| {n} | {len(sub)} | {_st.median(sub):.4f} | {100*bien/len(sub):.0f} % |")
+        w.append("")
 
     # --- 4. las celdas peligrosas
     principales = [r for r in filas if r["nivel"] == "raw" and abs(float(r["q"]) - 0.80) < 1e-9
