@@ -294,6 +294,15 @@ class HFLogitBackend:
         answers = {}
         for qname, q in questions.items():
             opts = list(q["criteria"]) if isinstance(q.get("criteria"), dict) else list(q.get("criteria", []))
+            tipo = q.get("type")
+            # Las preguntas `noul` (binarias) llegan SIN criterios: son los dos valores lógicos.
+            # Sin esto, `opt_ids` queda vacío y `_softmax` revienta (fallo real del 08-oct-2026).
+            if not opts:
+                if tipo == "noul":
+                    opts = ["false", "true"]
+                else:
+                    raise BackendError(
+                        f"pregunta {qname!r} sin criterios y sin ser `noul`: no hay opciones que puntuar")
             labels = [chr(ord("A") + i) for i in range(len(opts))]
             prompt = (f"{state}\n{q.get('instructions', qname)}\n"
                       + "\n".join(f"{l}. {o}" for l, o in zip(labels, opts)) + "\nRespuesta:")
@@ -302,7 +311,15 @@ class HFLogitBackend:
                 logits = self.model(**ids).logits[0, -1]
             opt_ids = [self.tok(" " + l, add_special_tokens=False)["input_ids"][0] for l in labels]
             probs = _softmax([float(logits[i]) for i in opt_ids])
-            answers[qname] = {"type": q.get("type"), "probabilities": dict(zip(opts, probs))}
+            if tipo == "score":
+                # Mismo convenio que Laya en `score`: probabilidades indexadas "0".."n-1" y el
+                # mapa de niveles en `legend`. Si no, las etiquetas de oro (el índice del nivel)
+                # no casan y se pierden TODAS las preguntas `score` (fallo del 08-oct-2026).
+                legend = {str(i): str(o) for i, o in enumerate(opts)}
+                answers[qname] = {"type": tipo, "legend": legend,
+                                  "probabilities": {str(i): p for i, p in enumerate(probs)}}
+            else:
+                answers[qname] = {"type": tipo, "probabilities": dict(zip(opts, probs))}
         return {"model": self.model_id, "answers": answers,
                 "usage": {"output_tokens": 0}}
 

@@ -36,56 +36,70 @@ def _num(x):
         return float("nan")
 
 
+def _matriz_delta(cel, n):
+    """Matriz 4x4 de Δ (filas = origen A, columnas = destino B). NaN si no aplica."""
+    M = np.full((len(DEFS), len(DEFS)), np.nan)
+    for r in cel:
+        if int(r["n"]) != n or r["A"] not in DEFS or r["B"] not in DEFS or r["A"] == r["B"]:
+            continue
+        M[DEFS.index(r["A"]), DEFS.index(r["B"])] = _num(r["delta"])
+    return M
+
+
 def heatmap_por_dataset(filas, out_dir, nivel="raw", q=0.8):
+    """Una figura por (dataset, cardinalidad), con la ESCALA DE COLOR COMPARTIDA entre paneles.
+
+    Escala compartida = un mismo color significa el mismo Δ en todos los paneles. Con escalas
+    por panel la comparacion visual entre modelos es falsa (defecto detectado el 08-oct-2026).
+    """
     datasets = sorted({r["dataset"] for r in filas})
     for ds in datasets:
         sub = [r for r in filas if r["dataset"] == ds and r["nivel"] == nivel
                and abs(float(r["q"]) - q) < 1e-9]
         if not sub:
             continue
-        modelos = sorted({r["modelo"] for r in sub})
-        cards = sorted({int(r["n"]) for r in sub})
-        fig, axes = plt.subplots(1, len(modelos), figsize=(4.2 * len(modelos), 4.4),
-                                 squeeze=False)
-        for j, modelo in enumerate(modelos):
-            ax = axes[0][j]
-            cel = [r for r in sub if r["modelo"] == modelo]
-            n_principal = cards[0]
-            cel = [r for r in cel if int(r["n"]) == n_principal]
-            M = np.full((len(DEFS), len(DEFS)), np.nan)
-            for r in cel:
-                if r["A"] in DEFS and r["B"] in DEFS and r["A"] != r["B"]:
-                    M[DEFS.index(r["A"]), DEFS.index(r["B"])] = _num(r["delta"])
-            vmax = np.nanmax(np.abs(M)) if not np.all(np.isnan(M)) else 1.0
-            # las celdas sin valor (diagonal y sin mapa) van en gris: así Δ=0 no se confunde
-            cmap = plt.get_cmap("RdBu_r").copy()
-            cmap.set_bad("0.88")
-            im = ax.imshow(np.ma.masked_invalid(M), cmap=cmap, vmin=-vmax, vmax=vmax)
-            ax.set_xticks(range(len(DEFS)), DEFS, fontsize=9)
-            ax.set_yticks(range(len(DEFS)), DEFS, fontsize=9)
-            ax.set_xlabel("destino (B)", fontsize=9)
-            if j == 0:
-                ax.set_ylabel("origen (A)", fontsize=9)
-            ax.set_title(f"{modelo.split('/')[-1]}\nn={n_principal}", fontsize=9)
-            for a in range(len(DEFS)):
-                for b in range(len(DEFS)):
-                    if np.isnan(M[a, b]):
-                        ax.text(b, a, "n/a" if a != b else "—", ha="center", va="center",
-                                fontsize=7, color="0.45")
-                        continue
-                    color = "white" if abs(M[a, b]) > 0.6 * vmax else "black"
-                    ax.text(b, a, f"{M[a, b]:+.2f}", ha="center", va="center",
-                            fontsize=8, color=color)
-            cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-            cb.set_label("Δ (q − cobertura B)", fontsize=8)
-        fig.suptitle(f"Transferencia de umbral — {ds} (nivel {nivel}, q={q})\n"
-                     f"Δ = q − cobertura_B al portar τ tal cual", fontsize=11)
-        fig.tight_layout(rect=(0, 0, 1, 0.93))
-        for ext in ("png", "pdf"):
-            fig.savefig(os.path.join(out_dir, f"heatmap_{ds}_{nivel}_q{int(q*100)}.{ext}"),
-                        dpi=150)
-        plt.close(fig)
-        print(f"[figura] heatmap_{ds}_{nivel}_q{int(q*100)}.png/pdf")
+        for n in sorted({int(r["n"]) for r in sub}):
+            modelos = sorted({r["modelo"] for r in sub if int(r["n"]) == n})
+            matrices = {m: _matriz_delta([r for r in sub if r["modelo"] == m], n) for m in modelos}
+            if all(np.all(np.isnan(M)) for M in matrices.values()):
+                continue
+            vmax = max(float(np.nanmax(np.abs(M))) for M in matrices.values()
+                       if not np.all(np.isnan(M)))
+            vmax = max(vmax, 1e-6)
+            fig, axes = plt.subplots(1, len(modelos), figsize=(4.2 * len(modelos), 4.6),
+                                     squeeze=False)
+            for j, modelo in enumerate(modelos):
+                ax = axes[0][j]
+                M = matrices[modelo]
+                cmap = plt.get_cmap("RdBu_r").copy()
+                cmap.set_bad("0.88")
+                im = ax.imshow(np.ma.masked_invalid(M), cmap=cmap, vmin=-vmax, vmax=vmax)
+                ax.set_xticks(range(len(DEFS)), DEFS, fontsize=9)
+                ax.set_yticks(range(len(DEFS)), DEFS, fontsize=9)
+                ax.set_xlabel("destino (B)", fontsize=9)
+                if j == 0:
+                    ax.set_ylabel("origen (A)", fontsize=9)
+                ax.set_title(modelo.split("/")[-1] if "/" in modelo else modelo, fontsize=9)
+                for a in range(len(DEFS)):
+                    for b in range(len(DEFS)):
+                        if np.isnan(M[a, b]):
+                            ax.text(b, a, "n/a" if a != b else "\u2014", ha="center",
+                                    va="center", fontsize=7, color="0.45")
+                            continue
+                        color = "white" if abs(M[a, b]) > 0.6 * vmax else "black"
+                        ax.text(b, a, f"{M[a, b]:+.2f}", ha="center", va="center",
+                                fontsize=8, color=color)
+                cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+                cb.set_label("\u0394 (q \u2212 cobertura B)", fontsize=8)
+            fig.suptitle(f"Transferencia de umbral \u2014 {ds}, n={n} (nivel {nivel}, q={q})\n"
+                         f"\u0394 = q \u2212 cobertura_B al portar \u03c4 tal cual "
+                         f"\u00b7 escala de color COMPARTIDA", fontsize=11)
+            fig.tight_layout(rect=(0, 0, 1, 0.90))
+            nombre = f"heatmap_{ds}_n{n}_{nivel}_q{int(q*100)}"
+            for ext in ("png", "pdf"):
+                fig.savefig(os.path.join(out_dir, f"{nombre}.{ext}"), dpi=150)
+            plt.close(fig)
+            print(f"[figura] {nombre}.png/pdf ({len(modelos)} paneles)")
 
 
 def figura_mapa(filas, out_dir, nivel="raw", q=0.8):

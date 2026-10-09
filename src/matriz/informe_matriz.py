@@ -25,7 +25,7 @@ def _f(x, nd=4):
         v = float(x)
     except (TypeError, ValueError):
         return "—"
-    return "nan" if v != v else f"{v:.{nd}f}"
+    return "—" if v != v else f"{v:.{nd}f}"
 
 
 def leer_csv(ruta):
