@@ -308,24 +308,29 @@ transferencia de umbrales** (`src/jev_conf_metrics/` + `results/matrix/`).
 
 ## 14. La matriz de transferencia — medida (08-oct-2026, Acer Nitro)
 
-**El entregable central ya existe.** 24 grupos medidos (5 configuraciones de modelo × 5 datasets),
-**17.600 decisiones** con la distribución completa, y **3.672 celdas** de matriz. Informe regenerable:
+**El entregable central ya existe, y es la corrida CONFIRMATORIA** (la que declara el pre-registro,
+DOI `10.5281/zenodo.23266795`): el conjunto completo de cada dataset, **23 grupos** (5 configuraciones de
+modelo × 5 datasets), **41.505 decisiones** y **3.564 celdas**. Informe regenerable:
 `results/matrix/RESUMEN_MATRIZ.md`; figuras en `results/matrix/`.
 
-**El objeto de la tesis, en una cifra:** sobre 17.600 distribuciones medidas, la diferencia entre la
-definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.321**,
-percentil 90 **0.531** y máximo **0.848**.
+> El **piloto** (subconjuntos, 17.600 decisiones) fue la puesta a punto. La confirmatoria lo sustituye.
+> En `typed-decisions` —el único dataset donde el piloto ya cubría el split entero— los 5 modelos
+> reprodujeron el **mismo número exacto**, así que el pipeline es determinista.
 
-**El claim, cuantificado.** 1.062 celdas tienen mapa cerrado entre definiciones (misma clase y misma
+**El objeto de la tesis, en una cifra:** sobre 41.505 distribuciones medidas, la diferencia entre la
+definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.292**,
+percentil 90 **0.441** y máximo **0.840**.
+
+**El claim, cuantificado.** 1.044 celdas tienen mapa cerrado entre definiciones (misma clase y misma
 cardinalidad). Error absoluto medio del porte de umbral:
 
 | subconjunto | celdas | \|Δ\| directo | \|Δ\| con mapa | factor |
 |---|---|---|---|---|
-| todas las celdas con mapa | 1.062 | 0.2679 | 0.0115 | 23× |
-| **sin empates dominantes** | 966 | **0.2534** | **0.0037** | **68×** |
-| solo modelos entrenados | 846 | 0.2415 | 0.0033 | 72× |
+| todas las celdas con mapa | 1.044 | 0.2721 | 0.0105 | 26× |
+| **sin empates dominantes** | 948 | **0.2577** | **0.0025** | **104×** |
+| solo modelos entrenados | 828 | 0.2466 | 0.0022 | 114× |
 | solo `n = 2` (Prop. 3) | 540 | 0.3136 | 0.0182 | 17× |
-| solo `n ≥ 3` (Prop. 1) | 522 | 0.2206 | 0.0047 | 47× |
+| solo `n ≥ 3` (Prop. 1) | 504 | 0.2276 | 0.0023 | 100× |
 
 **Hallazgo que afina el claim en dos capas** (ver `docs/erratas_especificacion.md` E2):
 
@@ -335,16 +340,15 @@ cardinalidad). Error absoluto medio del porte de umbral:
 2. **Capa de forma:** entre clases distintas (`pmax ↔ ent`, `pmax ↔ margen`) no existe mapa estricto:
    no hay número **ni** mapa que transfiera. Ahí está el peligro real.
 
-**Otras cosas medidas:** Kev-0.8B saca **0.820** de accuracy en `banking77` (n = 77) contra 0.358 de Laya
+**Otras cosas medidas:** Kev-0.8B saca **0.813** de accuracy en `banking77` (n = 77) contra 0.377 de Laya
 (el ecosistema sí entrena para cardinalidad alta); `clinc150` (n = 151) **no es ejecutable** en 2 de los 3
 checkpoints de Laya (ventana de 512 tokens: solo caben 126 opciones) — el límite documentado de Jev (≤ 255)
 no es alcanzable en esta implementación.
 
 **Pre-registro publicado:** DOI **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026).
 
-**Pendiente inmediato (actualizado):** la **corrida confirmatoria** sobre el conjunto completo (lo medido
-arriba es un piloto declarado en el propio pre-registro) y la redacción §4–§7 en el t440
-(ver `docs/handoff-t440.md`).
+**Pendiente inmediato:** solo la **redacción §4–§7** en el t440 (sin GPU: todo sale de `results/`; ver
+`docs/handoff-t440.md`).
 
 ---
 

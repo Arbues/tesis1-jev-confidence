@@ -20,5 +20,5 @@
   ],
   "accuracy": 0.4595,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/jaredpalmer__kev-0.8b__typed-decisions.jsonl"
+  "ruta": "results/crudos_confirmatoria/jaredpalmer__kev-0.8b__typed-decisions.jsonl"
 }

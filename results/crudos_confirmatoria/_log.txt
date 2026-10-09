@@ -1,3 +1,0 @@
-===== CONFIRMATORIA: 12:07:22 · limite=0 (completo) =====
-===== BLOQUE 1: Laya (3 checkpoints) =====
---- laya/none × typed-decisions 12:07:22

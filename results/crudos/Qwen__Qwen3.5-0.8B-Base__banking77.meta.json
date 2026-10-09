@@ -2,9 +2,9 @@
   "modelo": "Qwen/Qwen3.5-0.8B-Base",
   "backend": "raw",
   "dataset": "banking77",
-  "n_filas": 400,
+  "n_filas": 3076,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 3076,
   "backend_info": {
     "backend": "hf-logit",
     "model_id": "Qwen/Qwen3.5-0.8B-Base"
@@ -12,7 +12,7 @@
   "cardinalidades": [
     77
   ],
-  "accuracy": 0.02,
+  "accuracy": 0.015604681404421327,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/Qwen__Qwen3.5-0.8B-Base__banking77.jsonl"
+  "ruta": "results/crudos_confirmatoria/Qwen__Qwen3.5-0.8B-Base__banking77.jsonl"
 }

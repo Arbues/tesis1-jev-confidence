@@ -2,6 +2,18 @@
 
 *Para el redactor del paper en el `thinkpad-t440` (sin GPU). Actualizado: 08-oct-2026.*
 
+> **Estado: la medición está CERRADA.** Es la corrida **confirmatoria** que declara el pre-registro
+> (DOI **10.5281/zenodo.23266795**), sobre el conjunto completo de cada dataset: **23 grupos**
+> (5 configuraciones de modelo × 5 datasets), **41.505 decisiones**, **3.564 celdas**.
+> El piloto (subconjuntos) quedó sustituido y solo vive en el historial de git.
+>
+> **Cifras que van al paper** (todas en `results/matrix/RESUMEN_MATRIZ.md`, regenerable):
+> - La diferencia entre la definición de `confidence` más alta y la más baja de la **misma** distribución:
+>   mediana **0.292**, p90 **0.441**, máximo **0.840** (sobre 41.505 distribuciones).
+> - Error absoluto medio del porte de umbral: **0.2577 directo contra 0.0025 con mapa → factor 104×**
+>   (sin las celdas dominadas por empates de umbral); solo modelos entrenados, **114×**.
+> - El porte directo llega a perder **toda** la cobertura (celdas con Δ = 0.80 y cobertura 0).
+
 El t440 **no necesita GPU, ni pesos, ni acceso a HuggingFace**. Todo lo que el paper necesita está
 commiteado. Lo que no se puede regenerar allí (la inferencia) ya está hecho y guardado fila a fila.
 
@@ -13,7 +25,7 @@ commiteado. Lo que no se puede regenerar allí (la inferencia) ya está hecho y 
 |---|---|---|
 | `results/paso0_informe.md` | el go/no-go del paso 0 + la reproducción de las 5 métricas publicadas de Laya | **hecho** |
 | `results/raw/*.jsonl` | 2.000 decisiones × 4 configuraciones de modelo, con `row_hash` | **hecho** |
-| `results/crudos/*.jsonl` | las mediciones de la matriz: una fila por (modelo × dataset × ítem) | **hecho** |
+| `results/crudos/*.jsonl` | las mediciones **confirmatorias**: 65.185 filas, una por (modelo × dataset × ítem) | **hecho** |
 | `results/crudos/*.meta.json` | por grupo: modelo, revisión del Hub, cardinalidades, accuracy, nº de filas | **hecho** |
 | `results/matrix/matriz_transferencia.csv` | **la matriz**: celdas (A→B) × modelo × dataset × n × q × nivel | **hecho** |
 | `results/matrix/resumen.json` | parámetros de la corrida (K, q, bootstrap, niveles) | **hecho** |

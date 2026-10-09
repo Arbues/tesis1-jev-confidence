@@ -2,9 +2,9 @@
   "modelo": "convaiinnovations/laya/typed-decisions",
   "backend": "laya",
   "dataset": "sst5",
-  "n_filas": 400,
+  "n_filas": 1101,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 1101,
   "backend_info": {
     "backend": "laya",
     "model_id": "convaiinnovations/laya",
@@ -31,7 +31,7 @@
   "cardinalidades": [
     5
   ],
-  "accuracy": 0.435,
+  "accuracy": 0.45049954586739327,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/convaiinnovations__laya__typed-decisions__sst5.jsonl"
+  "ruta": "results/crudos_confirmatoria/convaiinnovations__laya__typed-decisions__sst5.jsonl"
 }

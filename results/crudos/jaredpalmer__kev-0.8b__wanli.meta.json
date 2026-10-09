@@ -2,9 +2,9 @@
   "modelo": "jaredpalmer/kev-0.8b",
   "backend": "kev",
   "dataset": "wanli",
-  "n_filas": 400,
+  "n_filas": 5000,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 5000,
   "backend_info": {
     "backend": "kev-http",
     "base_url": "http://127.0.0.1:8008",
@@ -16,7 +16,7 @@
   "cardinalidades": [
     3
   ],
-  "accuracy": 0.6175,
+  "accuracy": 0.5954,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/jaredpalmer__kev-0.8b__wanli.jsonl"
+  "ruta": "results/crudos_confirmatoria/jaredpalmer__kev-0.8b__wanli.jsonl"
 }

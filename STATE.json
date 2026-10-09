@@ -66,21 +66,23 @@
   },
 
   "matriz_2026_10_08": {
-    "nota": "MATRIZ DE TRANSFERENCIA MEDIDA (entregable central de la Ruta 1). Ejecutada en el Acer Nitro. Informe regenerable: results/matrix/RESUMEN_MATRIZ.md (src/matriz/informe_matriz.py); matriz: results/matrix/matriz_transferencia.csv; crudos: results/crudos/.",
-    "alcance_medido": "24 grupos = 5 configuraciones de modelo (Laya none / Laya typed-decisions / Laya multilingual / Kev-0.8B / control crudo Qwen3.5-0.8B-Base) x 5 datasets (typed-decisions, sst5, wanli, banking77, clinc150). 17600 decisiones con la distribucion completa. 3672 celdas = (A->B) x modelo x dataset x n x q x nivel.",
+    "nota": "MATRIZ DE TRANSFERENCIA MEDIDA — CORRIDA CONFIRMATORIA (la que declara el pre-registro DOI 10.5281/zenodo.23266795), sobre el conjunto COMPLETO de cada dataset. Informe regenerable: results/matrix/RESUMEN_MATRIZ.md (src/matriz/informe_matriz.py); matriz: results/matrix/matriz_transferencia.csv; crudos: results/crudos/.",
+    "alcance_medido": "23 grupos = 5 configuraciones de modelo (Laya none / Laya typed-decisions / Laya multilingual / Kev-0.8B / control crudo Qwen3.5-0.8B-Base) x 5 datasets (typed-decisions 400 casos, sst5 1101, wanli 5000, banking77 3076, clinc150 3100; clinc150 no es ejecutable en el checkpoint `none`). 41505 decisiones. 3564 celdas = (A->B) x modelo x dataset x n x q x nivel. Sustituye al PILOTO (17600 decisiones, 3672 celdas) que fue la puesta a punto.",
+    "determinismo": "En typed-decisions (unico dataset donde el piloto ya cubria el split entero) los 5 modelos reprodujeron el MISMO numero exacto en la confirmatoria: 0.4860 / 0.3595 / 0.3515 / 0.7685 / 0.4595. Mismo entorno + mismos datos = mismos resultados.",
+    "archivo_contaminado_del_piloto": "El piloto tenia un residuo de la corrida previa al arreglo de colision: convaiinnovations__laya__clinc150.jsonl contenia datos de `multilingual` etiquetados como `none` (ese checkpoint no puede con n=151, asi que el archivo nunca se sobrescribio). La matriz del piloto uso esa celda con datos falsos. Eliminado en la confirmatoria (por eso 3672 - 108 = 3564 celdas).",
     "cardinalidades": [2, 3, 4, 5, 77, 151],
     "diseno": "Cross-fitting K=5 (semilla 20261008, fold por sha256), q = 0.80 / 0.50 / 0.95, bootstrap de items B=2000, BH-FDR alpha=0.05, niveles AnyJev raw / L0 / L1 (L0 y L1 ajustados SOLO en calibracion).",
-    "resultado_central": "Sobre 17600 distribuciones, la diferencia entre la definicion de confidence mas alta y la mas baja de la MISMA distribucion: mediana 0.321, p90 0.531, maximo 0.848.",
-    "claim_cuantificado": "1062 celdas con mapa cerrado. Error absoluto medio del porte: 0.2679 directo vs 0.0115 con mapa (23x). Sin las celdas dominadas por empates: 0.2534 vs 0.0037 (68x). Solo modelos entrenados: 0.2415 vs 0.0033 (72x). El porte directo llega a perder TODA la cobertura (delta=0.80, cobertura_B=0).",
+    "resultado_central": "Sobre 41505 distribuciones, la diferencia entre la definicion de confidence mas alta y la mas baja de la MISMA distribucion: mediana 0.292, p90 0.441, maximo 0.840.",
+    "claim_cuantificado": "1044 celdas con mapa cerrado. Error absoluto medio del porte: 0.2721 directo vs 0.0105 con mapa (26x). Sin las celdas dominadas por empates: 0.2577 vs 0.0025 (104x). Solo modelos entrenados: 0.2466 vs 0.0022 (114x). Solo n>=3: 0.2276 vs 0.0023 (100x). El porte directo llega a perder TODA la cobertura (delta=0.80, cobertura_B=0).",
     "dos_capas_del_hallazgo": "1) ESCALA: ni entre definiciones equivalentes en orden viaja el numero (jev y pmax estan en escalas afines distintas); el mapa si transfiere (delta ~0.004). 2) FORMA: entre clases distintas (pmax<->ent, pmax<->margen) no existe mapa estricto: no hay numero NI mapa. Ver docs/erratas_especificacion.md E2.",
     "hallazgos_colaterales": [
-      "Kev-0.8B: accuracy 0.820 en banking77 (n=77) frente a 0.358 de Laya -> el ecosistema si entrena para cardinalidad alta.",
+      "Kev-0.8B: accuracy 0.813 en banking77 (n=77) frente a 0.377 de Laya -> el ecosistema si entrena para cardinalidad alta.",
       "clinc150 (n=151) NO es ejecutable en 2 de los 3 checkpoints de Laya (max_len=512 solo admite 126 opciones); el limite documentado de Jev (<=255) no es alcanzable en esta implementacion. En el checkpoint typed-decisions si corre.",
       "kev-suites no carga (fallo de generacion en el Hub, 08-oct-2026).",
       "El control crudo (Qwen3.5-0.8B-Base sin entrenar) tiene salidas saturadas: su umbral cae sobre valores muy empatados y eso infla delta_mapa (el mapa no puede dar q exacto si hay empates masivos). Por eso la comparacion limpia excluye esas celdas; la columna n_empates_tau lo declara por celda.",
       "A n=2, C_jev y C_mar son LA MISMA funcion (2*pmax-1): su porte directo da delta~0 por identidad, no por transferencia."
     ],
-    "limitaciones_declaradas": "Lo medido es un PILOTO declarado en paper/04_pre_registro.md (subconjuntos: 200 casos/config en typed-decisions, 400 items en el resto). La corrida confirmatoria (conjunto completo) va DESPUES del DOI. Extension prevista al Mac Mini: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev.",
+    "limitaciones_declaradas": "clinc150 (n=151) no es ejecutable en el checkpoint `none` de Laya (max_len=512 admite 126 opciones); kev-suites no carga (fallo del Hub). Extension prevista al Mac Mini: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev.",
     "herramientas": "src/jev_conf_metrics/ (libreria, 36 tests) + src/matriz/ (medir.py, matriz.py, figura.py, informe_matriz.py, correr_nucleo.sh, correr_kev.sh)."
   },
   "reglas_de_diseno_del_autor": {

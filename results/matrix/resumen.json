@@ -1,5 +1,5 @@
 {
-  "n_celdas": 3672,
+  "n_celdas": 3564,
   "modelos": [
     "Qwen/Qwen3.5-0.8B-Base",
     "convaiinnovations/laya",

@@ -16,5 +16,5 @@
   ],
   "accuracy": 0.486,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/Qwen__Qwen3.5-0.8B-Base__typed-decisions.jsonl"
+  "ruta": "results/crudos_confirmatoria/Qwen__Qwen3.5-0.8B-Base__typed-decisions.jsonl"
 }

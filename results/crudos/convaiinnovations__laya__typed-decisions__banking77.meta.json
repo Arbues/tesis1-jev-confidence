@@ -2,9 +2,9 @@
   "modelo": "convaiinnovations/laya/typed-decisions",
   "backend": "laya",
   "dataset": "banking77",
-  "n_filas": 400,
+  "n_filas": 3076,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 3076,
   "backend_info": {
     "backend": "laya",
     "model_id": "convaiinnovations/laya",
@@ -31,7 +31,7 @@
   "cardinalidades": [
     77
   ],
-  "accuracy": 0.37,
+  "accuracy": 0.3780884265279584,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/convaiinnovations__laya__typed-decisions__banking77.jsonl"
+  "ruta": "results/crudos_confirmatoria/convaiinnovations__laya__typed-decisions__banking77.jsonl"
 }

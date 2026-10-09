@@ -35,5 +35,5 @@
   ],
   "accuracy": 0.3595,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/convaiinnovations__laya__typed-decisions.jsonl"
+  "ruta": "results/crudos_confirmatoria/convaiinnovations__laya__typed-decisions.jsonl"
 }

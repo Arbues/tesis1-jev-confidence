@@ -2,9 +2,9 @@
   "modelo": "convaiinnovations/laya",
   "backend": "laya",
   "dataset": "wanli",
-  "n_filas": 400,
+  "n_filas": 5000,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 5000,
   "backend_info": {
     "backend": "laya",
     "model_id": "convaiinnovations/laya",
@@ -31,7 +31,7 @@
   "cardinalidades": [
     3
   ],
-  "accuracy": 0.66,
+  "accuracy": 0.6178,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/convaiinnovations__laya__wanli.jsonl"
+  "ruta": "results/crudos_confirmatoria/convaiinnovations__laya__wanli.jsonl"
 }

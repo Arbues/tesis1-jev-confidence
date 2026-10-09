@@ -2,9 +2,9 @@
   "modelo": "Qwen/Qwen3.5-0.8B-Base",
   "backend": "raw",
   "dataset": "clinc150",
-  "n_filas": 400,
+  "n_filas": 3100,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 3100,
   "backend_info": {
     "backend": "hf-logit",
     "model_id": "Qwen/Qwen3.5-0.8B-Base"
@@ -12,7 +12,7 @@
   "cardinalidades": [
     151
   ],
-  "accuracy": 0.04,
+  "accuracy": 0.03870967741935484,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/Qwen__Qwen3.5-0.8B-Base__clinc150.jsonl"
+  "ruta": "results/crudos_confirmatoria/Qwen__Qwen3.5-0.8B-Base__clinc150.jsonl"
 }

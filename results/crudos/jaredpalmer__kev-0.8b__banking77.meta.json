@@ -2,9 +2,9 @@
   "modelo": "jaredpalmer/kev-0.8b",
   "backend": "kev",
   "dataset": "banking77",
-  "n_filas": 400,
+  "n_filas": 3076,
   "n_saltadas": 0,
-  "n_casos": 400,
+  "n_casos": 3076,
   "backend_info": {
     "backend": "kev-http",
     "base_url": "http://127.0.0.1:8008",
@@ -16,7 +16,7 @@
   "cardinalidades": [
     77
   ],
-  "accuracy": 0.82,
+  "accuracy": 0.8133940182054616,
   "output_tokens_total": 0,
-  "ruta": "results/crudos/jaredpalmer__kev-0.8b__banking77.jsonl"
+  "ruta": "results/crudos_confirmatoria/jaredpalmer__kev-0.8b__banking77.jsonl"
 }
