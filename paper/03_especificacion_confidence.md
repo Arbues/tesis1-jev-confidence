@@ -196,16 +196,34 @@ Proposición 1). Este es el enunciado que da forma a toda la matriz.
 
 ## 5. Transferencia de umbral (definición operativa de la matriz)
 
+> **Corregido el 08-oct-2026** al implementar `jev-conf-metrics`. Dos erratas (E1 y E2) documentadas
+> en `docs/erratas_especificacion.md`. Lo de abajo es la versión vigente.
+
 Dados origen `A`, destino `B`, cobertura objetivo `q ∈ (0,1)` y conjunto de calibración `S_cal`:
 
-1. `τ_A = min { τ : (1/|S_cal|)·Σ_{i∈S_cal} 𝕀[C_A(i) ≥ τ] ≤ 1 − q }` (umbral que deja cobertura `q`).
-2. Aplicar `τ_B := τ_A` **tal cual** (sin re-ajuste) al destino.
-3. En prueba `S_te`: `cobertura_B = (1/|S_te|)·Σ 𝕀[C_B ≥ τ_A]`;
-   `precisión_B = (1/|S_te|)·Σ 𝕀[C_B ≥ τ_A]·a_i / cobertura_B`.
+1. `cobertura(τ) = (1/|S_cal|)·Σ_{i∈S_cal} 𝕀[C_A(i) ≥ τ]` (decreciente en `τ`), y
+   `τ_A = min { τ : cobertura(τ) ≤ q }` (umbral que deja cobertura `q`).
+   *(Errata E1: la condición era `≤ 1 − q`, con el signo invertido.)*
+2. **Dos portes, etiquetados** *(Errata E2: el paso 2 original prescribía solo el directo, y el cierre de
+   esta sección esperaba `Δ = 0` dentro de la clase — incompatible, porque `jev` y `pmax` están en
+   escalas afines distintas)*:
+   - **porte directo:** aplicar `τ_B := τ_A` **tal cual** (sin re-ajuste). Es lo que practica el
+     ecosistema. Métrica principal: `Δ(A→B) = q − cobertura_B(τ_A)`.
+   - **porte con mapa:** aplicar `τ_B := ψ(τ_A)`, con `ψ` el mapa cerrado A→B (`ψ = φ⁻¹` para
+     `jev→pmax`). Solo existe dentro de una clase de equivalencia **y** a cardinalidad fija.
+     `Δ_mapa(A→B) = q − cobertura_B(ψ(τ_A))`.
+3. En prueba `S_te`: `cobertura_B = (1/|S_te|)·Σ 𝕀[C_B ≥ τ]`;
+   `precisión_B = (1/|S_te|)·Σ 𝕀[C_B ≥ τ]·a_i / cobertura_B`.
 
-**Celda de la matriz:** `Δ(A→B) = q − cobertura_B`, con `precisión_B` al lado. Por Proposición 1, las celdas
-dentro de una clase de equivalencia (y todo `n = 2`) deben salir `Δ = 0` salvo ruido de empates; las celdas
-entre clases (`pmax ↔ ent`, `pmax ↔ margen`, cruces de `n`) son las informativas.
+**Celda de la matriz:** `Δ(A→B)` (porte directo) con `precisión_B` al lado, y `Δ_mapa(A→B)` cuando exista
+mapa. Lectura de las celdas:
+
+| Celdas | `Δ` (directo) | `Δ_mapa` | Qué significa |
+|---|---|---|---|
+| dentro de la clase (`jev ↔ pmax`), `n` fijo | **≠ 0** (diferencia de escala) | **= 0** | el número no viaja; el mapa sí (Proposición 1) |
+| entre clases (`pmax ↔ ent`, `pmax ↔ margen`) | ≠ 0 | no existe | no hay número **ni** mapa: el peligro real |
+| todo `n = 2` | ≠ 0 salvo coincidencia de escalas | **= 0** | con dos opciones todas ordenan igual (Proposición 3) |
+| cruce de cardinalidades | ≠ 0 | no existe | `φ` depende de `n` (§4.2) |
 
 ---
 
