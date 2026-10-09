@@ -1,0 +1,37 @@
+{
+  "n_celdas": 3672,
+  "modelos": [
+    "Qwen/Qwen3.5-0.8B-Base",
+    "convaiinnovations/laya",
+    "convaiinnovations/laya/multilingual",
+    "convaiinnovations/laya/typed-decisions",
+    "jaredpalmer/kev-0.8b"
+  ],
+  "datasets": [
+    "banking77",
+    "clinc150",
+    "sst5",
+    "typed-decisions",
+    "wanli"
+  ],
+  "cardinalidades": [
+    2,
+    3,
+    4,
+    5,
+    77,
+    151
+  ],
+  "niveles": [
+    "raw",
+    "L0",
+    "L1"
+  ],
+  "qs": [
+    0.8,
+    0.5,
+    0.95
+  ],
+  "K": 5,
+  "bootstrap": 2000
+}

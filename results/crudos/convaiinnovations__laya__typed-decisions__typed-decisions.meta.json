@@ -1,0 +1,39 @@
+{
+  "modelo": "convaiinnovations/laya/typed-decisions",
+  "backend": "laya",
+  "dataset": "typed-decisions",
+  "n_filas": 2000,
+  "n_saltadas": 0,
+  "n_casos": 400,
+  "backend_info": {
+    "backend": "laya",
+    "model_id": "convaiinnovations/laya",
+    "subfolder": "typed-decisions",
+    "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "hf_sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "device": "cuda",
+    "cfg_model_name": "laya-typed-decisions",
+    "temperature": [
+      1.0148024559020996,
+      1.0374259948730469,
+      1.0575125217437744
+    ],
+    "temperature_by_options": {
+      "choice:3-5": 1.7601518630981445,
+      "choice:6-10": 1.0000158548355103,
+      "score:3-5": 1.2514300346374512,
+      "noul:2": 1.983399510383606,
+      "choice:11+": 0.10058280825614929,
+      "choice:2": 1.9063563346862793
+    },
+    "fine_tuned": true
+  },
+  "cardinalidades": [
+    2,
+    4,
+    5
+  ],
+  "accuracy": 0.7685,
+  "output_tokens_total": 0,
+  "ruta": "results/crudos/convaiinnovations__laya__typed-decisions__typed-decisions.jsonl"
+}

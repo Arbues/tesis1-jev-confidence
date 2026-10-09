@@ -64,6 +64,16 @@ def dispersion_definiciones(crudos_dir, limite=2000):
             "p90": sorted(rangos)[int(0.9 * len(rangos))], "max": max(rangos)}
 
 
+def _sin_empates(filas, umbral=0.05):
+    """Celdas cuyo umbral NO cae sobre una masa grande de ítems empatados."""
+    out = []
+    for r in filas:
+        te = int(r["n_items_te"]) or 1
+        if int(r["n_empates_tau"]) / te < umbral:
+            out.append(r)
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Informe legible de la matriz")
     ap.add_argument("--matriz", default=os.path.join(RAIZ, "results", "matrix",
@@ -141,10 +151,32 @@ def main(argv=None):
             w.append(f"| `{r['modelo']}` | {r['dataset']} | {r['n']} | {r['q']} | "
                      f"{r['A']} → {r['B']} | {_f(r['delta'])} | {_f(r['delta_mapa'])} |")
         w.append("")
-        media_directo = sum(abs(float(r["delta"])) for r in con_mapa) / len(con_mapa)
-        media_mapa = sum(abs(float(r["delta_mapa"])) for r in con_mapa) / len(con_mapa)
-        w.append(f"Error absoluto medio del porte: **{media_directo:.4f}** directo contra "
-                 f"**{media_mapa:.4f}** con mapa (factor {media_directo / max(1e-9, media_mapa):.1f}×).")
+        w.append("Error absoluto medio del porte, por subconjunto de celdas:")
+        w.append("")
+        w.append("| subconjunto | celdas | \\|Δ\\| directo | \\|Δ\\| con mapa | factor |")
+        w.append("|---|---|---|---|---|")
+        subconjuntos = [
+            ("todas las celdas con mapa", con_mapa),
+            ("sin empates dominantes en el umbral (masa < 5 %)", _sin_empates(con_mapa)),
+            ("solo modelos entrenados (sin el control crudo)",
+             [r for r in con_mapa if not str(r["modelo"]).startswith("Qwen")]),
+            ("solo n = 2 (Proposición 3)", [r for r in con_mapa if str(r["n"]) == "2"]),
+            ("solo n ≥ 3 (Proposición 1)", [r for r in con_mapa if str(r["n"]) != "2"]),
+        ]
+        for nombre, sub in subconjuntos:
+            if not sub:
+                continue
+            d = sum(abs(float(r["delta"])) for r in sub) / len(sub)
+            m = sum(abs(float(r["delta_mapa"])) for r in sub) / len(sub)
+            w.append(f"| {nombre} | {len(sub)} | {d:.4f} | {m:.4f} | "
+                     f"{d / max(1e-9, m):.1f}× |")
+        w.append("")
+        w.append("**Cómo leer esto.** El porte con mapa tiene un suelo que no es culpa del mapa: si el "
+                 "umbral cae sobre un valor **empatado** (salidas saturadas), la cobertura salta y ni el "
+                 "mapa puede dar exactamente `q`. Por eso la comparación limpia es la del subconjunto sin "
+                 "empates dominantes, y por eso `delta_mapa` debe leerse **contra `delta` de la misma "
+                 "celda**, nunca como un cero absoluto. La columna `n_empates_tau` de la matriz dice, en "
+                 "cada celda, cuántos ítems comparten el umbral.")
         w.append("")
 
     # --- 4. las celdas peligrosas

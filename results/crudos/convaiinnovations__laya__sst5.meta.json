@@ -1,0 +1,37 @@
+{
+  "modelo": "convaiinnovations/laya",
+  "backend": "laya",
+  "dataset": "sst5",
+  "n_filas": 400,
+  "n_saltadas": 0,
+  "n_casos": 400,
+  "backend_info": {
+    "backend": "laya",
+    "model_id": "convaiinnovations/laya",
+    "subfolder": null,
+    "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "hf_sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "device": "cuda",
+    "cfg_model_name": "rl-agent",
+    "temperature": [
+      1.6369030475616455,
+      1.2514300346374512,
+      1.983399510383606
+    ],
+    "temperature_by_options": {
+      "choice:3-5": 1.7601518630981445,
+      "choice:6-10": 1.0000158548355103,
+      "score:3-5": 1.2514300346374512,
+      "noul:2": 1.983399510383606,
+      "choice:11+": 0.10058280825614929,
+      "choice:2": 1.9063563346862793
+    },
+    "fine_tuned": null
+  },
+  "cardinalidades": [
+    5
+  ],
+  "accuracy": 0.34,
+  "output_tokens_total": 0,
+  "ruta": "results/crudos/convaiinnovations__laya__sst5.jsonl"
+}

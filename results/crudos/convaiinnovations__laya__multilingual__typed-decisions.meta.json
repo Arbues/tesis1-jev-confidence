@@ -1,0 +1,32 @@
+{
+  "modelo": "convaiinnovations/laya/multilingual",
+  "backend": "laya",
+  "dataset": "typed-decisions",
+  "n_filas": 2000,
+  "n_saltadas": 0,
+  "n_casos": 400,
+  "backend_info": {
+    "backend": "laya",
+    "model_id": "convaiinnovations/laya",
+    "subfolder": "multilingual",
+    "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "hf_sha": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+    "device": "cuda",
+    "cfg_model_name": "rl-agent",
+    "temperature": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "temperature_by_options": {},
+    "fine_tuned": null
+  },
+  "cardinalidades": [
+    2,
+    4,
+    5
+  ],
+  "accuracy": 0.3515,
+  "output_tokens_total": 0,
+  "ruta": "results/crudos/convaiinnovations__laya__multilingual__typed-decisions.jsonl"
+}
