@@ -107,14 +107,31 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 ## 6. Estado actual y cómo continuar
 
 1. **Ruta elegida**: Ruta 1. Hecho.
-2. **Paso 0 go/no-go** (en el **Nitro**): descargar **Laya 421M** (`convaiinnovations/laya`) y **Kev-0.8B**
-   (`jaredpalmer/kev-0.8b`), correr `choice`/`score`/`noul` verificando `output_tokens = 0`, y reproducir un
-   ECE publicado sobre `LocalLLaMA/typed-decisions`. Registrar versiones + hashes.
-3. **Congelar** la lista de definiciones y datasets y la **cobertura objetivo**.
-4. **Librería `jev-conf-metrics`** + tests de conformidad → **pipeline** → **matriz de transferencia** +
-   dataset de mediciones crudas → **pre-registro con DOI**.
+2. **Paso 0 go/no-go**: ✅ **HECHO el 08-oct-2026 en el Acer Nitro → GO.** Laya (3 checkpoints) y Kev-0.8B
+   sobre las 2.000 decisiones de `typed-decisions`; `output_tokens = 0` verificado; las 5 métricas publicadas
+   de Laya reproducidas con |Δ| ≤ 0.003. Informe: `results/paso0_informe.md`; crudos en `results/raw/`.
+   El pipeline real vive en `src/paso0_go_no_go.py` (`--model laya|kev|raw`).
+3. **Congelado** (04-oct-2026): definiciones, datasets y cobertura objetivo → `paper/00_plan_del_paper.md` §10.
+4. **Especificación formal**: ✅ `paper/03_especificacion_confidence.md` (DEF-1..DEF-8, Proposiciones 1–3).
 
-Detalle en `eje-2-jev-opensource/11_ruta1_metrologia_confidence.md` y `paper/00_plan_del_paper.md`.
+### Pendiente, en orden
+
+| # | Qué falta | Quién | Nota |
+|---|---|---|---|
+| 1 | **Librería `jev-conf-metrics` + tests de conformidad** — extraer lo ya validado en `src/paso0_go_no_go.py` | agente (Nitro) | lo siguiente |
+| 2 | **Pipeline completo**: más modelos (Nimble, SemIf, Jeff-1, jev-lite, tinyjev; los 4B–9B en el Mac Mini) y más datasets (kev-suites, Banking77, CLINC150, SST-5, WANLI) | agente (Nitro/Mac) | |
+| 3 | **Matriz de transferencia de umbrales** → `results/matrix/` + figura *heatmap* | agente (Nitro) | es el entregable central |
+| 4 | **Pre-registro con DOI** | **autor** (OSF/Zenodo) | **va ANTES de la corrida principal (paso 3), no al final**; es lo único que no puede hacer el agente. No es urgente hoy |
+| 5 | **Paper**: §4 Método, §5 Resultados, §6 Discusión, §7 Conclusión (§1–§3 son borrador) + pulir citas a APA/IEEE | autor + agente | depende de la matriz |
+
+**Los resultados del paso 0 NO son el resultado de la tesis**: son el go/no-go y la línea base. El entregable
+central (la matriz) todavía no existe.
+
+### Entorno (trampa conocida)
+
+El `torch` que instala PyPI es **cu130** y el driver del Nitro es 556.19 (**CUDA 12.5**) → hay que instalar
+`torch==2.14.1+cu126` desde `https://download.pytorch.org/whl/cu126` o la GPU no arranca. Kev-0.8B no se carga
+con `transformers`: se sirve desde su repo y el script le habla por HTTP.
 
 ---
 
