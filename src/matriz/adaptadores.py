@@ -51,6 +51,33 @@ def _opciones_de(ds, columna_clase, columna_texto=None, orden_por=None):
     return vals
 
 
+def _indices_estratificados(ds, columna_clase, limite, seed=20261008):
+    """Índices estratificados por clase, deterministas.
+
+    Tomar los PRIMEROS N ítems de un dataset ordenado por clase es un sesgo real: en
+    `clinc150` los primeros 400 ítems cubren solo 20 de las 151 clases, así que la
+    cardinalidad efectiva no es la que se cree medir (detectado el 08-oct-2026). Aquí se
+    reparte el presupuesto entre TODAS las clases (cuota = limite // n_clases) y se rellena
+    el resto al azar con semilla fija.
+    """
+    import random
+    rng = random.Random(seed)
+    valores = list(ds[columna_clase])
+    por_clase = {}
+    for i, v in enumerate(valores):
+        clave = int(v) if isinstance(v, int) else str(v)
+        por_clase.setdefault(clave, []).append(i)
+    clases = sorted(por_clase, key=str)
+    for c in clases:
+        rng.shuffle(por_clase[c])
+    cuota = max(1, limite // len(clases))
+    idx = [i for c in clases for i in por_clase[c][:cuota]]
+    sobra = [i for c in clases for i in por_clase[c][cuota:]]
+    rng.shuffle(sobra)
+    idx.extend(sobra[:max(0, limite - len(idx))])
+    return sorted(idx[:limite])
+
+
 def _criteria(opciones, descripciones=None):
     """`criteria` como DICT {etiqueta: descripción}.
 
@@ -86,9 +113,8 @@ def sst5(limite=None, split="validation", **kw):
     ds = _hf()("SetFit/sst5", split=split)
     opciones = _opciones_de(ds, "label", "label_text")
     casos = []
-    for i, r in enumerate(ds):
-        if limite and i >= limite:
-            break
+    for i in _indices_estratificados(ds, "label", limite or len(ds)):
+        r = ds[i]
         etiqueta = opciones[int(r["label"])]
         casos.append({
             "id": f"sst5-{split}-{i}", "workflow": "sentiment", "config": "sst5",
@@ -108,9 +134,8 @@ def wanli(limite=None, split="test", **kw):
     ds = _hf()("alisawuffles/WANLI", split=split)
     opciones = sorted({str(r["gold"]) for r in ds})
     casos = []
-    for i, r in enumerate(ds):
-        if limite and i >= limite:
-            break
+    for i in _indices_estratificados(ds, "gold", limite or len(ds)):
+        r = ds[i]
         casos.append({
             "id": f"wanli-{split}-{r.get('id', i)}", "workflow": "nli", "config": "wanli",
             "state": f"Premisa: {r['premise']}\nHipótesis: {r['hypothesis']}",
@@ -129,9 +154,8 @@ def banking77(limite=None, split="test", **kw):
     if len(opciones) < 2:
         raise AdaptadorNoDisponible("banking77 sin nombres de clase utilizables")
     casos = []
-    for i, r in enumerate(ds):
-        if limite and i >= limite:
-            break
+    for i in _indices_estratificados(ds, "label", limite or len(ds)):
+        r = ds[i]
         etiqueta = opciones[int(r["label"])]
         casos.append({
             "id": f"banking77-{split}-{i}", "workflow": "intent", "config": "banking77",
@@ -151,9 +175,8 @@ def clinc150(limite=None, split="validation", config="plus", **kw):
     if len(opciones) < 2:
         raise AdaptadorNoDisponible("clinc150 sin nombres de clase utilizables")
     casos = []
-    for i, r in enumerate(ds):
-        if limite and i >= limite:
-            break
+    for i in _indices_estratificados(ds, "intent", limite or len(ds)):
+        r = ds[i]
         etiqueta = opciones[int(r["intent"])]
         casos.append({
             "id": f"clinc150-{split}-{i}", "workflow": "intent", "config": "clinc150",

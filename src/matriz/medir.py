@@ -39,8 +39,10 @@ from jev_conf_metrics.recursos import exigir_recursos, liberar  # noqa: E402
 
 from adaptadores import AdaptadorNoDisponible, cargar, listar  # noqa: E402
 
-# VRAM estimada por backend (MiB), para el guard previo a la carga
-VRAM_ESTIMADA = {"laya": 1600, "kev": 5100, "raw": 2600, "hf": 2600}
+# VRAM que necesita reservar ESTE proceso antes de cargar, en MiB.
+# `kev` va por HTTP contra su propio servidor: el modelo ya está residente allí, así que este
+# proceso no reserva nada (pedir 5 GB libres hacía que el guard abortara con el servidor vivo).
+VRAM_ESTIMADA = {"laya": 1600, "kev": 0, "raw": 2600, "hf": 2600}
 
 
 def _backend(args):
@@ -100,6 +102,23 @@ def _fila(caso, qname, ans, gold_q):
     return fila
 
 
+def nombre_de_modelo(info, backend_key=""):
+    """Nombre del modelo que se registra en cada fila.
+
+    Los tres checkpoints de Laya comparten `model_id`, así que sin el subfolder se pisarían
+    entre sí en disco (fallo real detectado el 08-oct-2026: solo sobrevivía el último en
+    escribirse). Se cualifica con el subfolder.
+    """
+    modelo = info.get("model_id") or info.get("model") or backend_key
+    sub = info.get("subfolder")
+    return f"{modelo}/{sub}" if sub else str(modelo)
+
+
+def etiqueta_de(modelo, dataset, sufijo=""):
+    """Nombre base de los artefactos de una corrida: `<modelo>__<dataset>`."""
+    return f"{str(modelo).replace('/', '__')}__{dataset}{sufijo}"
+
+
 def medir(backend, backend_key, dataset, limite, out_dir, info, sufijo=""):
     casos = cargar(dataset, limite=limite)
     if not casos:
@@ -125,8 +144,8 @@ def medir(backend, backend_key, dataset, limite, out_dir, info, sufijo=""):
     if not filas:
         raise SystemExit(f"[medir] 0 filas para {dataset}: revisa el mapeo del adaptador")
 
-    modelo = info.get("model_id") or info.get("model") or backend_key
-    etiqueta = f"{str(modelo).replace('/', '__')}__{dataset}{sufijo}"
+    modelo = nombre_de_modelo(info, backend_key)
+    etiqueta = etiqueta_de(modelo, dataset, sufijo)
     os.makedirs(out_dir, exist_ok=True)
     ruta = os.path.join(out_dir, f"{etiqueta}.jsonl")
     with open(ruta, "w", encoding="utf-8") as f:

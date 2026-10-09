@@ -234,22 +234,7 @@ def medir_grupo(filas, nivel, q, B_boot=2000, k=K):
             continue
         delta_medio = sum(acum["delta"]) / len(acum["delta"])
         # bootstrap sobre la unión de los conjuntos de prueba, con el τ de cada fold
-        ic = {"ic95_lo": float("nan"), "ic95_hi": float("nan"), "p": float("nan")}
-        if acum["items"]:
-            import random as _r
-            rng = _r.Random(20261008)
-            deltas = []
-            m = len(acum["items"])
-            for _ in range(B_boot):
-                idx = [rng.randrange(m) for _ in range(m)]
-                sel = [acum["items"][i] for i in idx]
-                cov = sum(1 for cb, _, tau in sel if cb >= tau) / m
-                deltas.append(q - cov)
-            deltas.sort()
-            ic = {"ic95_lo": deltas[int(0.025 * B_boot)],
-                  "ic95_hi": deltas[int(0.975 * B_boot) - 1],
-                  "p": min(1.0, 2 * min(sum(1 for d in deltas if d <= 0),
-                                        sum(1 for d in deltas if d >= 0)) / B_boot)}
+        ic = bootstrap_items(acum["items"], q, B=B_boot)
         salida.append({
             "n": n, "nivel": nivel, "q": q, "A": A, "B": Bx,
             "n_items": len(filas), "n_items_te": acum["n_te"],
@@ -263,6 +248,31 @@ def medir_grupo(filas, nivel, q, B_boot=2000, k=K):
             **ic,
         })
     return salida
+
+
+def bootstrap_items(items, q, B=2000, seed=20261008, chunk=250):
+    """Bootstrap de ítems VECTORIZADO (numpy, por trozos para no inflar la RAM).
+
+    `items` = [(conf_B, acierto, tau), ...] con el tau del fold de cada ítem. El umbral NO se
+    re-ajusta dentro del bootstrap. Devuelve IC 95 % y p bilateral.
+    """
+    import numpy as np
+    if not items:
+        return {"ic95_lo": float("nan"), "ic95_hi": float("nan"), "p": float("nan")}
+    cb = np.asarray([x[0] for x in items], dtype=np.float64)
+    tau = np.asarray([x[2] for x in items], dtype=np.float64)
+    m = cb.size
+    rng = np.random.default_rng(seed)
+    deltas = np.empty(B, dtype=np.float64)
+    for ini in range(0, B, chunk):
+        fin = min(B, ini + chunk)
+        idx = rng.integers(0, m, size=(fin - ini, m))
+        deltas[ini:fin] = q - (cb[idx] >= tau[idx]).mean(axis=1)
+    deltas.sort()
+    p = 2.0 * min(int((deltas <= 0).sum()), int((deltas >= 0).sum())) / B
+    return {"ic95_lo": float(deltas[int(0.025 * B)]),
+            "ic95_hi": float(deltas[int(0.975 * B) - 1]),
+            "p": min(1.0, float(p))}
 
 
 def _media(xs):

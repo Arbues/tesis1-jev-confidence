@@ -2,7 +2,9 @@
 # Mide el núcleo de la matriz en el Nitro, UN MODELO EN VRAM A LA VEZ.
 # Laya (3 checkpoints) + control crudo. El bloque de Kev va aparte (necesita su servidor).
 #
-#   bash src/matriz/correr_nucleo.sh
+#   bash src/matriz/correr_nucleo.sh            # todo (Laya + control crudo)
+#   bash src/matriz/correr_nucleo.sh laya       # solo el bloque de Laya
+#   bash src/matriz/correr_nucleo.sh raw        # solo el control crudo
 #
 # Reglas: un modelo a la vez; si el guard de recursos aborta, se para (no se insiste).
 set -u
@@ -33,11 +35,16 @@ bloque() {
   done
 }
 
+QUE="${1:-todo}"
+
+if [ "$QUE" = "todo" ] || [ "$QUE" = "laya" ]; then
 echo "===== BLOQUE 1: Laya (3 checkpoints) =====" | tee -a "$LOG"
 for sub in none typed-decisions multilingual; do
   bloque "$sub" typed-decisions sst5 wanli banking77 clinc150
 done
+fi
 
+if [ "$QUE" = "todo" ] || [ "$QUE" = "raw" ]; then
 echo "===== BLOQUE 2: control crudo (Qwen3.5-0.8B-Base) =====" | tee -a "$LOG"
 for ds in typed-decisions sst5 wanli banking77 clinc150; do
   lim=$(limite_de "$ds")
@@ -46,6 +53,7 @@ for ds in typed-decisions sst5 wanli banking77 clinc150; do
       --limite "$lim" --out "$OUT" 2>&1 \
     | grep -E "recursos\]|filas=|escrito|ABORTADO|Error|error" | tee -a "$LOG"
 done
+fi
 
 echo "===== FIN $(date +%H:%M:%S) =====" | tee -a "$LOG"
 echo "crudos:"; ls -la "$OUT"/*.jsonl | awk '{print "  "$5" "$9}'
