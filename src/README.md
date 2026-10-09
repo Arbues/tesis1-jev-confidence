@@ -45,15 +45,45 @@ out["usage"]["output_tokens"]                # 0  ← no genera texto
 
 Tres definiciones distintas de `confidence` viven en **la misma respuesta**: ese es el objeto de la Ruta 1.
 
+## `jev_conf_metrics/` — la librería (entregable 2)
+
+```python
+from jev_conf_metrics import all_confidences, celda, umbral_para_cobertura, exigir_recursos
+```
+
+| Módulo | Qué trae |
+|---|---|
+| `definiciones` | DEF-1…DEF-5 (`conf_jev`, `conf_ent`, `conf_pmax`, `conf_margin`, `conf_noul`), `CONFIDENCES`, las transformaciones AnyJev `aplicar_l0` / `aplicar_l1` y los mapas `order_equiv_affine_jev_pmax` / `phi_inv` |
+| `metricas` | `ece` (ancho y masa), `ece_laya` (binning exacto de Laya), `auroc`, `brier_multi`, `nll`, `rps` |
+| `transferencia` | `cobertura`, `umbral_para_cobertura`, `celda` (con `delta` y `delta_mapa`), `fold_de` (cross-fitting), `bootstrap_delta`, `bh_fdr` |
+| `recursos` | `exigir_recursos` / `liberar`: **aborta si la RAM disponible baja de 1 GB** |
+
+## `matriz/` — el pipeline de la matriz (entregable 3)
+
+| Comando | Qué hace |
+|---|---|
+| `python src/matriz/medir.py --listar` | lista los adaptadores de dataset (sin GPU) |
+| `python src/matriz/medir.py --dataset sst5 --inspeccionar` | carga 3 casos y muestra su estructura |
+| `python src/matriz/medir.py --model laya --subfolder none --dataset sst5 --limite 400` | mide → `results/crudos/<modelo>__<dataset>.jsonl` |
+| `bash src/matriz/correr_nucleo.sh [laya\|raw]` | el bloque completo, **un modelo en VRAM a la vez** |
+| `bash src/matriz/correr_kev.sh` | levanta el servidor de Kev, mide y lo mata (libera 4.8 GB) |
+| `python src/matriz/matriz.py` | **CPU puro**: la matriz desde los crudos (K=5, q, bootstrap, FDR) |
+| `python src/matriz/figura.py` | los *heatmaps* (escala de color compartida) |
+| `python src/matriz/informe_matriz.py` | `results/matrix/RESUMEN_MATRIZ.md` |
+
+Regla de recursos: un modelo a la vez, `exigir_recursos` antes de cargar, `liberar` después. Si la RAM
+disponible baja de **1 GB**, se para todo.
+
 ## Qué queda por enchufar
 
-- **Kev**: no se carga con `transformers` (es LoRA + cabeza *pointer* sobre `Qwen/Qwen3.5-0.8B-Base`).
-  Se sirve desde su repo y el backend `kev` solo habla HTTP con él:
+- **Kev**: ya está. No se carga con `transformers` (es LoRA + cabeza *pointer* sobre
+  `Qwen/Qwen3.5-0.8B-Base`): se sirve desde su repo y el backend `kev` solo habla HTTP con él.
   ```bash
   git clone https://github.com/jaredpalmer/kev.git && cd kev
   uv sync --extra serve
   uv run --extra serve python -m kev.serve --run jaredpalmer/kev-0.8b --port 8008
   ```
+- **Modelos 4B–9B** (Jeff-1, SemIf, jev-lite, Nimble): no caben en 6 GB; van al Mac Mini o en 4-bit.
 
 ## Reglas
 

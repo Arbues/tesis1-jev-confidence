@@ -68,13 +68,17 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 
 | # | Artefacto | Dónde vive | Estado |
 |---|---|---|---|
-| 1 | `spec` de las definiciones | `paper/03_especificacion_confidence.md` | **hecho** |
-| 2 | Librería `jev-conf-metrics` + tests | `src/jev_conf_metrics/` (Nitro) | por crear |
-| 3 | Matriz de transferencia | `results/matriz_transferencia.csv` (Nitro) | por medir |
-| 4 | Dataset de mediciones crudas | `results/mediciones_crudas.jsonl` (Nitro) | por medir |
-| 5 | Script regenerador (`make matrix`) | `src/` (Nitro) | por crear |
-| 6 | Pre-registro con DOI | OSF/Zenodo | pendiente |
-| 7 | Paper (IEEE) | `paper/` | en progreso |
+| 1 | `spec` de las definiciones | `paper/03_especificacion_confidence.md` | **hecho** (+ erratas en `docs/erratas_especificacion.md`) |
+| 2 | Librería `jev-conf-metrics` + tests | `src/jev_conf_metrics/` | **hecho** (36 tests) |
+| 3 | Matriz de transferencia | `results/matrix/matriz_transferencia.csv` | **medida** (3.672 celdas) |
+| 4 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | **medido** (17.600 filas, con `row_hash`) |
+| 5 | Script regenerador | `src/matriz/{medir,matriz,figura,informe_matriz}.py` + `correr_*.sh` | **hecho** |
+| 6 | Pre-registro con DOI | `paper/04_pre_registro.md` → OSF/Zenodo | **escrito**, falta publicar |
+| 7 | Paper (IEEE) | `paper/` | §1–§3 borrador; §4–§7 dependen de la corrida confirmatoria |
+
+**Desviación de rutas respecto a la versión anterior de esta tabla:** los artefactos viven bajo
+`results/matrix/` y `results/crudos/` (no en la raíz de `results/`), porque esas carpetas ya existían y así
+lo describen `README.md` §5 y `.hermes.md` §5. Las figuras (`heatmap_*.png/pdf`) están en `results/matrix/`.
 
 ---
 
@@ -136,9 +140,11 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
   y Kev-0.8B sobre las 2.000 decisiones de `typed-decisions`, `output_tokens = 0` verificado y **las 5
   métricas publicadas de Laya reproducidas con |Δ| ≤ 0.003** (ECE 0.213→0.2157, accuracy 0.766→0.7685,
   Brier 0.062→0.0615, soft acc 0.471→0.4707, score MAE 0.242→0.2424).
-- **Pendiente:** **librería `jev-conf-metrics`** + tests (extraer lo ya validado en `src/paso0_go_no_go.py`);
-  **matriz de transferencia**; revisar y pulir §1–§3 (citas al estilo final APA/IEEE). El **alcance ya está
-  congelado** (§10). Lo único que toca al autor: el **DOI del pre-registro** (requiere su cuenta OSF/Zenodo).
+- **Pendiente:** la **corrida confirmatoria** sobre el conjunto completo (lo medido es un piloto declarado
+  en `paper/04_pre_registro.md`); revisar y pulir §1–§3 y redactar §4–§7 (citas al estilo final APA/IEEE) —
+  en el t440, sin GPU, con `docs/handoff-t440.md`. El **alcance está congelado** (§10) y la **librería y la
+  matriz están hechas** (`src/jev_conf_metrics/`, `src/matriz/`, `results/matrix/`). Lo único que toca al
+  autor: **publicar el pre-registro y darme el DOI** (cuenta OSF/Zenodo).
 
 ---
 

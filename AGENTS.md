@@ -109,23 +109,28 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 1. **Ruta elegida**: Ruta 1. Hecho.
 2. **Paso 0 go/no-go**: ✅ **HECHO el 08-oct-2026 en el Acer Nitro → GO.** Laya (3 checkpoints) y Kev-0.8B
    sobre las 2.000 decisiones de `typed-decisions`; `output_tokens = 0` verificado; las 5 métricas publicadas
-   de Laya reproducidas con |Δ| ≤ 0.003. Informe: `results/paso0_informe.md`; crudos en `results/raw/`.
-   El pipeline real vive en `src/paso0_go_no_go.py` (`--model laya|kev|raw`).
+   de Laya reproducidas con |Δ| ≤ 0.003. Informe: `results/paso0_informe.md`.
 3. **Congelado** (04-oct-2026): definiciones, datasets y cobertura objetivo → `paper/00_plan_del_paper.md` §10.
 4. **Especificación formal**: ✅ `paper/03_especificacion_confidence.md` (DEF-1..DEF-8, Proposiciones 1–3).
+   Dos erratas corregidas y documentadas en `docs/erratas_especificacion.md`.
+5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (36 tests, `--selftest` OK).
+6. **Matriz de transferencia**: ✅ **MEDIDA.** 24 grupos (5 configuraciones de modelo × 5 datasets),
+   17.600 decisiones, 3.672 celdas. Informe: `results/matrix/RESUMEN_MATRIZ.md`; figuras y CSV en
+   `results/matrix/`. Resultado central: la diferencia entre la definición de `confidence` más alta y la más
+   baja de la **misma** distribución tiene mediana **0.321**; el porte directo del umbral se equivoca **68×**
+   más que el porte con mapa (0.2534 vs 0.0037 sin empates dominantes).
 
 ### Pendiente, en orden
 
 | # | Qué falta | Quién | Nota |
 |---|---|---|---|
-| 1 | **Librería `jev-conf-metrics` + tests de conformidad** — extraer lo ya validado en `src/paso0_go_no_go.py` | agente (Nitro) | lo siguiente |
-| 2 | **Pipeline completo**: más modelos (Nimble, SemIf, Jeff-1, jev-lite, tinyjev; los 4B–9B en el Mac Mini) y más datasets (kev-suites, Banking77, CLINC150, SST-5, WANLI) | agente (Nitro/Mac) | |
-| 3 | **Matriz de transferencia de umbrales** → `results/matrix/` + figura *heatmap* | agente (Nitro) | es el entregable central |
-| 4 | **Pre-registro con DOI** | **autor** (OSF/Zenodo) | **va ANTES de la corrida principal (paso 3), no al final**; es lo único que no puede hacer el agente. No es urgente hoy |
-| 5 | **Paper**: §4 Método, §5 Resultados, §6 Discusión, §7 Conclusión (§1–§3 son borrador) + pulir citas a APA/IEEE | autor + agente | depende de la matriz |
+| 1 | **DOI del pre-registro** — `paper/04_pre_registro.md` está listo para subir | **autor** (OSF/Zenodo) | es lo único que no puede hacer el agente |
+| 2 | **Corrida confirmatoria** sobre el conjunto COMPLETO | agente (Nitro) | lo medido es un **piloto declarado** en el pre-registro; va después del DOI |
+| 3 | **Paper**: §4 Método, §5 Resultados, §6 Discusión, §7 Conclusión (§1–§3 son borrador) + citas APA/IEEE | autor + agente (t440) | **sin GPU**: todo sale de `results/`; ver `docs/handoff-t440.md` |
+| 4 | Extensión al **Mac Mini**: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev | agente (Mac) | no caben en 6 GB de VRAM |
 
-**Los resultados del paso 0 NO son el resultado de la tesis**: son el go/no-go y la línea base. El entregable
-central (la matriz) todavía no existe.
+**Los resultados del paso 0 no son el resultado de la tesis**: lo es la matriz, que ya existe. Lo que falta
+es la corrida confirmatoria (dataset completo) y la redacción.
 
 ### Entorno (trampa conocida)
 

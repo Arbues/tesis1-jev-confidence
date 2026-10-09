@@ -70,7 +70,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
 | `eje-2-jev-opensource/FUENTES.md` | Inventario de las 49 fuentes del eje, verificadas con API | lectura obligatoria |
 | `eje-2-jev-opensource/08_estudio_ecosistema.md` | Estudio de campo: 20+ modelos con pesos, taxonomía por rigor, tabla de calibración, huecos | vigente |
-| `audit/jev-oss/` | 13 READMEs crudos de las implementaciones + 2 categorías del índice curado | dato |
+| `audit/jev-oss/` | 11 READMEs crudos de las implementaciones Jev + 2 categorías del índice curado | dato |
 | `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) + datos + scripts | ver §7 |
 | **`results/`** | **ARTEFACTOS de medición**: `raw/` = mediciones crudas del paso 0 (una fila por decisión, con `row_hash`) + resúmenes; `paso0_informe.md` = **informe go/no-go** | **vigente** |
 | `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
@@ -303,6 +303,47 @@ hay que instalar el build `cu126` o la GPU no arranca.
 
 **Pendiente inmediato:** el **DOI del pre-registro** (cuenta OSF/Zenodo del autor) y la **matriz de
 transferencia de umbrales** (`src/jev_conf_metrics/` + `results/matrix/`).
+
+---
+
+## 14. La matriz de transferencia — medida (08-oct-2026, Acer Nitro)
+
+**El entregable central ya existe.** 24 grupos medidos (5 configuraciones de modelo × 5 datasets),
+**17.600 decisiones** con la distribución completa, y **3.672 celdas** de matriz. Informe regenerable:
+`results/matrix/RESUMEN_MATRIZ.md`; figuras en `results/matrix/`.
+
+**El objeto de la tesis, en una cifra:** sobre 17.600 distribuciones medidas, la diferencia entre la
+definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.321**,
+percentil 90 **0.531** y máximo **0.848**.
+
+**El claim, cuantificado.** 1.062 celdas tienen mapa cerrado entre definiciones (misma clase y misma
+cardinalidad). Error absoluto medio del porte de umbral:
+
+| subconjunto | celdas | \|Δ\| directo | \|Δ\| con mapa | factor |
+|---|---|---|---|---|
+| todas las celdas con mapa | 1.062 | 0.2679 | 0.0115 | 23× |
+| **sin empates dominantes** | 966 | **0.2534** | **0.0037** | **68×** |
+| solo modelos entrenados | 846 | 0.2415 | 0.0033 | 72× |
+| solo `n = 2` (Prop. 3) | 540 | 0.3136 | 0.0182 | 17× |
+| solo `n ≥ 3` (Prop. 1) | 522 | 0.2206 | 0.0047 | 47× |
+
+**Hallazgo que afina el claim en dos capas** (ver `docs/erratas_especificacion.md` E2):
+
+1. **Capa de escala:** ni entre definiciones equivalentes en orden viaja el **número**. `jev` y `pmax`
+   están en escalas afines distintas: portar `τ` tal cual pierde hasta el **80 %** de la cobertura
+   (celdas con `Δ = 0.80` y cobertura 0). El **mapa** sí transfiere (Δ ≈ 0.004, un ítem de 400).
+2. **Capa de forma:** entre clases distintas (`pmax ↔ ent`, `pmax ↔ margen`) no existe mapa estricto:
+   no hay número **ni** mapa que transfiera. Ahí está el peligro real.
+
+**Otras cosas medidas:** Kev-0.8B saca **0.820** de accuracy en `banking77` (n = 77) contra 0.358 de Laya
+(el ecosistema sí entrena para cardinalidad alta); `clinc150` (n = 151) **no es ejecutable** en 2 de los 3
+checkpoints de Laya (ventana de 512 tokens: solo caben 126 opciones) — el límite documentado de Jev (≤ 255)
+no es alcanzable en esta implementación.
+
+**Pendiente inmediato (actualizado):** el **DOI del pre-registro** — `paper/04_pre_registro.md` está listo
+para subir a Zenodo (cuenta del autor). Después, la **corrida confirmatoria** sobre el conjunto completo
+(lo medido aquí es un piloto declarado en el propio pre-registro) y la redacción §4–§7 en el t440
+(ver `docs/handoff-t440.md`).
 
 ---
 
