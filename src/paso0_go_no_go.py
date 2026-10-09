@@ -386,17 +386,33 @@ def _normalize_answer(answer):
 
     `choice`/`score` traen `probabilities` (dict etiqueta -> p). `noul` NO: trae
     `noul` = P(true), así que se reconstruye [1-p, p] con las etiquetas [false, true].
+
+    Se devuelven las CLAVES tal cual las emite el modelo (pueden ser nombres de opción o
+    índices "0".."n-1" con el mapa en `legend`); quien necesite los nombres usa `etiquetas_de`.
     """
     if not isinstance(answer, dict):
         return None
     probs = answer.get("probabilities")
     if isinstance(probs, dict) and probs:
         labels = [str(k) for k in probs]
-        return labels, [float(probs[k]) for k in labels]
+        return labels, [float(probs[k]) for k in probs]
     if answer.get("type") == "noul" and "noul" in answer:
         ptrue = float(answer["noul"])
         return ["false", "true"], [1.0 - ptrue, ptrue]
     return None
+
+
+def etiquetas_de(answer, claves):
+    """Nombres legibles de las etiquetas cuando el modelo las devuelve como índices.
+
+    Laya, ante una pregunta `score`, devuelve `probabilities` indexadas por "0".."n-1" y el
+    mapa en `legend`. Los backends que construyen su propio prompt (el control crudo) devuelven
+    los nombres directamente. Esta función devuelve los nombres si hay `legend`, o las claves.
+    """
+    legend = answer.get("legend") if isinstance(answer, dict) else None
+    if isinstance(legend, dict) and legend:
+        return [str(legend.get(k, k)) for k in claves]
+    return list(claves)
 
 
 def _gold_dist(gold_q, labels):
