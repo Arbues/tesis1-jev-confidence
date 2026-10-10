@@ -143,8 +143,8 @@ lo describen `README.md` §5 y `.hermes.md` §5. Las figuras (`heatmap_*.png/pdf
 - **Hecho además (08–09-oct-2026):** la **corrida confirmatoria** (23 grupos, 65.185 decisiones, 3.564
   celdas), la **librería** `src/jev_conf_metrics/` (37 tests) y **§1–§7 del paper** redactados en
   `paper/secciones/`. El **alcance está congelado** (§10) y el pre-registro, publicado.
-- **Pendiente (solo del autor):** verificar el DOI del pre-registro en su cuenta, decidir cuándo el repo pasa
-  a público y hacer el formateo final APA/IEEE. No queda cómputo pendiente.
+- **Pendiente (solo del autor):** verificar el DOI del pre-registro en su cuenta, revisar el borrador §1–§7
+  y hacer el formateo final **IEEE**. El repositorio ya es público (10-oct-2026). No queda cómputo pendiente.
 
 ---
 

@@ -37,7 +37,7 @@ premisa particular se cierre.
 | 6 | Scripts regeneradores | `src/matriz/{medir,matriz,figura,informe_matriz}.py` | hechos |
 | 7 | Figuras (mapas de calor por dataset y cardinalidad) | `results/matrix/heatmap_*.png` / `.pdf` | hechas |
 | 8 | Pre-registro con DOI | `paper/04_pre_registro.md` → Zenodo | publicado (10.5281/zenodo.23266795) |
-| 9 | Repositorio | `github.com/Arbues/tesis1-jev-confidence` | privado; se abre con el MVP |
+| 9 | Repositorio | `github.com/Arbues/tesis1-jev-confidence` | **público** (Apache-2.0 / CC-BY-4.0) |
 
 Todo el conjunto se regenera con `python -m pytest tests/ -q` seguido de los tres scripts de `src/matriz/`
 (§4.5). Ninguna cifra del paper se escribe a mano: todas provienen del informe regenerable.
@@ -60,6 +60,5 @@ implementaciones (el instrumento está diseñado para eso, no para un conjunto f
 
 ## 7.4. Disponibilidad
 
-Repositorio `github.com/Arbues/tesis1-jev-confidence` (privado en la versión de tesis; se hace público con
-resultados). El pre-registro con el diseño congelado tiene DOI **10.5281/zenodo.23266795**. La librería se
-publicará con licencia permisiva junto con la primera versión pública.
+Repositorio **público** `github.com/Arbues/tesis1-jev-confidence` (Apache-2.0 el código, CC-BY-4.0 el paper
+y la documentación). El pre-registro con el diseño congelado tiene DOI **10.5281/zenodo.23266795**.
