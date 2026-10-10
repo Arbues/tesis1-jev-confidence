@@ -1,0 +1,76 @@
+% ======================================================================
+%  Tesis 1 · Ruta 1 — versión IEEE (LaTeX, clase IEEEtran)
+%  Compilar con:  ./compilar.sh   (o latexmk -pdf main.tex)
+%  Requiere TeX Live con la clase IEEEtran (paquete `ieeetran`) y `booktabs`.
+% ======================================================================
+\documentclass[conference]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{cite}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+
+% Menos cajas desbordadas en columnas estrechas (IEEE es a dos columnas).
+\setlength{\emergencystretch}{3em}
+\tolerance=3000
+
+\graphicspath{{../figures/}}
+
+\begin{document}
+
+\title{Metrología y transferencia del campo \texttt{confidence}\\
+en modelos de decisión de pesos abiertos tipo Jev}
+
+\author{%
+\IEEEauthorblockN{Arbués Enrique Pérez Villegas}
+\IEEEauthorblockA{Facultad de Ciencias\\
+Universidad Nacional de Ingeniería (FC-UNI)\\
+Lima, Perú\\
+arbues.perez.v@uni.pe\\
+ORCID: 0009-0004-7605-6569}
+}
+
+\maketitle
+
+\begin{abstract}
+Los modelos de decisión tipo Jev no generan texto: terminan la inferencia con un
+\emph{readout} de logits y exponen un campo \texttt{confidence} sobre el que el ecosistema
+fija umbrales de actuación. Sin embargo, el mismo nombre cubre definiciones
+matemáticamente incompatibles. Este trabajo construye y publica un \emph{instrumento} para
+medirlo: la especificación formal de las definiciones en uso, la librería
+\texttt{jev-conf-\allowbreak metrics}, un conjunto de 65\,185 decisiones medidas sobre pesos abiertos y
+una matriz de transferencia de umbrales que se regenera con un solo comando. Sobre 3\,564
+celdas y 23 grupos (Laya en tres \emph{checkpoints}, Kev-0.8B y un control crudo), la
+diferencia entre la definición más alta y la más baja de la \emph{misma} distribución tiene
+mediana 0.288; el porte directo de un umbral se equivoca del orden de cien veces más que el
+porte con el mapa cerrado cuando este existe; solo dos pares de definiciones transfieren por
+identidad matemática; y la incompatibilidad es un fenómeno de $n \ge 3$. El mismo modelo
+ofrece un ECE de 0.216 o de 0.577 según la definición. La contribución no es el hallazgo
+sino el instrumento: sobrevive a él y mide cualquier implementación futura.
+\end{abstract}
+
+\begin{IEEEkeywords}
+calibración, modelos de decisión, Jev, transferencia de umbrales, predicción selectiva,
+pesos abiertos.
+\end{IEEEkeywords}
+
+\input{secciones/01_introduccion}
+\input{secciones/02_trabajos_relacionados}
+\input{secciones/03_marco_teorico}
+\input{secciones/04_metodo}
+\input{secciones/05_resultados}
+\input{secciones/06_discusion}
+\input{secciones/07_conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{referencias}
+
+\end{document}

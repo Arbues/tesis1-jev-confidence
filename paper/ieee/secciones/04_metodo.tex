@@ -1,0 +1,158 @@
+\section{Método}
+\label{sec:metodo}
+
+\textbf{Desviaciones declaradas.} El pre-registro exige reportarlas y están en
+\texttt{results/matrix/RESUMEN\_MATRIZ.md} §7. La única con efecto sobre los datos es la \textbf{D1}: al
+auditar el pipeline se encontró que la implementación del debiasing \texttt{L0} no convergía (paso
+$\approx 1000\times$ demasiado pequeño), de modo que ese nivel era indistinguible de \texttt{raw}; se
+corrigió y \textbf{las celdas \texttt{L0} se recalcularon}. El \textbf{nivel principal \texttt{raw}} ---
+sobre el que van todos los titulares --- \textbf{no se tocó} tras publicar el pre-registro. D2 (un archivo
+contaminado del piloto, descartado) y D3 (\texttt{clinc150} no ejecutable en un checkpoint) no afectan a la
+confirmatoria.
+
+\subsection{Modelos bajo medición}
+
+Se midieron cinco configuraciones de pesos abiertos, todas con \texttt{output\_tokens} $= 0$ verificado (no
+generan texto). La revisión exacta de cada una (sha del Hub) quedó registrada por grupo en
+\texttt{results/crudos/*.meta.json} y en \texttt{results/raw/paso0\_versions.json} (regla D4).
+
+\begin{table}[t]
+\centering
+\caption{Las cinco configuraciones de pesos abiertos medidas. Todas verifican \texttt{output\_tokens} $= 0$
+(no generan texto); la última es un control crudo, no entrenado para emitir decisiones.}
+\label{tab:modelos}
+{\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{p{0.40\columnwidth}p{0.26\columnwidth}lp{0.26\columnwidth}}
+\toprule
+configuración & familia & parámetros & papel \\
+\midrule
+\texttt{convaiinnovations/\allowbreak laya} & encoder ModernBERT-large + cabeza de decisión & 421M & implementación de referencia \\
+\texttt{convaiinnovations/\allowbreak laya}, subcarpeta \texttt{typed-decisions} & el mismo repositorio, ajustado al benchmark & 421M & variante afinada \\
+\texttt{convaiinnovations/\allowbreak laya}, subcarpeta \texttt{multilingual} & el mismo repositorio, encoder multilingüe & n.d. & multilingüe \\
+\texttt{jaredpalmer/kev-0.8b} & familia Kev (0.8B) & 0.8B & familia entrenable \\
+\texttt{Qwen/Qwen3.5-0.8B-Base} & Qwen, sin ajuste a decisiones & 0.8B & \textbf{control crudo} (nivel \texttt{raw}) \\
+\bottomrule
+\end{tabular}}}
+\end{table}
+
+El control crudo es deliberado: permite ver la transferencia en un modelo que \textbf{no} fue entrenado para
+emitir decisiones, y así separar lo que aporta el entrenamiento de lo que es propio del \emph{readout}.
+
+\subsection{Datasets}
+
+Todos ya etiquetados. No hubo anotación, etiquetado humano ni kappa (regla D2).
+
+\begin{table}[t]
+\centering
+\caption{Datasets usados, con su cardinalidad $n$ y el número de ítems medidos. Los cinco están ya
+etiquetados: no hubo anotación humana.}
+\label{tab:datasets}
+{\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{p{0.44\columnwidth}lp{0.10\columnwidth}p{0.34\columnwidth}}
+\toprule
+dataset & $n$ (cardinalidad) & ítems & por qué \\
+\midrule
+\texttt{LocalLLaMA/\allowbreak typed-decisions} & 2, 4, 5 & 2\,000 & el benchmark compartido del ecosistema \\
+\texttt{SetFit/sst5} & 5 & 1\,101 & ordinal (primitivo \texttt{score}) \\
+\texttt{alisawuffles/\allowbreak WANLI} & 3 & 5\,000 & inferencia de lenguaje natural \\
+\texttt{mteb/banking77} & 77 & 3\,076 & cardinalidad alta \\
+\texttt{clinc/clinc\_oos} (\texttt{plus}) & 151 & 3\,100 & extremo de cardinalidad (el límite documentado de Jev) \\
+\bottomrule
+\end{tabular}}}
+\end{table}
+
+Cinco configuraciones por cinco datasets dan 25 combinaciones posibles; se midieron \textbf{23 grupos}. Las
+dos ausencias no son fallos del pipeline y se declaran en §4.7.
+
+\textbf{Decisiones totales medidas: 65\,185} (una fila por modelo, dataset e ítem), en
+\texttt{results/crudos/*.jsonl}.
+
+\subsection{Las definiciones bajo medición}
+
+Sobre la distribución $p$ que cada modelo devuelve para cada ítem se calcularon, en paralelo y con el mismo
+dato, las cuatro definiciones analíticas de la especificación
+(\texttt{paper/03\_especificacion\_confidence.md}):
+
+$C_{\max} = p_{\max}$ (DEF-4) $\cdot$ $C_{\text{Jev}} = (n\cdot p_{\max} - 1)/(n - 1)$ (DEF-1) $\cdot$
+$C_{\text{ent}} = 1 - H(p)/\ln n$ (DEF-2) $\cdot$ $C_{\text{mar}} = p_{(1)} - p_{(2)}$ (DEF-5). La quinta,
+$C_{\text{noul}} = \max(\pi, 1-\pi)$ (DEF-3), entra en el bloque de $n = 2$.
+
+Las dos definiciones \textbf{opacas} (\texttt{act\_probability} de Laya y \texttt{open-decision-ai})
+quedaron fuera de la matriz por decisión de alcance: no son funciones de $p$ y no tienen clase de
+equivalencia en orden. Las transformaciones AnyJev (nivel \texttt{L0}, debiasing sin etiquetas; nivel
+\texttt{L1}, temperatura ajustada solo dentro de la partición de calibración) se aplicaron sobre las cuatro
+analíticas, además del nivel \texttt{raw}.
+
+\subsection{Procedimiento}
+
+\begin{enumerate}
+\item \textbf{Cross-fitting} $K = 5$, semilla \texttt{20261008}. El fold de cada ítem es determinista,
+   \texttt{fold = sha256(\textquotedbl 20261008:id\textquotedbl) mod 5}. El umbral se ajusta en cuatro folds y se evalúa en el que
+   queda, de modo que cada ítem pasa por prueba exactamente una vez y ningún ítem participa en su propio
+   umbral.
+\item \textbf{Umbral objetivo.} Para un origen $A$ y una cobertura objetivo $q$, se toma
+   $\tau_A = \min\{\tau : \text{cobertura}(\tau) \le q\}$ sobre los valores observados de $C_A$ en
+   calibración, con $\text{cobertura}(\tau) = \#\{C_A \ge \tau\}/N$.
+\item \textbf{Dos portes por celda.} El \textbf{porte directo} aplica $\tau_B := \tau_A$ tal cual, que es lo
+   que practica el ecosistema, y su degradación es la métrica principal,
+   $\Delta(A \to B) = q - \text{cobertura}_B(\tau_A)$. El \textbf{porte con mapa} aplica
+   $\tau_B := \psi(\tau_A)$, con $\psi$ el mapa cerrado $A \to B$ (por ejemplo $\psi = \phi^{-1}$ para
+   $\text{jev} \to \text{pmax}$), y existe solo dentro de una clase de equivalencia y a cardinalidad fija. El
+   par de columnas es necesario porque el número y el mapa son cosas distintas (ver erratas E1 y E2 en
+   \texttt{docs/erratas\_especificacion.md}).
+\item \textbf{Coberturas objetivo} $q \in \{0.80, 0.50, 0.95\}$, con 0.80 como principal.
+\item \textbf{Intervalos.} Bootstrap de ítems con $B = 2000$ y semilla fija; el umbral $\tau$ no se reajusta
+   dentro del bootstrap.
+\item \textbf{Comparaciones múltiples.} Benjamini-Hochberg (FDR) con $\alpha = 0.05$ sobre todas las celdas.
+\item \textbf{Reporte por cardinalidad $n$} y por nivel AnyJev.
+\end{enumerate}
+
+Una \textbf{celda} de la matriz es, por tanto, la tupla (definición origen $A$, definición destino $B$,
+modelo, dataset, $n$, $q$, nivel). El resultado completo tiene \textbf{3\,564 celdas}, en
+\texttt{results/matrix/matriz\_transferencia.csv}.
+
+\subsection{La figura central y los artefactos}
+
+La matriz se resume en un mapa de calor por dataset y cardinalidad (\texttt{results/matrix/heatmap\_*.png} y
+\texttt{.pdf}), con filas de definición origen y columnas de definición destino, y la caída de cobertura
+anotada por celda. La figura \texttt{delta\_vs\_delta\_mapa\_raw\_q80} contrasta, celda a celda, el porte
+directo contra el porte con mapa (el enunciado de la Proposición 1 sobre los datos).
+
+Todo el informe de resultados (\path{results/matrix/RESUMEN_MATRIZ.md}) se regenera con un comando, sin
+edición manual:
+
+{\small
+\begin{flushleft}
+\texttt{python -m pytest tests/ -q}\\
+\texttt{python src/matriz/\allowbreak matriz.py --crudos results/\allowbreak crudos --out results/\allowbreak matrix}\\
+\texttt{python src/matriz/figura.py}\\
+\texttt{python src/matriz/informe\_matriz.py}
+\end{flushleft}}
+
+\texttt{matriz.py} es CPU pura: lee los \texttt{.jsonl} de mediciones y no toca ningún peso. Si el CSV
+regenerado no es idéntico al publicado, hay un bug o un cambio de versión.
+
+\subsection{Trazabilidad (regla D4)}
+
+Cada fila de \texttt{results/crudos/*.jsonl} contiene la distribución completa, la etiqueta, el acierto, las
+cuatro definiciones calculadas, el modelo, la revisión del Hub y un \texttt{row\_hash}. La columna
+\textbf{medido aquí} agrupa los campos \texttt{conf\_*} (calculados aquí sobre la distribución devuelta); la
+columna \textbf{auto-reportado} agrupa \texttt{answer\_confidence}, \texttt{confidence\_reported} y
+\texttt{act\_probability} (emitidos por el propio modelo). Las cifras de ECE de las fichas del ecosistema son
+auto-reportadas y \textbf{no} se usan como medición propia.
+
+\subsection{Alcance no cubierto, declarado antes de los resultados}
+
+\begin{itemize}
+\item \texttt{clinc150} ($n = 151$) \textbf{no es ejecutable} en el checkpoint base de Laya: su ventana de
+  512 tokens solo admite 126 de las 151 opciones. El límite documentado de Jev (hasta 255 opciones) no es
+  alcanzable en esa implementación. Sí se midió con los otros checkpoints y con el control crudo.
+\item \texttt{jaredpalmer/kev-suites} \textbf{no carga} (fallo de generación en el Hub el 08-oct-2026); no es
+  un fallo del pipeline.
+\item Los modelos de 4B a 9B (Jeff-1, SemIf, jev-lite, Nimble-9B) no caben en 6 GB de VRAM; quedan como
+  extensión en el Mac Mini o a 4 bits.
+\end{itemize}

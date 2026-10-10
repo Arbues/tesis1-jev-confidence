@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-conf-metrics"
+version = "0.1.0"
+description = "Metrología y transferencia del campo `confidence` en modelos de decisión tipo Jev"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Arbués Enrique Pérez Villegas", email = "arbues.perez.v@uni.pe" },
+]
+keywords = ["confidence", "calibration", "Jev", "threshold transfer", "decision models"]
+
+# La librería en sí es stdlib puro: no arrastra dependencias.
+dependencies = []
+
+[project.optional-dependencies]
+# Para regenerar la matriz y las figuras desde los crudos.
+figuras = ["numpy>=1.26", "matplotlib>=3.8"]
+
+# Para correr los tests.
+dev = ["pytest>=8", "numpy>=1.26"]
+
+[project.urls]
+Homepage = "https://github.com/Arbues/tesis1-jev-confidence"
+Repository = "https://github.com/Arbues/tesis1-jev-confidence"
+"Pre-registro (DOI)" = "https://doi.org/10.5281/zenodo.23266795"
+ORCID = "https://orcid.org/0009-0004-7605-6569"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["jev_conf_metrics"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
