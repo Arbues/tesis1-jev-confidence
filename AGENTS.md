@@ -99,6 +99,9 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 - **Nunca push directo a `main`.** Todo cambio va a una **rama separada → Pull Request → squash merge**.
 - `gh` CLI está autenticado (SSH). Ejemplo: `git checkout -b feat/algo && git push -u origin HEAD && gh pr create`.
 - Commits en español, mensajes claros.
+- **Ramas (09-oct-2026):** `main` es la buena y ya trae el paper (§4–§7) y la auditoría del `L0`. La rama
+  **`feat/matriz-transferencia` está OBSOLETA** (historial previo al rebase sobre `main`): **no usarla ni
+  fusionarla**, se conserva solo por historial. El trabajo vigente salió de `fix/auditoria-l0-y-cifras`.
 - **Visibilidad:** el repo es **privado** por ahora; se pasa a **público** cuando existan resultados o al
   menos el MVP del framework.
 
