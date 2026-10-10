@@ -67,12 +67,12 @@
 
   "matriz_2026_10_08": {
     "nota": "MATRIZ DE TRANSFERENCIA MEDIDA — CORRIDA CONFIRMATORIA (la que declara el pre-registro DOI 10.5281/zenodo.23266795), sobre el conjunto COMPLETO de cada dataset. Informe regenerable: results/matrix/RESUMEN_MATRIZ.md (src/matriz/informe_matriz.py); matriz: results/matrix/matriz_transferencia.csv; crudos: results/crudos/.",
-    "alcance_medido": "23 grupos = 5 configuraciones de modelo (Laya none / Laya typed-decisions / Laya multilingual / Kev-0.8B / control crudo Qwen3.5-0.8B-Base) x 5 datasets (typed-decisions 400 casos, sst5 1101, wanli 5000, banking77 3076, clinc150 3100; clinc150 no es ejecutable en el checkpoint `none`). 41505 decisiones. 3564 celdas = (A->B) x modelo x dataset x n x q x nivel. Sustituye al PILOTO (17600 decisiones, 3672 celdas) que fue la puesta a punto.",
+    "alcance_medido": "23 grupos = 5 configuraciones de modelo (Laya none / Laya typed-decisions / Laya multilingual / Kev-0.8B / control crudo Qwen3.5-0.8B-Base) x 5 datasets (typed-decisions 400 casos, sst5 1101, wanli 5000, banking77 3076, clinc150 3100; clinc150 no es ejecutable en el checkpoint `none`). 65185 decisiones. 3564 celdas = (A->B) x modelo x dataset x n x q x nivel. Sustituye al PILOTO (17600 decisiones, 3672 celdas) que fue la puesta a punto.",
     "determinismo": "En typed-decisions (unico dataset donde el piloto ya cubria el split entero) los 5 modelos reprodujeron el MISMO numero exacto en la confirmatoria: 0.4860 / 0.3595 / 0.3515 / 0.7685 / 0.4595. Mismo entorno + mismos datos = mismos resultados.",
     "archivo_contaminado_del_piloto": "El piloto tenia un residuo de la corrida previa al arreglo de colision: convaiinnovations__laya__clinc150.jsonl contenia datos de `multilingual` etiquetados como `none` (ese checkpoint no puede con n=151, asi que el archivo nunca se sobrescribio). La matriz del piloto uso esa celda con datos falsos. Eliminado en la confirmatoria (por eso 3672 - 108 = 3564 celdas).",
     "cardinalidades": [2, 3, 4, 5, 77, 151],
     "diseno": "Cross-fitting K=5 (semilla 20261008, fold por sha256), q = 0.80 / 0.50 / 0.95, bootstrap de items B=2000, BH-FDR alpha=0.05, niveles AnyJev raw / L0 / L1 (L0 y L1 ajustados SOLO en calibracion).",
-    "resultado_central": "Sobre 41505 distribuciones, la diferencia entre la definicion de confidence mas alta y la mas baja de la MISMA distribucion: mediana 0.292, p90 0.441, maximo 0.840.",
+    "resultado_central": "Sobre 65185 distribuciones, la diferencia entre la definicion de confidence mas alta y la mas baja de la MISMA distribucion: mediana 0.288, p90 0.434, maximo 0.848.",
     "claim_cuantificado": "1044 celdas con mapa cerrado. Error absoluto medio del porte: 0.2721 directo vs 0.0105 con mapa (26x). Sin las celdas dominadas por empates: 0.2577 vs 0.0025 (104x). Solo modelos entrenados: 0.2466 vs 0.0022 (114x). Solo n>=3: 0.2276 vs 0.0023 (100x). El porte directo llega a perder TODA la cobertura (delta=0.80, cobertura_B=0).",
     "dos_capas_del_hallazgo": "1) ESCALA: ni entre definiciones equivalentes en orden viaja el numero (jev y pmax estan en escalas afines distintas); el mapa si transfiere (delta ~0.004). 2) FORMA: entre clases distintas (pmax<->ent, pmax<->margen) no existe mapa estricto: no hay numero NI mapa. Ver docs/erratas_especificacion.md E2.",
     "hallazgos_colaterales": [
@@ -262,25 +262,26 @@
     {"n": 1, "paso": "PASO 0 go/no-go: HECHO el 08-oct-2026 en el Acer Nitro -> GO. Laya (3 checkpoints) + Kev-0.8B sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado; las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003", "documento": "results/paso0_informe.md", "artefactos": "results/raw/"},
     {"n": 2, "paso": "Congelar la lista de definiciones y de datasets, y la cobertura objetivo", "responsable": "autor (alcance)", "estado": "ya congelado en paper/00_plan_del_paper.md seccion 10"},
     {"n": 3, "paso": "Especificacion formal de cada definicion", "responsable": "autor (redaccion)", "estado": "hecho: paper/03_especificacion_confidence.md"},
-    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad (extraer lo ya validado en src/paso0_go_no_go.py)", "responsable": "agente"},
+    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad (extraer lo ya validado en src/paso0_go_no_go.py)", "responsable": "agente", "estado": "hecho: src/jev_conf_metrics/ (36 tests)"},
     {"n": 5, "paso": "Pipeline de medicion (pesos abiertos + datasets ya etiquetados)", "responsable": "agente", "estado": "funcionando en src/paso0_go_no_go.py (Laya + Kev + control crudo)"},
-    {"n": 6, "paso": "Matriz de transferencia + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente", "estado": "crudas del paso 0 hechas; falta la matriz"},
-    {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal", "estado": "UNICO PENDIENTE QUE NECESITA AL AUTOR (cuenta OSF/Zenodo)"},
+    {"n": 6, "paso": "Matriz de transferencia + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente", "estado": "hecha (corrida confirmatoria): results/matrix/matriz_transferencia.csv (3564 celdas) + results/crudos/ (65185 filas)"},
+    {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal", "estado": "HECHO: publicado 10.5281/zenodo.23266795 (08-oct-2026)"},
     {"n": 8, "paso": "Fijar el titulo definitivo al cerrar la especificacion", "responsable": "autor"},
-    {"n": 9, "paso": "Estudio del objetivo RLCD en paralelo - nivel que el Taller convierte en teoria"}
+    {"n": 9, "paso": "Estudio del objetivo RLCD en paralelo - nivel que el Taller convierte en teoria"},
+    {"n": 10, "paso": "Redaccion del paper §1–§7 (borrador)", "responsable": "agente (t440)", "estado": "hecho: paper/secciones/ (09-oct-2026)"}
   ],
 
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PRIVADO; se pasa a publico al tener resultados o el MVP del framework) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
-    "alcance_congelado": "paper/00_plan_del_paper.md seccion 10 (04-oct-2026, decidido por el agente conforme a D1-D5): definiciones analiticas (pmax, Jev, entropia, margen) + AnyJev L0/L1 en la matriz; act_probability y open-decision-ai solo catalogo; modelos Laya 421M / Laya-typed-decisions / Kev-0.8B / tinyjev; datasets typed-decisions, kev-suites, Banking77, CLINC150, SST-5, WANLI; q=0.80 (+0.50/0.95). El paso 0 ya se corrio (08-oct-2026); el UNICO pendiente del autor es el DOI del pre-registro (OSF/Zenodo).",
-    "resultados": "results/ - paso0_informe.md (informe go/no-go regenerable con src/paso0_informe.py) + raw/ (mediciones crudas del paso 0, una fila por decision con row_hash) + matrix/ (vacio; la matriz de transferencia esta por construir)",
+    "alcance_congelado": "paper/00_plan_del_paper.md seccion 10 (04-oct-2026, decidido por el agente conforme a D1-D5): definiciones analiticas (pmax, Jev, entropia, margen) + AnyJev L0/L1 en la matriz; act_probability y open-decision-ai solo catalogo; modelos Laya 421M / Laya-typed-decisions / Kev-0.8B / tinyjev; datasets typed-decisions, kev-suites, Banking77, CLINC150, SST-5, WANLI; q=0.80 (+0.50/0.95). El paso 0 ya se corrio (08-oct-2026), el pre-registro esta publicado (10.5281/zenodo.23266795) y la matriz esta medida (corrida confirmatoria); no queda computo pendiente.",
+    "resultados": "results/ - paso0_informe.md (go/no-go regenerable con src/paso0_informe.py) + raw/ (paso 0, una fila por decision con row_hash) + crudos/ (65185 mediciones confirmatorias) + matrix/ (la matriz: matriz_transferencia.csv, figuras, RESUMEN_MATRIZ.md y resumen.json)",
     "paper": {
       "plan": "paper/00_plan_del_paper.md",
       "marco_teorico": "paper/01_marco_teorico.md",
       "referencias": "paper/02_referencias.bib",
       "especificacion": "paper/03_especificacion_confidence.md (formaliza cada definicion, con proposiciones y tests de conformidad)",
-      "secciones": "paper/secciones/01_introduccion.md, 02_trabajos_relacionados.md, 03_marco_teorico.md (borradores)"
+      "secciones": "paper/secciones/01_introduccion.md, 02_trabajos_relacionados.md, 03_marco_teorico.md, 04_metodo.md, 05_resultados.md, 06_discusion.md, 07_conclusion.md (§1–§7, borradores del 08–09-oct-2026)"
     },
     "guia_agentes": "AGENTS.md (raiz, canonico) + docs/guia-agentes.md (version resumida)",
     "punto_de_entrada": "README.md",

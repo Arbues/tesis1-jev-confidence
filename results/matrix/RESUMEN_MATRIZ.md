@@ -40,7 +40,7 @@ Parámetros: `K=5` cross-fitting · `q=[0.8, 0.5, 0.95]` · bootstrap `B=2000` �
 
 ## 2. El objeto de la tesis, en una cifra
 
-Sobre **41505 distribuciones** medidas (una fila = una decisión), la diferencia entre la definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.292**, percentil 90 **0.441** y máximo **0.840**.
+Sobre **65185 distribuciones** medidas (una fila = una decisión), la diferencia entre la definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.288**, percentil 90 **0.434** y máximo **0.848**.
 
 ## 3. Proposición 1 en los datos (¿el mapa conserva la cobertura?)
 
