@@ -21,6 +21,34 @@ commiteado. Lo que no se puede regenerar allí (la inferencia) ya está hecho y 
 
 ---
 
+## 0. Nota para el agente del t440 (09-oct-2026)
+
+Si ya escribiste §4–§7 con una versión anterior de la matriz, revisa estas cuatro cosas. Todas están ya
+corregidas en `main` tras la **auditoría final de errores**:
+
+| # | Qué cambió | Cifra vigente | Cifra vieja |
+|---|---|---|---|
+| 1 | El titular es sobre el **nivel principal `raw`**, no sobre los tres niveles mezclados | **109×** (0.2337 vs 0.0021, 312 celdas) | 104× (0.2577 vs 0.0025, 948 celdas) |
+| 2 | El recuento de distribuciones tenía un tope de 2000 filas por archivo | **65.185** (mediana 0.288, p90 0.434, máx 0.848) | 41.505 (0.292 / 0.441 / 0.840) |
+| 3 | El nivel **`L0` se recalculó** (desviación D1: su implementación no convergía y era indistinguible de `raw`) | `L0` 37× · `L1` 126× | `L0` indistinguible de `raw` |
+| 4 | Las tablas **por par** de §5.4 ahora son sobre `raw` | celdas 15 / 99 | 45 / 297 |
+
+**Cómo comprobar que todo cuadra** (sin GPU):
+
+```bash
+python src/matriz/matriz.py --crudos results/crudos --out results/matrix
+python src/matriz/informe_matriz.py
+```
+
+Toda cifra del paper debe aparecer **literalmente** en `results/matrix/RESUMEN_MATRIZ.md`. Si alguna no
+aparece, es que quedó de la versión anterior.
+
+**Lo que NO hay que tocar:** el nivel `raw` —sobre el que van todos los titulares— **no se modificó** tras
+publicar el pre-registro (DOI `10.5281/zenodo.23266795`). `L0` y `L1` son niveles de sensibilidad, y la
+corrección del `L0` está declarada como desviación en `RESUMEN_MATRIZ.md` §7 y en §4 del paper.
+
+---
+
 ## 1. Qué hay (y dónde)
 
 | Ruta | Qué contiene | Estado |
