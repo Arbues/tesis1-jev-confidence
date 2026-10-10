@@ -96,7 +96,8 @@ entrada (`README.md`, `STATE.json`, `.hermes.md`, `AGENTS.md`, `.gitignore`, `LI
 va a su carpeta → código a `src/`, resultados a `results/`, texto a `paper/`, ideas a `notes/`, datos a
 `data/`. Si dudas, crea una subcarpeta con nombre claro **dentro** de la que corresponda, no en la raíz.
 
-> **Visibilidad:** repo **privado** por ahora; se pasa a **público** cuando existan resultados o el MVP del framework.
+> **Visibilidad:** repositorio **público** desde el 10-oct-2026. Licencias: **Apache-2.0** el código
+> (`LICENSE`), **CC-BY-4.0** el paper y la documentación (`LICENSE-docs`); cita en `CITATION.cff`.
 
 ---
 
