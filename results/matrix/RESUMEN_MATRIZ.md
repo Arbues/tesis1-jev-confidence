@@ -44,28 +44,32 @@ Sobre **65185 distribuciones** medidas (una fila = una decisión), la diferencia
 
 ## 3. Proposición 1 en los datos (¿el mapa conserva la cobertura?)
 
-1044 celdas tienen mapa cerrado (misma clase de equivalencia y misma cardinalidad). Las 8 con mayor desviación:
+348 celdas tienen mapa cerrado (misma clase de equivalencia y misma cardinalidad). Las 8 con mayor desviación:
 
 | modelo | dataset | n | q | A → B | Δ directo | Δ con mapa |
 |---|---|---|---|---|---|---|
 | `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | pmax → margin | 0.5000 | 0.2090 |
 | `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | jev → margin | 0.2090 | 0.2090 |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.8 | margin → pmax | -0.2000 | 0.2078 |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.8 | margin → jev | 0.2078 | 0.2078 |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.8 | margin → ent | 0.7916 | 0.2078 |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.8 | pmax → margin | 0.8000 | 0.1719 |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.8 | jev → margin | 0.1719 | 0.1719 |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | pmax → margin | 0.5000 | 0.1419 |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | pmax → jev | 0.5000 | 0.1288 |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | pmax → ent | 0.5000 | 0.1288 |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | jev → pmax | -0.5000 | 0.1288 |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | jev → ent | 0.5000 | 0.1288 |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | ent → pmax | -0.5000 | 0.1288 |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | ent → jev | -0.4448 | 0.1288 |
+
+Todo lo de esta sección es sobre el **nivel principal `raw`** (el que congela el pre-registro). Los niveles `L0` y `L1` están en la matriz completa y se resumen en §5.
 
 Error absoluto medio del porte, por subconjunto de celdas:
 
 | subconjunto | celdas | \|Δ\| directo | \|Δ\| con mapa | factor |
 |---|---|---|---|---|
-| todas las celdas con mapa | 1044 | 0.2721 | 0.0105 | 25.9× |
-| sin empates dominantes en el umbral (masa < 5 %) | 948 | 0.2577 | 0.0025 | 104.5× |
-| solo modelos entrenados (sin el control crudo) | 828 | 0.2466 | 0.0022 | 113.9× |
-| solo n = 2 (Proposición 3) | 540 | 0.3136 | 0.0182 | 17.2× |
-| solo n ≥ 3 (Proposición 1) | 504 | 0.2276 | 0.0023 | 100.0× |
+| todas las celdas con mapa | 348 | 0.2528 | 0.0123 | 20.5× |
+| sin empates dominantes en el umbral (masa < 5 %) | 312 | 0.2337 | 0.0021 | 109.2× |
+| solo modelos entrenados (sin el control crudo) | 276 | 0.2289 | 0.0020 | 112.8× |
+| solo n = 2 (Proposición 3) | 180 | 0.3006 | 0.0218 | 13.8× |
+| solo n ≥ 3 (Proposición 1) | 168 | 0.2015 | 0.0021 | 95.8× |
+| nivel `L0` (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37.1× |
+| nivel `L1` (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126.0× |
 
 **Cómo leer esto.** El porte con mapa tiene un suelo que no es culpa del mapa: si el umbral cae sobre un valor **empatado** (salidas saturadas), la cobertura salta y ni el mapa puede dar exactamente `q`. Por eso la comparación limpia es la del subconjunto sin empates dominantes, y por eso `delta_mapa` debe leerse **contra `delta` de la misma celda**, nunca como un cero absoluto. La columna `n_empates_tau` de la matriz dice, en cada celda, cuántos ítems comparten el umbral.
 
@@ -75,18 +79,18 @@ La distribución de `Δ` es **bimodal**, no centrada: hay pares que coinciden (y
 
 | A → B | celdas | \|Δ\| **mediana** | \|Δ\| media | ¿tiene mapa? |
 |---|---|---|---|---|
-| margin → jev | 45 | **0.0023** | 0.0224 | sí |
-| jev → margin | 45 | **0.0024** | 0.0245 | sí |
-| jev → pmax | 297 | **0.0799** | 0.1675 | sí |
-| ent → jev | 45 | **0.1837** | 0.1974 | sí |
-| ent → margin | 45 | **0.1837** | 0.1974 | sí |
-| margin → pmax | 45 | **0.2000** | 0.2336 | sí |
-| ent → pmax | 45 | **0.2000** | 0.2447 | sí |
-| pmax → jev | 297 | **0.3131** | 0.3388 | sí |
-| margin → ent | 45 | **0.3817** | 0.4041 | sí |
-| jev → ent | 45 | **0.3817** | 0.4042 | sí |
-| pmax → margin | 45 | **0.5277** | 0.5590 | sí |
-| pmax → ent | 45 | **0.7667** | 0.6834 | sí |
+| margin → jev | 15 | **0.0023** | 0.0250 | sí |
+| jev → margin | 15 | **0.0023** | 0.0293 | sí |
+| jev → pmax | 99 | **0.0759** | 0.1568 | sí |
+| ent → jev | 15 | **0.1837** | 0.1898 | sí |
+| ent → margin | 15 | **0.1837** | 0.1898 | sí |
+| margin → pmax | 15 | **0.2000** | 0.2253 | sí |
+| ent → pmax | 15 | **0.2000** | 0.2421 | sí |
+| pmax → jev | 99 | **0.2574** | 0.2973 | sí |
+| margin → ent | 15 | **0.3474** | 0.3855 | sí |
+| jev → ent | 15 | **0.3474** | 0.3857 | sí |
+| pmax → margin | 15 | **0.5262** | 0.5154 | sí |
+| pmax → ent | 15 | **0.7667** | 0.6787 | sí |
 
 Dos coincidencias **por identidad matemática**, no por azar: (i) a `n = 2`, `C_jev` y `C_mar` son la MISMA función (`2·p_max − 1`), así que su porte directo ya da 0; (ii) a cardinalidad alta, `C_jev = (n·p−1)/(n−1) → p`, así que `jev` y `pmax` convergen y sus umbrales casi coinciden. En el extremo opuesto, `pmax → ent` es el peor par: cambia la FORMA de la función, no solo la escala.
 
@@ -94,12 +98,12 @@ Dos coincidencias **por identidad matemática**, no por azar: (i) a `n = 2`, `C_
 
 | n | celdas con mapa | \|Δ\| mediana | % con \|Δ\| < 0.01 |
 |---|---|---|---|
-| 2 | 540 | 0.2288 | 14 % |
-| 3 | 90 | 0.1980 | 0 % |
-| 4 | 90 | 0.4018 | 0 % |
-| 5 | 180 | 0.2081 | 0 % |
-| 77 | 90 | 0.0068 | 57 % |
-| 151 | 54 | 0.0131 | 41 % |
+| 2 | 180 | 0.2141 | 14 % |
+| 3 | 30 | 0.1775 | 0 % |
+| 4 | 30 | 0.4085 | 0 % |
+| 5 | 60 | 0.2000 | 0 % |
+| 77 | 30 | 0.0058 | 63 % |
+| 151 | 18 | 0.0127 | 44 % |
 
 ## 4. Dónde el umbral NO viaja (nivel `raw`, q = 0.80, tras FDR)
 
@@ -141,4 +145,16 @@ Dos coincidencias **por identidad matemática**, no por azar: (i) a `n = 2`, `C_
 | `results/raw/paso0_*` | la reproducción del paso 0 (5 métricas publicadas, |Δ| ≤ 0.003) |
 
 Columna **medido aquí / auto-reportado**: en los crudos, `conf_*` son **medidos aquí** (calculados sobre la distribución devuelta) y `answer_confidence` / `confidence_reported` / `act_probability` son **auto-reportados** por el modelo. Las cifras de ECE de la tabla de calibración del ecosistema son **auto-reportadas** y no se usan en la matriz.
+
+## 7. Desviaciones respecto al pre-registro
+
+El pre-registro (`paper/04_pre_registro.md`, DOI 10.5281/zenodo.23266795) exige reportar cualquier desviación. Las habidas:
+
+| # | Qué | Por qué | Efecto |
+|---|---|---|---|
+| D1 | Se corrigió un **fallo de implementación del nivel `L0`** | El debiasing sin etiquetas no convergía: el paso era ~1000× demasiado pequeño, `b` quedaba en ~0 y las frecuencias de argmax apenas se movían (168/294/416/222 → 169/299/408/224, con objetivo 275). El nivel `L0` era indistinguible de `raw` | No cambia el plan congelado (que dice «debiasing sin etiquetas»), corrige su implementación. **Las celdas `L0` se recalcularon**; `raw` (nivel principal) y `L1` no se tocan |
+| D2 | Se descartó un archivo del **piloto** que estaba contaminado | `convaiinnovations__laya__clinc150.jsonl` contenía datos de `multilingual` etiquetados como `none` (residuo de una corrida previa a un arreglo de colisión) | No afecta a la confirmatoria: ese archivo no existe en ella |
+| D3 | `clinc150` no se midió en el checkpoint `none` de Laya | Su ventana de 512 tokens solo admite 126 de las 151 opciones | **Limitación, no desviación**: se declara en el paper |
+
+El **nivel principal es `raw`** y **no se ha tocado** tras publicar el pre-registro. `L0` y `L1` son niveles de sensibilidad.
 

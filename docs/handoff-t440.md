@@ -10,8 +10,10 @@
 > **Cifras que van al paper** (todas en `results/matrix/RESUMEN_MATRIZ.md`, regenerable):
 > - La diferencia entre la definición de `confidence` más alta y la más baja de la **misma** distribución:
 >   mediana **0.288**, p90 **0.434**, máximo **0.848** (sobre 65.185 distribuciones).
-> - Error absoluto medio del porte de umbral: **0.2577 directo contra 0.0025 con mapa → factor 104×**
->   (sin las celdas dominadas por empates de umbral); solo modelos entrenados, **114×**.
+> - Error absoluto medio del porte de umbral, **nivel principal `raw`**: **0.2337 directo contra 0.0021 con
+>   mapa → factor 109×** (sin las celdas dominadas por empates de umbral); solo modelos entrenados, **113×**.
+> - **El promedio no es el resumen**: la distribución de `Δ` es bimodal. Usar la tabla **por par (A→B)** de
+>   §3b del informe: peor par `pmax → ent` (mediana 0.767), mejor `margin → jev` (0.002).
 > - El porte directo llega a perder **toda** la cobertura (celdas con Δ = 0.80 y cobertura 0).
 
 El t440 **no necesita GPU, ni pesos, ni acceso a HuggingFace**. Todo lo que el paper necesita está
@@ -34,6 +36,7 @@ commiteado. Lo que no se puede regenerar allí (la inferencia) ya está hecho y 
 | `results/matrix/RESUMEN_MATRIZ.md` | informe legible con todas las tablas | **hecho** |
 | `paper/04_pre_registro.md` | el pre-registro (lo publica el autor en Zenodo para el DOI) | **hecho** |
 | `docs/erratas_especificacion.md` | las 3 contradicciones encontradas y cómo se resolvieron | **hecho** |
+| §7 de `RESUMEN_MATRIZ.md` | las **desviaciones respecto al pre-registro** (el pre-registro exige reportarlas): D1 corrección del nivel `L0` | **hecho** |
 | `src/jev_conf_metrics/` | la librería del entregable 2, con `tests/` | **hecho** |
 
 ## 2. Mapa artefacto → sección del paper

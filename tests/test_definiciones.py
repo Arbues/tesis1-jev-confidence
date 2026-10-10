@@ -100,6 +100,43 @@ def test_T8_noul_simetrico():
         assert conf_noul(x) >= 0.5 - 1e-12
 
 
+def test_L0_iguala_las_frecuencias_de_argmax():
+    """Regresión de un fallo real (08-oct-2026): el debiasing L0 no hacía nada.
+
+    Con un paso de `0.5/len(matriz)` el prior `b` quedaba en ~0 y las frecuencias de argmax no
+    se movían (el nivel `L0` era indistinguible de `raw`). El objetivo del L0 es repartirlas
+    uniformemente: si este test falla, el nivel L0 de la matriz no significa lo que dice.
+    """
+    import random
+    from src.jev_conf_metrics.definiciones import (
+        aplicar_l0, prior_por_desplazamiento_ciclico,
+    )
+
+    rng = random.Random(3)
+    n_clases = 4
+    # distribuciones con sesgo fuerte hacia la clase 2 (como las reales)
+    probs = []
+    for _ in range(400):
+        p = [rng.random() * 0.2 for _ in range(n_clases)]
+        p[2] += 0.6
+        s = sum(p)
+        probs.append([x / s for x in p])
+
+    def frecuencias(b):
+        import collections
+        c = collections.Counter(max(range(n_clases), key=lambda i: q[i])
+                                for q in (aplicar_l0(p, b) for p in probs))
+        return [c[k] / len(probs) for k in range(n_clases)]
+
+    antes = frecuencias([0.0] * n_clases)
+    assert max(antes) - min(antes) > 0.15, antes  # hay sesgo que corregir
+
+    b = prior_por_desplazamiento_ciclico(probs, n_clases)
+    despues = frecuencias(b)
+    assert max(despues) - min(despues) < 0.05, (b, despues)
+    assert any(x > 0 for x in b), b
+
+
 def test_nombres_congelados():
     """La lista de definiciones de la matriz no puede cambiar sin tocar el pre-registro."""
     assert set(CONFIDENCES) == {"jev", "ent", "pmax", "margin"}

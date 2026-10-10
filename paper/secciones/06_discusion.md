@@ -33,7 +33,7 @@ depende de `n` y de la definición, así que la misma cifra `0.7` significa cobe
 deja de ser una función de `p_max` (la entropía usa toda la distribución, no solo el máximo), ni siquiera
 existe el mapa.
 
-Esto es exactamente lo que predice la Proposición 1 y lo que mide el factor **104×**: el costo de confundir
+Esto es exactamente lo que predice la Proposición 1 y lo que mide el factor **109×**: el costo de confundir
 "mismo orden" con "mismo número".
 
 ## 6.3. El umbral es una política, no un número suelto
@@ -71,7 +71,7 @@ en realidad, discrepancias del **medidor**.
   "fallos": son el resultado de que no haya traducción matemática posible. La matriz las marca como tales.
 - **El control crudo infla el porte directo** en las celdas con empates de umbral (modelo sin entrenar,
   salidas saturadas). Por eso la comparación limpia excluye las celdas dominadas por empates y la de
-  referencia es la de 948 celdas (104×).
+  referencia es la de 312 celdas (109×, nivel `raw`).
 - **Las definiciones opacas** (`act_probability`, `open-decision-ai`) quedaron fuera de la matriz por
   decisión de alcance, ya que no son funciones de la distribución.
 

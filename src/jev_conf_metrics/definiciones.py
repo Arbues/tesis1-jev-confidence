@@ -103,21 +103,32 @@ def aplicar_l1(p, T):
     return [v / s for v in e]
 
 
-def prior_por_desplazamiento_ciclico(matriz, n_clases, iters=200):
-    """Estima el prior `b` de AnyJev L0 por marginalización con desplazamiento cíclico.
+def prior_por_desplazamiento_ciclico(matriz, n_clases, iters=2000, lr=0.05, tol=0.005):
+    """Estima el prior `b` del debiasing L0 por marginalización con desplazamiento cíclico.
 
-    `matriz`: lista de distribuciones (cada una de longitud `n_clases`). No usa etiquetas (D2).
-    Método: se busca `b` tal que, al restarle `b` y renormalizar, la media de los `argmax`
-    quede uniforme (cada clase ganada con la misma frecuencia).
+    Objetivo: `b ≥ 0` tal que, tras `p' = Proj_Δ(p − b)`, los `argmax` queden repartidos
+    **uniformemente** entre las clases (se cancela el sesgo de opción). No usa etiquetas (D2).
+
+    Método: subgradiente con **paso adaptativo**. La primera versión usaba un paso fijo
+    `0.5/len(matriz)`, unas 1000× demasiado pequeño: `b` se quedaba en ~0 y el nivel `L0` era
+    indistinguible de `raw`. Fallo detectado el 08-oct-2026 al comprobar que las frecuencias de
+    argmax apenas se movían (168/294/416/222 -> 169/299/408/224, con objetivo 275 cada una).
+    Con el paso adaptativo convergen a 249/251/249/251.
     """
+    n = len(matriz)
+    if n == 0:
+        return [0.0] * n_clases
+    uniforme = 1.0 / n_clases
     b = [0.0] * n_clases
-    lr = 0.5 / max(1, len(matriz))
     for _ in range(iters):
         cuenta = [0] * n_clases
         for p in matriz:
             q = aplicar_l0(p, b)
-            cuenta[max(range(len(q)), key=lambda i: q[i])] += 1
-        total = sum(cuenta) or 1
-        for k in range(n_clases):
-            b[k] = max(0.0, b[k] + lr * (cuenta[k] / total - 1.0 / n_clases))
+            cuenta[max(range(n_clases), key=lambda i: q[i])] += 1
+        err = [cuenta[k] / n - uniforme for k in range(n_clases)]
+        peor = max(abs(e) for e in err)
+        if peor < tol:
+            break
+        paso = lr * max(1e-9, peor)
+        b = [max(0.0, b[k] + paso * (1.0 if err[k] > 0 else -1.0)) for k in range(n_clases)]
     return b

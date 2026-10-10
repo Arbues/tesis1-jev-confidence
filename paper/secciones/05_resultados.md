@@ -57,17 +57,20 @@ sobre la otra.
 
 ## 5.3. El número no viaja; el mapa sí
 
-De las 3.564 celdas, **1.044 tienen mapa cerrado** entre definiciones (misma clase de equivalencia y misma
-cardinalidad), que son las únicas donde tiene sentido comparar el porte directo contra el porte con mapa. El
-error absoluto medio:
+El titular es sobre el **nivel principal `raw`**, que es el que congela el pre-registro. En él, de las 3.564
+celdas, **348 tienen mapa cerrado** entre definiciones (misma clase de equivalencia y misma cardinalidad;
+1.044 si se cuentan los tres niveles), que son las únicas donde tiene sentido comparar el porte directo
+contra el porte con mapa. El error absoluto medio:
 
 | subconjunto | celdas | \|Δ\| directo | \|Δ\| con mapa | factor |
 |---|---|---|---|---|
-| todas las celdas con mapa | 1.044 | 0.2721 | 0.0105 | 25.9× |
-| **sin empates dominantes en el umbral** | **948** | **0.2577** | **0.0025** | **104.5×** |
-| solo modelos entrenados (sin control crudo) | 828 | 0.2466 | 0.0022 | 113.9× |
-| solo n = 2 (Proposición 3) | 540 | 0.3136 | 0.0182 | 17.2× |
-| solo n ≥ 3 (Proposición 1) | 504 | 0.2276 | 0.0023 | 100.0× |
+| todas las celdas con mapa | 348 | 0.2528 | 0.0123 | 20.5× |
+| **sin empates dominantes en el umbral** | **312** | **0.2337** | **0.0021** | **109.2×** |
+| solo modelos entrenados (sin control crudo) | 276 | 0.2289 | 0.0020 | 112.8× |
+| solo n = 2 (Proposición 3) | 180 | 0.3006 | 0.0218 | 13.8× |
+| solo n ≥ 3 (Proposición 1) | 168 | 0.2015 | 0.0021 | 95.8× |
+| nivel `L0` (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37.1× |
+| nivel `L1` (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126.0× |
 
 El porte directo se equivoca **del orden de cien veces más** que el porte con mapa. El matiz de la tercera
 columna lo explica §5.4.
@@ -85,18 +88,18 @@ El titular es el par, no la media global.
 
 | A → B | celdas | \|Δ\| mediana | \|Δ\| media | ¿mapa? |
 |---|---|---|---|---|
-| margin → jev | 45 | **0.0023** | 0.0224 | sí |
-| jev → margin | 45 | **0.0024** | 0.0245 | sí |
-| jev → pmax | 297 | **0.0799** | 0.1675 | sí |
-| ent → jev | 45 | **0.1837** | 0.1974 | sí |
-| ent → margin | 45 | **0.1837** | 0.1974 | sí |
-| margin → pmax | 45 | **0.2000** | 0.2336 | sí |
-| ent → pmax | 45 | **0.2000** | 0.2447 | sí |
-| pmax → jev | 297 | **0.3131** | 0.3388 | sí |
-| margin → ent | 45 | **0.3817** | 0.4041 | sí |
-| jev → ent | 45 | **0.3817** | 0.4042 | sí |
-| pmax → margin | 45 | **0.5277** | 0.5590 | sí |
-| pmax → ent | 45 | **0.7667** | 0.6834 | sí |
+| margin → jev | 15 | **0.0023** | 0.0250 | sí |
+| jev → margin | 15 | **0.0023** | 0.0293 | sí |
+| jev → pmax | 99 | **0.0759** | 0.1568 | sí |
+| ent → jev | 15 | **0.1837** | 0.1898 | sí |
+| ent → margin | 15 | **0.1837** | 0.1898 | sí |
+| margin → pmax | 15 | **0.2000** | 0.2253 | sí |
+| ent → pmax | 15 | **0.2000** | 0.2421 | sí |
+| pmax → jev | 99 | **0.2574** | 0.2973 | sí |
+| margin → ent | 15 | **0.3474** | 0.3855 | sí |
+| jev → ent | 15 | **0.3474** | 0.3857 | sí |
+| pmax → margin | 15 | **0.5262** | 0.5154 | sí |
+| pmax → ent | 15 | **0.7667** | 0.6787 | sí |
 
 Dos de las coincidencias son **identidades matemáticas**, no azar: (i) a `n = 2`, `C_Jev` y `C_mar` son la
 **misma** función (`2·p_max − 1`), así que su porte directo ya da casi cero; (ii) a cardinalidad alta,

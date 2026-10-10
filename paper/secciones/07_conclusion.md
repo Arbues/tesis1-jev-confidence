@@ -11,7 +11,8 @@ promesa: que sirve para fijar un umbral de actuación. La medición sobre **23 g
 celdas** muestra que esa promesa **no viaja entre implementaciones**. Sobre la **misma** distribución, la
 definición de `confidence` más alta y la más baja difieren con mediana **0.288** y máximo **0.848**. Portar el
 umbral tal cual (copiar la cifra) se equivoca del orden de **cien veces** más que portarlo con el mapa
-matemático cuando este existe (0.2577 contra 0.0025, sobre las 948 celdas sin empates dominantes). Y en las
+matemático cuando este existe (0.2337 contra 0.0021, sobre las 312 celdas del nivel principal `raw` sin
+empates dominantes). Y en las
 celdas de peor caso, el porte directo pierde **toda** la cobertura: quien calibra al 80 % con una definición
 puede terminar actuando en el 0 % con otra.
 

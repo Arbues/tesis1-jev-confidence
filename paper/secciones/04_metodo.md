@@ -5,6 +5,14 @@
 pre-registro (`paper/04_pre_registro.md`, DOI 10.5281/zenodo.23266795). Ningún parámetro se ajustó después
 de ver los resultados.*
 
+> **Desviaciones declaradas.** El pre-registro exige reportarlas y están en `results/matrix/RESUMEN_MATRIZ.md`
+> §7. La única con efecto sobre los datos es la **D1**: al auditar el pipeline se encontró que la
+> implementación del debiasing `L0` no convergía (paso ~1000× demasiado pequeño), de modo que ese nivel era
+> indistinguible de `raw`; se corrigió y **las celdas `L0` se recalcularon**. El **nivel principal `raw`** —
+> sobre el que van todos los titulares— **no se tocó** tras publicar el pre-registro. D2 (un archivo
+> contaminado del piloto, descartado) y D3 (`clinc150` no ejecutable en un checkpoint) no afectan a la
+> confirmatoria.
+
 ---
 
 ## 4.1. Modelos bajo medición

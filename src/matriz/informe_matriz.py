@@ -141,7 +141,9 @@ def main(argv=None):
         w.append("")
 
     # --- 3. Proposición 1 en los datos
-    con_mapa = [r for r in filas if r["delta_mapa"] not in ("", None)]
+    # El titular va sobre el nivel PRINCIPAL (`raw`): mezclar niveles mezclaria el efecto de las
+    # transformaciones AnyJev con el de la definicion, que es lo que se mide.
+    con_mapa = [r for r in filas if r["nivel"] == "raw" and r["delta_mapa"] not in ("", None)]
     if con_mapa:
         peores = sorted(con_mapa, key=lambda r: -abs(float(r["delta_mapa"])))[:8]
         w.append("## 3. Proposición 1 en los datos (¿el mapa conserva la cobertura?)")
@@ -155,6 +157,9 @@ def main(argv=None):
             w.append(f"| `{r['modelo']}` | {r['dataset']} | {r['n']} | {r['q']} | "
                      f"{r['A']} → {r['B']} | {_f(r['delta'])} | {_f(r['delta_mapa'])} |")
         w.append("")
+        w.append("Todo lo de esta sección es sobre el **nivel principal `raw`** (el que congela el "
+                 "pre-registro). Los niveles `L0` y `L1` están en la matriz completa y se resumen en §5.")
+        w.append("")
         w.append("Error absoluto medio del porte, por subconjunto de celdas:")
         w.append("")
         w.append("| subconjunto | celdas | \\|Δ\\| directo | \\|Δ\\| con mapa | factor |")
@@ -166,6 +171,12 @@ def main(argv=None):
              [r for r in con_mapa if not str(r["modelo"]).startswith("Qwen")]),
             ("solo n = 2 (Proposición 3)", [r for r in con_mapa if str(r["n"]) == "2"]),
             ("solo n ≥ 3 (Proposición 1)", [r for r in con_mapa if str(r["n"]) != "2"]),
+            ("nivel `L0` (debiasing sin etiquetas)",
+             [r for r in filas if r["nivel"] == "L0" and r["delta_mapa"] not in ("", None)
+              and int(r["n_empates_tau"]) / max(1, int(r["n_items_te"])) < 0.05]),
+            ("nivel `L1` (temperatura con etiquetas)",
+             [r for r in filas if r["nivel"] == "L1" and r["delta_mapa"] not in ("", None)
+              and int(r["n_empates_tau"]) / max(1, int(r["n_items_te"])) < 0.05]),
         ]
         for nombre, sub in subconjuntos:
             if not sub:
@@ -265,6 +276,31 @@ def main(argv=None):
              "`confidence_reported` / `act_probability` son **auto-reportados** por el modelo. Las "
              "cifras de ECE de la tabla de calibración del ecosistema son **auto-reportadas** y no "
              "se usan en la matriz.")
+    w.append("")
+
+    # --- 7. desviaciones respecto al pre-registro (su seccion 7 las exige)
+    w.append("## 7. Desviaciones respecto al pre-registro")
+    w.append("")
+    w.append("El pre-registro (`paper/04_pre_registro.md`, DOI 10.5281/zenodo.23266795) exige reportar "
+             "cualquier desviación. Las habidas:")
+    w.append("")
+    w.append("| # | Qué | Por qué | Efecto |")
+    w.append("|---|---|---|---|")
+    w.append("| D1 | Se corrigió un **fallo de implementación del nivel `L0`** | El debiasing sin etiquetas "
+             "no convergía: el paso era ~1000× demasiado pequeño, `b` quedaba en ~0 y las frecuencias de "
+             "argmax apenas se movían (168/294/416/222 → 169/299/408/224, con objetivo 275). El nivel `L0` "
+             "era indistinguible de `raw` | No cambia el plan congelado (que dice «debiasing sin "
+             "etiquetas»), corrige su implementación. **Las celdas `L0` se recalcularon**; `raw` (nivel "
+             "principal) y `L1` no se tocan |")
+    w.append("| D2 | Se descartó un archivo del **piloto** que estaba contaminado | "
+             "`convaiinnovations__laya__clinc150.jsonl` contenía datos de `multilingual` etiquetados como "
+             "`none` (residuo de una corrida previa a un arreglo de colisión) | No afecta a la "
+             "confirmatoria: ese archivo no existe en ella |")
+    w.append("| D3 | `clinc150` no se midió en el checkpoint `none` de Laya | Su ventana de 512 tokens "
+             "solo admite 126 de las 151 opciones | **Limitación, no desviación**: se declara en el paper |")
+    w.append("")
+    w.append("El **nivel principal es `raw`** y **no se ha tocado** tras publicar el pre-registro. `L0` y "
+             "`L1` son niveles de sensibilidad.")
     w.append("")
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)

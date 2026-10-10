@@ -321,16 +321,24 @@ modelo × 5 datasets), **65.185 decisiones** y **3.564 celdas**. Informe regener
 definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.288**,
 percentil 90 **0.434** y máximo **0.848**.
 
-**El claim, cuantificado.** 1.044 celdas tienen mapa cerrado entre definiciones (misma clase y misma
-cardinalidad). Error absoluto medio del porte de umbral:
+**El claim, cuantificado** (nivel principal `raw`, el que congela el pre-registro). 348 celdas tienen mapa
+cerrado entre definiciones (misma clase y misma cardinalidad; 1.044 contando los tres niveles). Error
+absoluto medio del porte de umbral:
 
 | subconjunto | celdas | \|Δ\| directo | \|Δ\| con mapa | factor |
 |---|---|---|---|---|
-| todas las celdas con mapa | 1.044 | 0.2721 | 0.0105 | 26× |
-| **sin empates dominantes** | 948 | **0.2577** | **0.0025** | **104×** |
-| solo modelos entrenados | 828 | 0.2466 | 0.0022 | 114× |
-| solo `n = 2` (Prop. 3) | 540 | 0.3136 | 0.0182 | 17× |
-| solo `n ≥ 3` (Prop. 1) | 504 | 0.2276 | 0.0023 | 100× |
+| todas las celdas con mapa | 348 | 0.2528 | 0.0123 | 20× |
+| **sin empates dominantes** | 312 | **0.2337** | **0.0021** | **109×** |
+| solo modelos entrenados | 276 | 0.2289 | 0.0020 | 113× |
+| solo `n = 2` (Prop. 3) | 180 | 0.3006 | 0.0218 | 14× |
+| solo `n ≥ 3` (Prop. 1) | 168 | 0.2015 | 0.0021 | 96× |
+| nivel `L0` (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37× |
+| nivel `L1` (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126× |
+
+**El promedio no es el resumen:** la distribución de `Δ` es **bimodal** (hay pares que coinciden por
+identidad matemática y pares que fallan en grande), así que el titular es la tabla **por par (A→B)** de
+`RESUMEN_MATRIZ.md` §3b, no la media global. El peor par es `pmax → ent` (mediana 0.767: cambia la FORMA,
+no solo la escala); el mejor, `margin → jev` (0.002, porque a `n = 2` son la misma función).
 
 **Hallazgo que afina el claim en dos capas** (ver `docs/erratas_especificacion.md` E2):
 
@@ -349,6 +357,12 @@ no es alcanzable en esta implementación.
 
 **Hecho:** la **redacción §4–§7** quedó en `paper/secciones/` (09-oct-2026), en el t440, sin GPU. Falta solo
 la revisión del autor y el formateo final APA/IEEE.
+
+**Auditoría final de errores (08-oct-2026):** sin pérdida silenciosa de filas (0 saltadas en los 23
+grupos), `matriz.py` **determinista**, folds balanceados, y **sin truncado silencioso** en cardinalidad
+alta (Kev puntúa las 77 opciones, Laya las 151). Se encontró y corrigió un fallo real: el debiasing `L0` no
+convergía (paso ~1000× demasiado pequeño), así que ese nivel era indistinguible de `raw`. Reportado como
+**desviación D1** en `RESUMEN_MATRIZ.md` §7. El nivel principal `raw` no se tocó tras publicar el DOI.
 
 ---
 
