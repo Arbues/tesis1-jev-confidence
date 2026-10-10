@@ -349,7 +349,7 @@ no solo la escala); el mejor, `margin → jev` (0.002, porque a `n = 2` son la m
    no hay número **ni** mapa que transfiera. Ahí está el peligro real.
 
 **Otras cosas medidas:** Kev-0.8B saca **0.813** de accuracy en `banking77` (n = 77) contra 0.377 de Laya
-(el ecosistema sí entrena para cardinalidad alta); `clinc150` (n = 151) **no es ejecutable** en 2 de los 3
+(el ecosistema sí entrena para cardinalidad alta); `clinc150` (n = 151) **no es ejecutable** en 1 de los 3
 checkpoints de Laya (ventana de 512 tokens: solo caben 126 opciones) — el límite documentado de Jev (≤ 255)
 no es alcanzable en esta implementación.
 

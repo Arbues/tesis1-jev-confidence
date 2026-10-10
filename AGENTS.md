@@ -115,8 +115,8 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
    de Laya reproducidas con |Δ| ≤ 0.003. Informe: `results/paso0_informe.md`.
 3. **Congelado** (04-oct-2026): definiciones, datasets y cobertura objetivo → `paper/00_plan_del_paper.md` §10.
 4. **Especificación formal**: ✅ `paper/03_especificacion_confidence.md` (DEF-1..DEF-8, Proposiciones 1–3).
-   Dos erratas corregidas y documentadas en `docs/erratas_especificacion.md`.
-5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (36 tests, `--selftest` OK).
+   Tres erratas corregidas y documentadas en `docs/erratas_especificacion.md` (E3, menor).
+5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (37 tests, `--selftest` OK).
 6. **Matriz de transferencia**: ✅ **MEDIDA** en su corrida confirmatoria (la que declara el pre-registro).
    23 grupos (5 configuraciones de modelo × 5 datasets), 65.185 decisiones, 3.564 celdas.
    Informe: `results/matrix/RESUMEN_MATRIZ.md`; figuras y CSV en `results/matrix/`. Resultado central:

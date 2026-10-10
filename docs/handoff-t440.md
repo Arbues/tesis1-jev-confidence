@@ -1,6 +1,6 @@
 # Handoff — qué hay, cómo se regenera y qué falta
 
-*Para el redactor del paper en el `thinkpad-t440` (sin GPU). Actualizado: 08-oct-2026.*
+*Para el redactor del paper en el `thinkpad-t440` (sin GPU). Actualizado: 10-oct-2026.*
 
 > **Estado: la medición está CERRADA.** Es la corrida **confirmatoria** que declara el pre-registro
 > (DOI **10.5281/zenodo.23266795**), sobre el conjunto completo de cada dataset: **23 grupos**
@@ -88,7 +88,7 @@ corrección del `L0` está declarada como desviación en `RESUMEN_MATRIZ.md` §7
 # en el t440, con el repo clonado y un venv con numpy + matplotlib
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python numpy matplotlib pytest
 
-python -m pytest tests/ -q                       # 36 tests: la matemática y la regresión del paso 0
+python -m pytest tests/ -q                       # 37 tests: la matemática y la regresión del paso 0
 python src/matriz/matriz.py --crudos results/crudos --out results/matrix
 python src/matriz/figura.py
 python src/matriz/informe_matriz.py
@@ -113,7 +113,7 @@ original sin volver a correr el modelo. Los `.meta.json` guardan la revisión de
 | Modelos 4B–9B fuera de esta corrida | no caben en 6 GB de VRAM. Extensión prevista: Mac Mini o 4-bit (`GestaltLabs/Jeff-1`, SemIf, `vagmi/jev-lite`, `Bespoke-Nimble-9B` — este último **sin licencia declarada**) |
 | `chaoliangUNSW/Jev-Style-Qwen3.5-2B` | no verificable (HTTP 401) |
 | `act_probability` y `open-decision-ai` | fuera de la matriz por decisión congelada (opacas) |
-| Cardinalidades altas | con distribuciones casi one-hot las definiciones **coinciden**: la incompatibilidad es un fenómeno de `n ≥ 3` con distribuciones dispersas (Proposición 2) |
+| Cardinalidades altas | con distribuciones casi one-hot las definiciones **coinciden**: la incompatibilidad es un fenómeno de `n ≥ 3` con distribuciones dispersas (Proposición 3) |
 
 ## 6. Cómo citar el instrumento
 
