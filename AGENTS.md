@@ -121,20 +121,22 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
    23 grupos (5 configuraciones de modelo × 5 datasets), 65.185 decisiones, 3.564 celdas.
    Informe: `results/matrix/RESUMEN_MATRIZ.md`; figuras y CSV en `results/matrix/`. Resultado central:
    la diferencia entre la definición de `confidence` más alta y la más baja de la **misma** distribución
-   tiene mediana **0.288**; el porte directo del umbral se equivoca **104×** más que el porte con mapa
-   (0.2577 vs 0.0025, sin empates dominantes).
+   tiene mediana **0.288**; el porte directo del umbral se equivoca **109×** más que el porte con mapa, en el
+   nivel principal `raw` (0.2337 vs 0.0021, sin celdas dominadas por empates). **El promedio engaña**
+   (distribución bimodal): el titular es la tabla **por par** del informe §3b.
 
 ### Pendiente, en orden
 
 | # | Qué falta | Quién | Nota |
 |---|---|---|---|
-| 1 | **DOI del pre-registro** — `paper/04_pre_registro.md` está listo para subir | **autor** (OSF/Zenodo) | es lo único que no puede hacer el agente |
-| 2 | **Corrida confirmatoria** sobre el conjunto COMPLETO | agente (Nitro) | lo medido es un **piloto declarado** en el pre-registro; va después del DOI |
-| 3 | **Paper**: §4 Método, §5 Resultados, §6 Discusión, §7 Conclusión (§1–§3 son borrador) + citas APA/IEEE | autor + agente (t440) | **sin GPU**: todo sale de `results/`; ver `docs/handoff-t440.md` |
+| 1 | ~~DOI del pre-registro~~ | autor | ✅ **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026) |
+| 2 | ~~Corrida confirmatoria~~ | agente | ✅ hecha: 23 grupos, 65.185 filas, 3.564 celdas |
+| 3 | ~~Redacción §4–§7~~ | agente (t440) | ✅ escrita (09-oct-2026). **Pendiente: revisión del autor + formato APA/IEEE** |
 | 4 | Extensión al **Mac Mini**: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev | agente (Mac) | no caben en 6 GB de VRAM |
 
-**Los resultados del paso 0 no son el resultado de la tesis**: lo es la matriz, que ya existe. Lo que falta
-es la corrida confirmatoria (dataset completo) y la redacción.
+**Los resultados del paso 0 no son el resultado de la tesis**: lo es la matriz, que ya existe y está medida
+sobre el conjunto completo. Si el t440 ya escribió §4–§7, **revisar las 4 cifras que cambiaron con la
+auditoría** — están listadas en `docs/handoff-t440.md` §0.
 
 ### Entorno (trampa conocida)
 
