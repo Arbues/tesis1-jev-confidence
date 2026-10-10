@@ -33,7 +33,7 @@ modelos como si fueran intercambiables. **Nadie ha medido sistemáticamente cuá
 
 **Estructura teórica que lo respalda (núcleo interno):** la fórmula de Jev `(n·p_max−1)/(n−1)`, a `n` fijo,
 es una transformación **estrictamente creciente y afín** de `p_max`; por tanto **su umbral transfiere de
-forma exacta a `p_max`** (misma cobertura). En cambio, la **entropía normalizada** es una función de *toda*
+forma exacta a `p_max`** aplicando el mapa `φ⁻¹` (misma cobertura). En cambio, la **entropía normalizada** es una función de *toda*
 la distribución, no de `p_max` solo: dos distribuciones con el mismo `p_max` pueden tener entropías
 distintas, así que **el umbral NO transfiere** en general entre una definición tipo entropía y una tipo
 orden-estadístico. La matriz mide esas dos clases de caso. → **Esto convierte un "instrumento" en una tesis
