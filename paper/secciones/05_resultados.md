@@ -106,16 +106,16 @@ Dos de las coincidencias son **identidades matemáticas**, no azar: (i) a `n = 2
 `C_Jev = (n·p − 1)/(n − 1) → p`, así que `jev` y `pmax` convergen y sus umbrales casi coinciden. En el
 extremo opuesto, `pmax → ent` es el peor par: no cambia la escala, cambia la **forma** de la función.
 
-Fracción de celdas que transfieren bien (`|Δ| < 0.01`), por cardinalidad:
+Fracción de celdas que transfieren bien (`|Δ| < 0.01`), por cardinalidad (nivel `raw`):
 
 | n | celdas con mapa | \|Δ\| mediana | % con \|Δ\| < 0.01 |
 |---|---|---|---|
-| 2 | 540 | 0.2288 | 14 % |
-| 3 | 90 | 0.1980 | 0 % |
-| 4 | 90 | 0.4018 | 0 % |
-| 5 | 180 | 0.2081 | 0 % |
-| 77 | 90 | 0.0068 | 57 % |
-| 151 | 54 | 0.0131 | 41 % |
+| 2 | 180 | 0.2141 | 14 % |
+| 3 | 30 | 0.1775 | 0 % |
+| 4 | 30 | 0.4085 | 0 % |
+| 5 | 60 | 0.2000 | 0 % |
+| 77 | 30 | 0.0058 | 63 % |
+| 151 | 18 | 0.0127 | 44 % |
 
 ## 5.5. Efecto de la cardinalidad
 

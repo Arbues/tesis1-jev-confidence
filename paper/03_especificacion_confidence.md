@@ -196,8 +196,8 @@ Proposición 1). Este es el enunciado que da forma a toda la matriz.
 
 ## 5. Transferencia de umbral (definición operativa de la matriz)
 
-> **Corregido el 08-oct-2026** al implementar `jev-conf-metrics`. Dos erratas (E1 y E2) documentadas
-> en `docs/erratas_especificacion.md`. Lo de abajo es la versión vigente.
+> **Corregido el 08-oct-2026** al implementar `jev-conf-metrics`. Tres erratas (E1, E2 y E3, esta última menor)
+> documentadas en `docs/erratas_especificacion.md`. Lo de abajo es la versión vigente.
 
 Dados origen `A`, destino `B`, cobertura objetivo `q ∈ (0,1)` y conjunto de calibración `S_cal`:
 

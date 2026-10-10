@@ -264,7 +264,7 @@
     {"n": 1, "paso": "PASO 0 go/no-go: HECHO el 08-oct-2026 en el Acer Nitro -> GO. Laya (3 checkpoints) + Kev-0.8B sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado; las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003", "documento": "results/paso0_informe.md", "artefactos": "results/raw/"},
     {"n": 2, "paso": "Congelar la lista de definiciones y de datasets, y la cobertura objetivo", "responsable": "autor (alcance)", "estado": "ya congelado en paper/00_plan_del_paper.md seccion 10"},
     {"n": 3, "paso": "Especificacion formal de cada definicion", "responsable": "autor (redaccion)", "estado": "hecho: paper/03_especificacion_confidence.md"},
-    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad (extraer lo ya validado en src/paso0_go_no_go.py)", "responsable": "agente", "estado": "hecho: src/jev_conf_metrics/ (36 tests)"},
+    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad (extraer lo ya validado en src/paso0_go_no_go.py)", "responsable": "agente", "estado": "hecho: src/jev_conf_metrics/ (37 tests)"},
     {"n": 5, "paso": "Pipeline de medicion (pesos abiertos + datasets ya etiquetados)", "responsable": "agente", "estado": "funcionando en src/paso0_go_no_go.py (Laya + Kev + control crudo)"},
     {"n": 6, "paso": "Matriz de transferencia + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente", "estado": "hecha (corrida confirmatoria): results/matrix/matriz_transferencia.csv (3564 celdas) + results/crudos/ (65185 filas)"},
     {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal", "estado": "HECHO: publicado 10.5281/zenodo.23266795 (08-oct-2026)"},

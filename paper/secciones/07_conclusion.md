@@ -30,7 +30,7 @@ premisa particular se cierre.
 | # | artefacto | dónde | estado |
 |---|---|---|---|
 | 1 | Especificación formal de las definiciones (DEF-1..DEF-8, Proposiciones 1 a 3) | `paper/03_especificacion_confidence.md` + erratas | hecho |
-| 2 | Librería `jev-conf-metrics` | `src/jev_conf_metrics/` | hecho (36 tests) |
+| 2 | Librería `jev-conf-metrics` | `src/jev_conf_metrics/` | hecho (37 tests) |
 | 3 | Arnés de conformidad (tests T1..T8) | `tests/` | hecho |
 | 4 | Matriz de transferencia de umbrales | `results/matrix/matriz_transferencia.csv` | medida (3.564 celdas) |
 | 5 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | medido (65.185 filas, con `row_hash`) |
