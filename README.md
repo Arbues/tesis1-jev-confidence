@@ -37,7 +37,8 @@ cada uno publicable:
 | **Tesis 2** | curso de tesis 2 | El mecanismo (objetivo que induzca calibración) | Algorítmica |
 | **Taller** | taller de tesis (último) | **Las bases matemáticas** (condiciones + demostración) | **Teórica** |
 
-**Restricción de forma:** formato exigido **APA o IEEE** (R.R. 1439-2023-UNI). El Plan de Tesis tiene validez de 2 años.
+**Restricción de forma:** la norma admite **APA o IEEE** (R.R. 1439-2023-UNI); para este trabajo **se elige
+IEEE** (fijado el 10-oct-2026). El Plan de Tesis tiene validez de 2 años.
 
 ---
 
@@ -48,12 +49,12 @@ bajo tres reglas: el resultado es un **artefacto** (no un hallazgo), el trabajo 
 y lo automatizable **máximo**, y las referencias/comparaciones son **trazables**. El Taller convertirá esa
 evidencia en teoría del objetivo RLCD.
 
-**Título provisional:**
+**Título definitivo (fijado el 10-oct-2026):**
 > *Metrología y transferencia del campo `confidence` en modelos de decisión de pesos abiertos tipo Jev*
 > *Metrology and Threshold Transfer of the `confidence` Field in Open-Weight Jev-Type Decision Models*
 
 **Regla de estilo:** sin dos puntos, sin subtítulo, sin signos de interrogación. Frase nominal que declara
-propiedad + objeto + alcance + tipo de método. **El título definitivo se fija al cerrar la especificación.**
+propiedad + objeto + alcance + tipo de método. **El título quedó fijado al cerrar la especificación.**
 
 ---
 
@@ -90,7 +91,8 @@ docs/       Guías (incluye guia-agentes.md)
 ```
 
 **Regla de orden (para que nada quede suelto en la raíz):** la **raíz** es solo para los archivos de
-entrada (`README.md`, `STATE.json`, `.hermes.md`, `AGENTS.md`, `.gitignore`) y las carpetas. Todo lo nuevo
+entrada (`README.md`, `STATE.json`, `.hermes.md`, `AGENTS.md`, `.gitignore`, `LICENSE`, `LICENSE-docs`,
+`CITATION.cff`) y las carpetas. Todo lo nuevo
 va a su carpeta → código a `src/`, resultados a `results/`, texto a `paper/`, ideas a `notes/`, datos a
 `data/`. Si dudas, crea una subcarpeta con nombre claro **dentro** de la que corresponda, no en la raíz.
 
@@ -198,7 +200,7 @@ metrología.** De ahí D1 y la Ruta 1.
 
 - **Idioma:** español. En el chat, **corto**; si no entiende, reformular en lenguaje llano. Los `.md` entregados, detallados.
 - **Formato:** respuestas con **tablas y pasos**; aprende mejor con **diagramas de arquitectura**.
-- **Formato de tesis:** **APA o IEEE** (R.R. 1439-2023-UNI).
+- **Formato de tesis:** **IEEE** (la norma R.R. 1439-2023-UNI admite APA o IEEE).
 - **Aporte interno** (matemática, mecanismos, código) valorado; puede vivir en el marco teórico.
 - **Git:** rama separada → PR → squash merge; **nunca push directo a main** (solo en repos que son git; **esta carpeta no lo es**).
 - **Seguridad:** cero contraseñas o secrets en `.env` ni en repos; en docs, solo placeholders.

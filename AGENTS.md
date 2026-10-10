@@ -150,6 +150,6 @@ con `transformers`: se sirve desde su repo y el script le habla por HTTP.
 
 - **Idioma:** español (paper y docs). Los `.md` deben ser **detallados y bien estructurados**; los mensajes de
   chat, **breves**.
-- Formato de tesis: **APA o IEEE** (R.R. 1439-2023-UNI).
+- Formato de tesis: **IEEE** (la norma R.R. 1439-2023-UNI admite APA o IEEE; elegido IEEE el 10-oct-2026).
 - Cero contraseñas o secrets en el repo. En docs, solo placeholders.
 - Si un enfoque falla **3 veces**: parar y cambiar de perspectiva.

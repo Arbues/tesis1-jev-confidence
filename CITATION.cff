@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "Si usas este instrumento (la librería o la matriz de transferencia), cítalo con estos datos."
+title: >-
+  Metrología y transferencia del campo confidence en modelos de decisión de pesos
+  abiertos tipo Jev
+abstract: >-
+  Instrumento de medición y matriz de transferencia de umbrales entre las definiciones
+  incompatibles del campo confidence en el ecosistema open-source de modelos de decisión
+  tipo Jev (Laya, Kev y pares). Incluye la especificación formal de las definiciones, la
+  librería jev-conf-metrics, el dataset de 65.185 mediciones crudas con hash por fila y la
+  matriz de transferencia regenerable con un comando.
+type: software
+authors:
+  - family-names: Pérez V.
+    given-names: Arbués Enrique
+    email: arbues.perez.v@uni.pe
+    affiliation: >-
+      Facultad de Ciencias, Universidad Nacional de Ingeniería (FC-UNI), Lima, Perú
+date-released: "2026-10-10"
+license: Apache-2.0
+repository-code: "https://github.com/Arbues/tesis1-jev-confidence"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23266795
+    description: >-
+      Pre-registro del diseño de medición (definiciones, datasets, cobertura objetivo).
+keywords:
+  - confidence calibration
+  - decision models
+  - Jev
+  - threshold transfer
+  - calibration
+  - open weights
