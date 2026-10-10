@@ -70,11 +70,11 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 |---|---|---|---|
 | 1 | `spec` de las definiciones | `paper/03_especificacion_confidence.md` | **hecho** (+ erratas en `docs/erratas_especificacion.md`) |
 | 2 | Librería `jev-conf-metrics` + tests | `src/jev_conf_metrics/` | **hecho** (36 tests) |
-| 3 | Matriz de transferencia | `results/matrix/matriz_transferencia.csv` | **medida** (3.672 celdas) |
-| 4 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | **medido** (17.600 filas, con `row_hash`) |
+| 3 | Matriz de transferencia | `results/matrix/matriz_transferencia.csv` | **medida** (3.564 celdas, corrida confirmatoria) |
+| 4 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | **medido** (65.185 filas, con `row_hash`) |
 | 5 | Script regenerador | `src/matriz/{medir,matriz,figura,informe_matriz}.py` + `correr_*.sh` | **hecho** |
 | 6 | Pre-registro con DOI | `paper/04_pre_registro.md` → Zenodo | ✅ **publicado: 10.5281/zenodo.23266795** |
-| 7 | Paper (IEEE) | `paper/` | §1–§3 borrador; §4–§7 dependen de la corrida confirmatoria |
+| 7 | Paper (IEEE) | `paper/secciones/` | **§1–§7 borrador** (08–09-oct-2026) |
 
 **Desviación de rutas respecto a la versión anterior de esta tabla:** los artefactos viven bajo
 `results/matrix/` y `results/crudos/` (no en la raíz de `results/`), porque esas carpetas ya existían y así
@@ -126,25 +126,25 @@ lo describen `README.md` §5 y `.hermes.md` §5. Las figuras (`heatmap_*.png/pdf
 | 5 | Pipeline de medición | Nitro | agente (dev) |
 | 6 | Matriz + dataset de mediciones crudas (hash por fila) | Nitro | agente (dev) |
 | 7 | Pre-registro con DOI | — | agente |
-| 8 | Medición principal + redacción | t440 + Nitro | ambos |
+| 8 | Medición principal + redacción | t440 + Nitro | ✅ hecho: matriz confirmatoria + §4–§7 |
 
 ---
 
 ## 9. Estado y pendiente inmediato
 
 - **Hecho:** ruta elegida; documento principal (`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`);
-  marco teórico base (`paper/01_marco_teorico.md`); **borradores §1–§3** (`paper/secciones/`);
+  marco teórico base (`paper/01_marco_teorico.md`); **borradores §1–§7** (`paper/secciones/`);
   bibliografía (`paper/02_referencias.bib`); repo GitHub y `AGENTS.md`;
   **especificación formal** de las definiciones (`paper/03_especificacion_confidence.md`);
   **paso 0 ejecutado en el Acer Nitro (08-oct-2026) → GO** (`results/paso0_informe.md`): Laya (3 checkpoints)
   y Kev-0.8B sobre las 2.000 decisiones de `typed-decisions`, `output_tokens = 0` verificado y **las 5
   métricas publicadas de Laya reproducidas con |Δ| ≤ 0.003** (ECE 0.213→0.2157, accuracy 0.766→0.7685,
   Brier 0.062→0.0615, soft acc 0.471→0.4707, score MAE 0.242→0.2424).
-- **Pendiente:** la **corrida confirmatoria** sobre el conjunto completo (lo medido es un piloto declarado
-  en `paper/04_pre_registro.md`); revisar y pulir §1–§3 y redactar §4–§7 (citas al estilo final APA/IEEE) —
-  en el t440, sin GPU, con `docs/handoff-t440.md`. El **alcance está congelado** (§10) y la **librería y la
-  matriz están hechas** (`src/jev_conf_metrics/`, `src/matriz/`, `results/matrix/`). Lo único que toca al
-  autor: nada — el pre-registro ya está publicado (DOI **10.5281/zenodo.23266795**).
+- **Hecho además (08–09-oct-2026):** la **corrida confirmatoria** (23 grupos, 65.185 decisiones, 3.564
+  celdas), la **librería** `src/jev_conf_metrics/` (36 tests) y **§1–§7 del paper** redactados en
+  `paper/secciones/`. El **alcance está congelado** (§10) y el pre-registro, publicado.
+- **Pendiente (solo del autor):** verificar el DOI del pre-registro en su cuenta, decidir cuándo el repo pasa
+  a público y hacer el formateo final APA/IEEE. No queda cómputo pendiente.
 
 ---
 

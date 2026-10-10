@@ -1,7 +1,7 @@
 # README — Estado del proyecto de tesis (punto de entrada)
 
 > **Si eres un agente que acaba de abrir esta carpeta: lee este archivo completo antes de actuar.**
-> Contiene el contexto acumulado, las decisiones tomadas y sus razones. Última actualización: **04-oct-2026**.
+> Contiene el contexto acumulado, las decisiones tomadas y sus razones. Última actualización: **09-oct-2026**.
 >
 > **Sesión nueva:** `.hermes.md` es el contexto de proyecto que Hermes auto-carga al arrancar, y `STATE.json`
 > es el punto de reentrada. Los dos son de lectura obligatoria antes de proponer o cambiar nada.
@@ -64,7 +64,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `README.md` | **este archivo** — punto de entrada y estado consolidado | vigente |
 | `STATE.json` | El mismo estado en formato máquina-legible para agentes | vigente |
 | `.hermes.md` | Contexto de proyecto que Hermes auto-carga al arrancar | vigente |
-| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `03_especificacion_confidence.md` (especificación formal), `secciones/` (borradores §1–§3) | **vigente** |
+| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `03_especificacion_confidence.md` (especificación formal), `04_pre_registro.md`, `secciones/` (borradores §1–§7) | **vigente** |
 | `docs/guia-agentes.md` | Guía de trabajo/handoff para agentes (AGENTS.md canónico pendiente de aprobación) | vigente |
 | **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`** | **DOCUMENTO PRINCIPAL VIGENTE**: la Ruta 1 (artefacto, diseño de medición, marco teórico, paso 0, plan) | **vigente** |
 | `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
@@ -72,7 +72,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 | `eje-2-jev-opensource/08_estudio_ecosistema.md` | Estudio de campo: 20+ modelos con pesos, taxonomía por rigor, tabla de calibración, huecos | vigente |
 | `audit/jev-oss/` | 11 READMEs crudos de las implementaciones Jev + 2 categorías del índice curado | dato |
 | `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) + datos + scripts | ver §7 |
-| **`results/`** | **ARTEFACTOS de medición**: `raw/` = mediciones crudas del paso 0 (una fila por decisión, con `row_hash`) + resúmenes; `paso0_informe.md` = **informe go/no-go** | **vigente** |
+| **`results/`** | **ARTEFACTOS de medición**: `raw/` (paso 0), `crudos/` (65.185 mediciones confirmatorias, con `row_hash`), `matrix/` (la matriz, CSV + figuras + `RESUMEN_MATRIZ.md`) y `paso0_informe.md` | **vigente** |
 | `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
 | `eje-1-jepa/`, `_descartado/` | **EJE DESCARTADO — FUERA DE ALCANCE.** No leer, no usar, no proponer subrutas | descartado |
 
@@ -81,7 +81,7 @@ propiedad + objeto + alcance + tipo de método. **El título definitivo se fija 
 El repo tiene un **árbol de trabajo** para ir llenando poco a poco, sin ser rígido:
 
 ```
-paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, secciones/ §1-§3, figures/, tables/)
+paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, secciones/ §1-§7, figures/, tables/)
 src/        CÓDIGO (librería jev-conf-metrics, pipeline) — se trabaja en el Acer Nitro
 results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz de transferencia)
 data/       Datasets descargados (los pesados NO se versionan)
@@ -301,8 +301,8 @@ Factor **2,7×** entre la definición más benévola y la más severa sobre el m
 `src/README.md` — ojo: el `torch` de PyPI es **cu130** y el driver del Nitro es 556.19 (**CUDA 12.5**);
 hay que instalar el build `cu126` o la GPU no arranca.
 
-**Pendiente inmediato:** el **DOI del pre-registro** (cuenta OSF/Zenodo del autor) y la **matriz de
-transferencia de umbrales** (`src/jev_conf_metrics/` + `results/matrix/`).
+**Estado:** el **DOI del pre-registro** ya está publicado (`10.5281/zenodo.23266795`) y la **matriz de
+transferencia** está medida (`results/matrix/`, ver §14).
 
 ---
 
@@ -310,16 +310,16 @@ transferencia de umbrales** (`src/jev_conf_metrics/` + `results/matrix/`).
 
 **El entregable central ya existe, y es la corrida CONFIRMATORIA** (la que declara el pre-registro,
 DOI `10.5281/zenodo.23266795`): el conjunto completo de cada dataset, **23 grupos** (5 configuraciones de
-modelo × 5 datasets), **41.505 decisiones** y **3.564 celdas**. Informe regenerable:
+modelo × 5 datasets), **65.185 decisiones** y **3.564 celdas**. Informe regenerable:
 `results/matrix/RESUMEN_MATRIZ.md`; figuras en `results/matrix/`.
 
 > El **piloto** (subconjuntos, 17.600 decisiones) fue la puesta a punto. La confirmatoria lo sustituye.
-> En `typed-decisions` —el único dataset donde el piloto ya cubría el split entero— los 5 modelos
+> En `typed-decisions` (el único dataset donde el piloto ya cubría el split entero) los 5 modelos
 > reprodujeron el **mismo número exacto**, así que el pipeline es determinista.
 
-**El objeto de la tesis, en una cifra:** sobre 41.505 distribuciones medidas, la diferencia entre la
-definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.292**,
-percentil 90 **0.441** y máximo **0.840**.
+**El objeto de la tesis, en una cifra:** sobre 65.185 distribuciones medidas, la diferencia entre la
+definición de `confidence` más alta y la más baja de la **misma** distribución tiene mediana **0.288**,
+percentil 90 **0.434** y máximo **0.848**.
 
 **El claim, cuantificado.** 1.044 celdas tienen mapa cerrado entre definiciones (misma clase y misma
 cardinalidad). Error absoluto medio del porte de umbral:
@@ -347,8 +347,8 @@ no es alcanzable en esta implementación.
 
 **Pre-registro publicado:** DOI **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026).
 
-**Pendiente inmediato:** solo la **redacción §4–§7** en el t440 (sin GPU: todo sale de `results/`; ver
-`docs/handoff-t440.md`).
+**Hecho:** la **redacción §4–§7** quedó en `paper/secciones/` (09-oct-2026), en el t440, sin GPU. Falta solo
+la revisión del autor y el formateo final APA/IEEE.
 
 ---
 

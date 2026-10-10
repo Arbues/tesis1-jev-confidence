@@ -1,11 +1,11 @@
 # §2. Trabajos relacionados (borrador)
 
-*Tesis 1 · Ruta 1 · borrador de la sección 2 · 04-oct-2026*
+*Tesis 1 · Ruta 1 · borrador de la sección 2 · 08-oct-2026*
 
 ---
 
-Este trabajo se sitúa en la intersección de cuatro cuerpos de literatura —calibración, reglas de puntuación
-propias, predicción selectiva y calibración post-hoc— y de un quinto, reciente y aún en formación: el
+Este trabajo se sitúa en la intersección de cuatro cuerpos de literatura (calibración, reglas de puntuación
+propias, predicción selectiva y calibración post-hoc) y de un quinto, reciente y aún en formación: el
 ecosistema de modelos de decisión tipo Jev.
 
 **Calibración de clasificadores.** Un predictor probabilístico está calibrado si, de las veces que anuncia
@@ -18,14 +18,14 @@ aciertos por confianza, medida con AUROC) es una propiedad distinta de la calibr
 
 **Reglas de puntuación propias.** \cite{gneiting2007} caracterizan las reglas **estrictamente propias**, cuyo
 óptimo se alcanza declarando la distribución verdadera. Es la base teórica de RLCD: la recompensa de Jev
-combinan la regla logarítmica con la esférica —y el RPS para salidas ordinales
-\cite{good1952,epstein1969}—. La teoría predice que reportar honestamente es la única estrategia óptima; la
-práctica del ecosistema la contradice (Sección 2.5).
+combina la regla logarítmica con la esférica, y el RPS para salidas ordinales
+\cite{good1952,epstein1969}. La teoría predice que reportar honestamente es la única estrategia óptima; la
+práctica del ecosistema la contradice, como se ve en el cierre de esta sección.
 
 **Predicción selectiva.** \cite{chow1970} derivó la política óptima de rechazo: actuar cuando
 `p > 1 − C_esc/C_err`. \cite{geifman2017} llevaron la idea a redes profundas y a las curvas *risk–coverage* y
 el AURC; \cite{jitkrittum2023} estudian cuándo basta la confianza para derivar. Todos estos umbrales suponen
-que la confianza está calibrada —que es exactamente lo que este trabajo pone a prueba cuando la confianza
+que la confianza está calibrada, que es exactamente lo que este trabajo pone a prueba cuando la confianza
 tiene varias definiciones.
 
 **Calibración post-hoc y conformal.** \cite{platt1999} y \cite{zadrozny2002} dan la escala de Platt y la
@@ -35,9 +35,9 @@ predicción conformal, cobertura con garantía libre de distribución, como alte
 **El ecosistema Jev-OSS (2026).** \cite{jev2026blog,jev2026docs} describen el modelo y sus primitivos;
 \cite{archerhume,navinpai} reconstruyen su arquitectura y la mecánica de RLCD a partir de sondeos de la API.
 \cite{layaRepo} publica la primera implementación abierta con pesos y receta; \cite{kevRepo,nimble,semif,jeff}
-le siguen. Los cierres de septiembre —por qué RLCD no calibra \cite{arXiv2609.38850,lakoreai2026}, la
-coherencia de la negación \cite{arXiv2609.33209}, el sesgo nombre–definición \cite{arXiv2609.26758} y la
-cartografía del ecosistema \cite{arXiv2609.30216}— ocupan el «por qué» y el «qué hay». La reproducción
+le siguen. Los cierres de septiembre de 2026 (por qué RLCD no calibra \cite{arXiv2609.38850,lakoreai2026},
+la coherencia de la negación \cite{arXiv2609.33209}, el sesgo nombre–definición \cite{arXiv2609.26758} y la
+cartografía del ecosistema \cite{arXiv2609.30216}) ocupan el «por qué» y el «qué hay». La reproducción
 pre-registrada de \cite{arXiv2609.33843} es el estado del arte más cercano: mide la calibración de Laya
 **dentro de una sola definición** (`q = p_max`) y encuentra que el umbral no transfiere **entre datasets**.
 Lo que ninguno hace es comparar **entre definiciones**.

@@ -42,8 +42,12 @@ def leer_metas(crudos_dir):
     return metas
 
 
-def dispersion_definiciones(crudos_dir, limite=2000):
-    """Ilustración del objeto: cuánto se separan las 4 definiciones en la MISMA distribución."""
+def dispersion_definiciones(crudos_dir, limite=None):
+    """Ilustración del objeto: cuánto se separan las 4 definiciones en la MISMA distribución.
+
+    `limite=None` lee TODAS las filas del conjunto medido (la estadística se reporta sobre el
+    conjunto completo, no sobre una muestra). Un valor entero acota cada archivo.
+    """
     import statistics
     rangos = []
     for p in sorted(glob.glob(os.path.join(crudos_dir, "*.jsonl"))):
@@ -51,7 +55,7 @@ def dispersion_definiciones(crudos_dir, limite=2000):
             continue
         with open(p, encoding="utf-8") as f:
             for i, linea in enumerate(f):
-                if i >= limite:
+                if limite is not None and i >= limite:
                     break
                 r = json.loads(linea)
                 vals = [r.get(f"conf_{d}") for d in DEFS]

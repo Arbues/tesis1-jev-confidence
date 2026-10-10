@@ -24,7 +24,7 @@ matriz y a la noción de «cobertura objetivo»):
 > `τ_A(q) = min { τ ∈ valores observados de C_A : cobertura(τ) ≤ q }`
 
 **Efecto.** Ninguno sobre las mediciones del paso 0 (no usan umbrales). Afecta solo a la matriz, que
-aún no se ha medido. **Acción:** corregir la línea en la especificación.
+aún no se ha medido. **Acción (aplicada el 09-oct-2026):** corregir la línea en la especificación.
 
 ---
 
@@ -67,8 +67,8 @@ precisamente, la frontera que la Proposición 1 declara.
    estricto: no hay número **ni** mapa que transfiera. Aquí está el peligro real.
 
 **Efecto.** Ninguno sobre el paso 0. La matriz gana una columna y pierde una expectativa mal puesta.
-**Acción:** corregir el cierre de §5 en la especificación y añadir esta tabla al marco teórico del
-paper (§3) como parte del enunciado de la Proposición 1.
+**Acción (aplicada el 09-oct-2026):** corregir el cierre de §5 en la especificación y añadir esta tabla al
+marco teórico del paper (§3) como parte del enunciado de la Proposición 1.
 
 ---
 

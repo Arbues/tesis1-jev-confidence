@@ -4,12 +4,12 @@
 
 > **Estado: la medición está CERRADA.** Es la corrida **confirmatoria** que declara el pre-registro
 > (DOI **10.5281/zenodo.23266795**), sobre el conjunto completo de cada dataset: **23 grupos**
-> (5 configuraciones de modelo × 5 datasets), **41.505 decisiones**, **3.564 celdas**.
+> (5 configuraciones de modelo × 5 datasets), **65.185 decisiones**, **3.564 celdas**.
 > El piloto (subconjuntos) quedó sustituido y solo vive en el historial de git.
 >
 > **Cifras que van al paper** (todas en `results/matrix/RESUMEN_MATRIZ.md`, regenerable):
 > - La diferencia entre la definición de `confidence` más alta y la más baja de la **misma** distribución:
->   mediana **0.292**, p90 **0.441**, máximo **0.840** (sobre 41.505 distribuciones).
+>   mediana **0.288**, p90 **0.434**, máximo **0.848** (sobre 65.185 distribuciones).
 > - Error absoluto medio del porte de umbral: **0.2577 directo contra 0.0025 con mapa → factor 104×**
 >   (sin las celdas dominadas por empates de umbral); solo modelos entrenados, **114×**.
 > - El porte directo llega a perder **toda** la cobertura (celdas con Δ = 0.80 y cobertura 0).
@@ -57,7 +57,7 @@ commiteado. Lo que no se puede regenerar allí (la inferencia) ya está hecho y 
 # en el t440, con el repo clonado y un venv con numpy + matplotlib
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python numpy matplotlib pytest
 
-python -m pytest tests/ -q                       # 33 tests: la matemática y la regresión del paso 0
+python -m pytest tests/ -q                       # 36 tests: la matemática y la regresión del paso 0
 python src/matriz/matriz.py --crudos results/crudos --out results/matrix
 python src/matriz/figura.py
 python src/matriz/informe_matriz.py
