@@ -38,11 +38,20 @@ contraseña de administrador si se usa la segunda:
 ```bash
 sudo apt update
 sudo apt install -y texlive-latex-recommended texlive-latex-extra \
-    texlive-fonts-recommended texlive-publishers texlive-bibtex-extra biber latexmk
+    texlive-fonts-recommended texlive-publishers texlive-bibtex-extra \
+    texlive-lang-spanish latexmk cm-super
 ```
 
-`texlive-publishers` trae la clase `IEEEtran`; `texlive-latex-extra` trae `booktabs` y
-`latexmk`.
+Qué aporta cada uno: `texlive-publishers` trae la clase `IEEEtran`; `texlive-latex-extra` trae
+`booktabs`, `xurl` y `latexmk`; **`texlive-lang-spanish` es imprescindible** porque `main.tex`
+usa `babel` con la opción `spanish` (sin él falla con `spanish.ldf not found`); `cm-super`
+evita que las fuentes con codificación T1 salgan como mapas de bits.
+
+Comprobar que quedó bien (debe responder con rutas, no vacío):
+
+```bash
+for p in IEEEtran.cls booktabs.sty xurl.sty spanish.ldf; do printf "%-16s " "$p"; kpsewhich "$p" || echo FALTA; done
+```
 
 **Ruta B — TinyTeX, instalación local sin `sudo`:**
 
