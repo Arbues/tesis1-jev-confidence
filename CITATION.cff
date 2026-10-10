@@ -11,19 +11,24 @@ abstract: >-
   matriz de transferencia regenerable con un comando.
 type: software
 authors:
-  - family-names: Pérez V.
+  - family-names: Pérez Villegas
     given-names: Arbués Enrique
     email: arbues.perez.v@uni.pe
+    orcid: "https://orcid.org/0009-0004-7605-6569"
     affiliation: >-
       Facultad de Ciencias, Universidad Nacional de Ingeniería (FC-UNI), Lima, Perú
 date-released: "2026-10-10"
 license: Apache-2.0
+license-url: "https://github.com/Arbues/tesis1-jev-confidence/blob/main/LICENSE"
 repository-code: "https://github.com/Arbues/tesis1-jev-confidence"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.23266795
     description: >-
       Pre-registro del diseño de medición (definiciones, datasets, cobertura objetivo).
+  - type: url
+    value: "https://orcid.org/0009-0004-7605-6569"
+    description: "ORCID del autor"
 keywords:
   - confidence calibration
   - decision models

@@ -29,3 +29,14 @@ results/raw/*mock*
 # --- Sistema ---
 .DS_Store
 Thumbs.db
+
+# --- LaTeX (artefactos de compilación; el .pdf final sí se puede versionar) ---
+*.aux
+*.bbl
+*.blg
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+

@@ -1,0 +1,52 @@
+\section{Conclusión y artefactos}
+\label{sec:conclusion}
+
+\subsection{Conclusión}
+
+El ecosistema abierto de modelos de decisión tipo Jev comparte un nombre de campo, \texttt{confidence}, y una promesa: que sirve para fijar un umbral de actuación. La medición sobre \textbf{23 grupos, 65\,185 decisiones y 3\,564 celdas} muestra que esa promesa \textbf{no viaja entre implementaciones}. Sobre la \textbf{misma} distribución, la definición de \texttt{confidence} más alta y la más baja difieren con mediana \textbf{0.288} y máximo \textbf{0.848}. Portar el umbral tal cual (copiar la cifra) se equivoca del orden de \textbf{cien veces} más que portarlo con el mapa matemático cuando este existe (0.2337 contra 0.0021, sobre las 312 celdas del nivel principal \texttt{raw} sin empates dominantes). Y en las celdas de peor caso, el porte directo pierde \textbf{toda} la cobertura: quien calibra al 80\,\% con una definición puede terminar actuando en el 0\,\% con otra.
+
+El resultado tiene dos capas. La \textbf{escala} hace que el número no viaje aunque el orden se preserve; la \textbf{forma} hace que entre clases de definiciones distintas no exista ni número ni mapa. Dos pares que se creían distintos resultan ser la \textbf{misma} fórmula (la \texttt{choice\_confidence} de Kev es la de Jev; con $n=2$, $C_{\mathrm{Jev}}$ y el margen coinciden), lo que da transferencia exacta donde otros ven incompatibilidad.
+
+El aporte no es el hallazgo de que las implementaciones discrepan, que era de esperar. El aporte es el \textbf{instrumento} que permite cuantificar y corregir esa discrepancia, y que sigue valiendo aunque cada premisa particular se cierre.
+
+\subsection{Artefactos entregados}
+
+\begin{table}[htbp]
+\centering
+\caption{Artefactos entregados}
+\label{tab:artefactos}
+\small
+\begin{tabular}{@{}c >{\raggedright\arraybackslash}p{4.9cm} >{\raggedright\arraybackslash}p{2.3cm}@{}}
+\toprule
+\# & Artefacto (y dónde vive) & Estado \\
+\midrule
+1 & Especificación formal de las definiciones (DEF-1..DEF-8, Proposiciones 1 a 3) y erratas, en \path{paper/03_especificacion_confidence.md} & hecho \\
+2 & Librería \texttt{jev-conf-metrics}, en \path{src/jev_conf_metrics/} & hecho (37 tests) \\
+3 & Arnés de conformidad (tests T1..T8), en \path{tests/} & hecho \\
+4 & Matriz de transferencia de umbrales, en \path{results/matrix/matriz_transferencia.csv} & medida (3\,564 celdas) \\
+5 & Dataset de mediciones crudas, en \path{results/crudos/}, con \texttt{row\_hash} por fila & medido (65\,185 filas) \\
+6 & Scripts regeneradores, en \path{src/matriz/} & hechos \\
+7 & Figuras (mapas de calor por dataset y cardinalidad), en \path{paper/figures/} & hechas \\
+8 & Pre-registro con DOI, en \path{paper/04_pre_registro.md} $\to$ Zenodo & publicado (\path{10.5281/zenodo.23266795}) \\
+9 & Repositorio \path{github.com/Arbues/tesis1-jev-confidence} & \textbf{público} (Apache-2.0 / CC-BY-4.0) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Todo el conjunto se regenera con \texttt{python -m pytest tests/ -q} seguido de los tres scripts de \texttt{src/matriz/} (\S4.5). Ninguna cifra del paper se escribe a mano: todas provienen del informe regenerable.
+
+\subsection{Trabajo futuro}
+
+El arco completo tiene tres etapas, y esta tesis cubre la primera.
+
+\begin{itemize}
+\item \textbf{Tesis 1 (este trabajo, medida).} El instrumento: medir y cuantificar la transferencia de umbrales entre las definiciones incompatibles del campo \texttt{confidence}.
+\item \textbf{Tesis 2 (mecanismo).} Una vez medido el problema, inducir calibración en el objetivo de entrenamiento, no solo por ajuste post-hoc. La pregunta heredada es por qué el término de RL de RLCD no bastó, que la literatura reciente ya exploró y que aquí se da por ocupada.
+\item \textbf{Taller de Tesis (teoría).} Las condiciones necesarias y suficientes para que una regla de puntuación estrictamente propia induzca un umbral que viaje entre definiciones.
+\end{itemize}
+
+Extensiones inmediatas del instrumento: medir los modelos de 4B a 9B en el Mac Mini, incorporar las definiciones opacas cuando exista una forma de tratarlas, y repetir la matriz cuando aparezcan nuevas implementaciones (el instrumento está diseñado para eso, no para un conjunto fijo de modelos).
+
+\subsection{Disponibilidad}
+
+Repositorio \textbf{público} \texttt{github.com/Arbues/tesis1-jev-confidence} (Apache-2.0 el código, CC-BY-4.0 el paper y la documentación). El pre-registro con el diseño congelado tiene DOI \textbf{10.5281/zenodo.23266795}.

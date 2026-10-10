@@ -65,8 +65,10 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | `README.md` | **este archivo** — punto de entrada y estado consolidado | vigente |
 | `STATE.json` | El mismo estado en formato máquina-legible para agentes | vigente |
 | `.hermes.md` | Contexto de proyecto que Hermes auto-carga al arrancar | vigente |
-| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `03_especificacion_confidence.md` (especificación formal), `04_pre_registro.md`, `secciones/` (borradores §1–§7) | **vigente** |
+| **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `03_especificacion_confidence.md` (especificación formal), `04_pre_registro.md`, `secciones/` (borradores §1–§7), **`ieee/`** (versión IEEE en LaTeX: `main.tex` + `secciones/`; se compila con `compilar.sh`), **`figures/`** (las 8 figuras del paper) | **vigente** |
 | `docs/guia-agentes.md` | Guía de trabajo/handoff para agentes (AGENTS.md canónico pendiente de aprobación) | vigente |
+| `docs/libreria.md` | **API de la librería** `jev-conf-metrics`: definiciones, métricas, transferencia y puntos de extensión | vigente |
+| `docs/validacion-productos.md` | **Cómo validar los productos**, comando por comando (guía para el autor) | vigente |
 | **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`** | **DOCUMENTO PRINCIPAL VIGENTE**: la Ruta 1 (artefacto, diseño de medición, marco teórico, paso 0, plan) | **vigente** |
 | `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
 | `eje-2-jev-opensource/FUENTES.md` | Inventario de las 49 fuentes del eje, verificadas con API | lectura obligatoria |
@@ -75,6 +77,8 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) + datos + scripts | ver §7 |
 | **`results/`** | **ARTEFACTOS de medición**: `raw/` (paso 0), `crudos/` (65.185 mediciones confirmatorias, con `row_hash`), `matrix/` (la matriz, CSV + figuras + `RESUMEN_MATRIZ.md`) y `paso0_informe.md` | **vigente** |
 | `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
+| `src/figuras_paper.py` | Genera las 8 figuras del paper desde los artefactos medidos | vigente |
+| `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 37 tests en cada `push` | vigente |
 | `eje-1-jepa/`, `_descartado/` | **EJE DESCARTADO — FUERA DE ALCANCE.** No leer, no usar, no proponer subrutas | descartado |
 
 ### 3-bis. Estructura de trabajo y regla de orden
@@ -82,12 +86,13 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 El repo tiene un **árbol de trabajo** para ir llenando poco a poco, sin ser rígido:
 
 ```
-paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, secciones/ §1-§7, figures/, tables/)
+paper/      EL PAPER (00_plan, 01_marco_teorico, 02_referencias.bib, secciones/ §1-§7, ieee/ versión IEEE, figures/, tables/)
 src/        CÓDIGO (librería jev-conf-metrics, pipeline) — se trabaja en el Acer Nitro
 results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz de transferencia)
 data/       Datasets descargados (los pesados NO se versionan)
 notes/      Apuntes, borradores y lluvia de ideas (aquí sí, suelto está bien)
-docs/       Guías (incluye guia-agentes.md)
+docs/       Guías (guia-agentes.md, libreria.md, validacion-productos.md)
+.github/    CI: los 37 tests en cada push/PR
 ```
 
 **Regla de orden (para que nada quede suelto en la raíz):** la **raíz** es solo para los archivos de

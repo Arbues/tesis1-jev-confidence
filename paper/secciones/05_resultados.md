@@ -40,6 +40,9 @@ Un dato aparte que el ecosistema no reporta: en cardinalidad alta, **Kev-0.8B sa
 `banking77` (n = 77) frente a 0.377 del checkpoint base de Laya**. El ecosistema sí entrena para muchos
 opciones; no todos los modelos por igual.
 
+![Accuracy en cardinalidad alta (banking77, n = 77)](../figures/fig7-accuracy-banking77.pdf)
+*Kev-0.8B (0.813) frente a Laya base (0.377): el ecosistema sí entrena para cardinalidad alta.*
+
 ## 5.2. El objeto de la tesis, en una cifra
 
 Sobre las **65.185** distribuciones medidas (una fila por decisión), la diferencia entre la definición de
@@ -54,6 +57,10 @@ Sobre las **65.185** distribuciones medidas (una fila por decisión), la diferen
 Es decir: en el caso típico, dos implementaciones del mismo campo discrepan en casi tres décimas sobre el
 mismo dato, y el peor caso llega a 0.85. Cualquier umbral fijado sobre una de las dos no significa lo mismo
 sobre la otra.
+
+![Distribución de la brecha entre definiciones](../figures/fig1-brecha.pdf)
+*El objeto de la tesis en una distribución: sobre las 65.185 decisiones, la brecha entre la definición más
+alta y la más baja de la misma distribución tiene mediana 0.288 (rojo) y p90 0.434 (naranja).*
 
 ## 5.3. El número no viaja; el mapa sí
 
@@ -75,11 +82,18 @@ contra el porte con mapa. El error absoluto medio:
 El porte directo se equivoca **del orden de cien veces más** que el porte con mapa. El matiz de la tercera
 columna lo explica §5.4.
 
+![Error del porte directo frente al porte con mapa](../figures/fig2-directo-vs-mapa.pdf)
+*El titular: en el nivel principal `raw`, el porte directo se equivoca 109× más que el porte con mapa en el
+subconjunto limpio (sin empates dominantes).*
+
 **Cómo leer la tabla.** El porte con mapa tiene un suelo que no es culpa del mapa: si el umbral cae sobre un
 valor **empatado** en muchas salidas (modelos saturados), la cobertura salta y ni el mapa puede dar `q`
 exacto. Por eso la comparación limpia es la del subconjunto sin empates dominantes (masa por debajo del 5 %),
 y por eso `delta_mapa` debe leerse contra `delta` de la **misma** celda, nunca como un cero absoluto. La
 columna `n_empates_tau` de la matriz declara, en cada celda, cuántos ítems comparten el umbral.
+
+![Δ directo contra Δ con mapa](../figures/fig3-delta-vs-mapa.pdf)
+*Proposición 1 en los datos: con el mapa φ el error colapsa a cero; sin él se abre (nivel `raw`, q = 0.80).*
 
 ## 5.4. El promedio no es el resumen: la estructura está en el par
 
@@ -106,6 +120,10 @@ Dos de las coincidencias son **identidades matemáticas**, no azar: (i) a `n = 2
 `C_Jev = (n·p − 1)/(n − 1) → p`, así que `jev` y `pmax` convergen y sus umbrales casi coinciden. En el
 extremo opuesto, `pmax → ent` es el peor par: no cambia la escala, cambia la **forma** de la función.
 
+![Error del porte directo por par de definiciones](../figures/fig4-por-par.pdf)
+*El promedio engaña: la estructura está en el par. Verde ≈ transfiere; rojo = falla en grande (`pmax → ent`
+es el peor, mediana 0.7667).*
+
 Fracción de celdas que transfieren bien (`|Δ| < 0.01`), por cardinalidad (nivel `raw`):
 
 | n | celdas con mapa | \|Δ\| mediana | % con \|Δ\| < 0.01 |
@@ -116,6 +134,10 @@ Fracción de celdas que transfieren bien (`|Δ| < 0.01`), por cardinalidad (nive
 | 5 | 60 | 0.2000 | 0 % |
 | 77 | 30 | 0.0058 | 63 % |
 | 151 | 18 | 0.0127 | 44 % |
+
+![Transferencia por cardinalidad](../figures/fig5-por-cardinalidad.pdf)
+*El porte falla en todas las cardinalidades; solo remonta a `n` alto, donde las definiciones tipo `p_max`
+convergen entre sí (63 % de acierto a n = 77).*
 
 ## 5.5. Efecto de la cardinalidad
 
@@ -156,6 +178,9 @@ La lectura es directa: hay celdas en las que portar el umbral **pierde toda la c
 80 % con una definición y despliega con otra puede terminar actuando en el 0 % de los casos (o en todos), sin
 ningún aviso del modelo.
 
+![Heatmap de la matriz (banking77, n = 77)](../figures/fig8-heatmap-banking77.pdf)
+*Dónde el umbral no viaja: Δ por par de definiciones y por modelo. Hay celdas que pierden toda la cobertura.*
+
 ## 5.7. Hallazgos de metrología del paso 0 (contexto)
 
 La corrida de verificación sobre `typed-decisions` dejó, además, dos resultados que no estaban en la
@@ -170,3 +195,7 @@ literatura del ecosistema y que son parte del instrumento:
 
 Y sobre la misma corrida, el ECE cambia por completo según la definición: en `laya-typed-decisions` va de
 **0.216** con `p_max` a **0.577** con la entropía normalizada, un factor **2.7×** sobre el mismo dato.
+
+![ECE por definición](../figures/fig6-ece-por-definicion.pdf)
+*El mismo modelo y los mismos datos (laya/typed-decisions, n = 2000): ECE 0.216 con `p_max` frente a 0.577
+con la entropía normalizada.*

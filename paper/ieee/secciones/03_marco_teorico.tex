@@ -1,0 +1,152 @@
+\section{Marco teórico}
+\label{sec:marco_teorico}
+
+\subsection{Notación}
+
+Sea una pregunta con $n$ opciones etiquetadas ($n$ es la cardinalidad; el primitivo \texttt{choice} admite
+hasta 255 y \texttt{score} entre 2 y 10). El modelo devuelve una distribución $p = (p_1, \dots, p_n)$ sobre
+las opciones, con $p_i \ge 0$ y $\sum_i p_i = 1$, y la etiqueta correcta es $y \in \{1,\dots,n\}$.
+Escribimos $p_{\max} = \max_i p_i$, $\hat{y} = \arg\max_i p_i$, y el acierto $a = \mathbf{1}[\hat{y} = y]$.
+Con $H(p) = -\sum_i p_i \log p_i$ denotamos la entropía de Shannon (el logaritmo es indistinto mientras se
+normalice). Ordenamos las probabilidades de mayor a menor: $p_{(1)} \ge p_{(2)} \ge \dots \ge p_{(n)}$, de
+modo que $p_{(1)} = p_{\max}$.
+
+\subsection{El campo \texttt{confidence} como función de la distribución}
+
+Cada implementación define \texttt{confidence} como una función distinta de $p$ y de $n$:
+
+\begin{table}[t]
+\centering
+\caption{Definiciones de \texttt{confidence} como función de la distribución $p$ y de la cardinalidad $n$.}
+\label{tab:campo_confidence}
+\footnotesize
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}llll@{}}
+\toprule
+definición & fórmula & dominio & quién la usa \\
+\midrule
+concentración de Jev & $C_{\mathrm{Jev}}(p) = (n\,p_{\max} - 1)/(n - 1)$ & $[0,1]$ & Jev, Kev \\
+entropía normalizada & $C_{\mathrm{ent}}(p) = 1 - H(p)/\log n$ & $[0,1]$ & Laya (\texttt{choice}, \texttt{score}) \\
+probabilidad ganadora & $C_{\max}(p) = p_{\max}$ & $[1/n, 1]$ & jev-lite, \texttt{answer\_confidence} \\
+margen & $C_{\mathrm{mar}}(p) = p_{(1)} - p_{(2)}$ & $[0,1]$ & derivados \\
+\texttt{noul} (binario) & $C_{\mathrm{noul}}(p) = \max(p, 1 - p)$ & $[1/2, 1]$ & Laya (\texttt{noul}) \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Para una misma $p$, estas funciones toman valores distintos. Esta es la fuente de la incompatibilidad de
+umbrales: el umbral es un punto en el \textbf{rango} de una función, y los rangos no coinciden.
+
+\begin{table}[t]
+\centering
+\caption{La misma distribución, cuatro definiciones, cuatro números.}
+\label{tab:cuatro_numeros}
+\small
+\begin{tabular}{lcccc}
+\toprule
+$p$ ($n = 3$) & $C_{\mathrm{Jev}}$ & $C_{\mathrm{ent}}$ & $C_{\max}$ & $C_{\mathrm{mar}}$ \\
+\midrule
+$(0.0118, 0.4629, 0.5253)$ & 0.288 & 0.320 & 0.525 & 0.062 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Calibración frente a discriminación}
+
+La \textbf{calibración} pregunta si el número es \emph{creíble}: $P(\hat{y} = y \mid C = c) = c$ para todo
+$c$. La \textbf{discriminación} pregunta si el número \emph{ordena bien}: si los aciertos reciben valores de
+$C$ más altos que los errores, y se mide con AUROC$(C, a)$. Un modelo puede discriminar bien y estar
+des-calibrado, y dos definiciones pueden discriminar idéntico y calibrar distinto: por eso el trabajo
+reporta \textbf{ambas}. El ECE (Error de Calibración Esperado) con $M$ bins $B_m$ es
+
+\[
+\mathrm{ECE} = \sum_m \frac{\lvert B_m\rvert}{N}\cdot \lvert \mathrm{acc}(B_m) - \mathrm{conf}(B_m)\rvert,
+\]
+
+y se calcula en dos esquemas, bins de \textbf{igual ancho} y de \textbf{igual masa}, porque el número
+cambia entre ellos \cite{naeini2015,guo2017}. Como métricas de error probabilístico se usan la
+\textbf{Brier} multiclase $\mathrm{Brier} = (1/N)\sum_i \sum_k (p_{ik} - y_{ik})^2$ \cite{brier1950} y la
+\textbf{NLL} $-(1/N)\sum_i \log p_i(y_i)$.
+
+\subsection{Equivalencia en orden y transferencia exacta}
+
+El punto teórico del trabajo es que la incompatibilidad \textbf{no} es uniforme: algunas definiciones están
+relacionadas por una transformación monótona, y entonces el umbral transfiere \textbf{exacto}; otras no lo
+están. Lo fijamos en tres proposiciones (demostraciones y comprobación numérica en
+\texttt{paper/03\_especificacion\_confidence.md}).
+
+\begin{quote}
+\textbf{Proposición 1 (equivalencia en orden).} Sea $n$ fijo. La definición de Jev es afín y estrictamente
+creciente en $p_{\max}$: $C_{\mathrm{Jev}} = \alpha\,p_{\max} + \beta$ con $\alpha = n/(n-1) > 0$ y
+$\beta = -1/(n-1)$. En consecuencia, $C_{\mathrm{Jev}}$ y $C_{\max}$ son \textbf{equivalentes en orden}:
+existe $\phi$ estrictamente creciente con $C_{\mathrm{Jev}} = \phi(C_{\max})$. Un umbral $\tau$ sobre
+$C_{\mathrm{Jev}}$ induce el mismo conjunto de actuaciones y abstenciones que el umbral $\phi^{-1}(\tau)$
+sobre $C_{\max}$, y la cobertura es idéntica.
+\end{quote}
+
+\begin{quote}
+\textbf{Proposición 2 (no equivalencia con la entropía).} Para $n \ge 3$ existen distribuciones $p, p'$ con
+$p_{\max} = p'_{\max}$ y $H(p) \ne H(p')$. Por tanto $C_{\mathrm{ent}}$ \textbf{no} es función de
+$p_{\max}$ solo, y en general \textbf{no} existe $\phi$ monótona con $C_{\mathrm{ent}} = \phi(C_{\max})$. El
+umbral no transfiere entre una definición tipo $p_{\max}$ y una tipo entropía.
+\end{quote}
+
+\begin{quote}
+\textbf{Proposición 3 (degeneración en $n = 2$).} Con $n = 2$, $C_{\mathrm{Jev}} = 2\,p_{\max} - 1 =
+C_{\mathrm{mar}}$, esto es, la definición de Jev y el margen son la \textbf{misma} función; y
+$C_{\mathrm{ent}}$, con $H$ función de un solo parámetro, es también una transformación estrictamente
+monótona de $p_{\max}$. Por tanto en $n = 2$ \textbf{todas} las definiciones son equivalentes en orden, y la
+incompatibilidad de umbrales es un fenómeno exclusivo de $n \ge 3$ con distribuciones dispersas.
+\end{quote}
+
+\textbf{Consecuencia: el fallo tiene dos capas.} Si dos definiciones son equivalentes en orden pero viven en
+escalas distintas (por ejemplo $C_{\mathrm{Jev}}$ y $C_{\max}$), el \textbf{número} no viaja aunque el
+\textbf{mapa} sí: existe traducción exacta $\phi^{-1}$. Si además pertenecen a \textbf{clases} distintas
+(por ejemplo $p_{\max}$ y la entropía), no existe ni número ni mapa, y el porte directo es una extrapolación
+inválida. Esta distinción, entre la capa de \textbf{escala} y la capa de \textbf{forma}, es la que explica
+por qué el resultado no se puede resumir con un promedio y se documenta en
+\texttt{docs/erratas\_especificacion.md}.
+
+\subsection{Transferencia de umbrales (definición formal)}
+
+Dados un origen $A$, un destino $B$, una cobertura objetivo $q \in (0, 1)$ y un conjunto de calibración:
+
+\begin{enumerate}
+\item Hallar $\tau_A$ tal que $\mathrm{cobertura}_A(\tau_A) = q$, con
+  $\mathrm{cobertura}_A(\tau) = \#\{C_A \ge \tau\}/N$ (el menor umbral observado que no supera la cobertura
+  objetivo).
+\item Portarlo al destino de una de dos maneras:
+  \begin{itemize}
+  \item \textbf{porte directo:} $\tau_B := \tau_A$, que es lo que practica el ecosistema;
+  \item \textbf{porte con mapa:} $\tau_B := \psi(\tau_A)$, con $\psi$ el mapa cerrado $A \to B$, que
+    \textbf{solo existe} dentro de una clase de equivalencia y a cardinalidad fija (por ejemplo
+    $\psi = \phi^{-1}$ para \texttt{jev} $\to$ \texttt{pmax}).
+  \end{itemize}
+\item Medir en el conjunto de prueba la cobertura efectiva $\mathrm{cobertura}_B(\tau_A)$ y la precisión.
+\end{enumerate}
+
+La \textbf{degradación} $\Delta(A \to B) = q - \mathrm{cobertura}_B(\tau_A)$ es la celda de la matriz. Se
+repite por modelo, por dataset y por cardinalidad. El mismo procedimiento se puede aplicar \textbf{entre
+datasets} (umbral ajustado en un dataset $A$ y aplicado en otro $B$), que es el eje donde \cite{jebadiah}
+observó que la calibración no viaja y \cite{arXiv2609.33843} lo cuantificó dentro de la definición
+$p_{\max}$. Este trabajo recorre el eje distinto, el de las definiciones.
+
+\subsection{Predicción selectiva: el umbral como política}
+
+Con probabilidad de acierto $p$, coste de error $C_{\mathrm{err}}$ y coste de escalar $C_{\mathrm{esc}}$,
+actuar conviene si $(1-p)\cdot C_{\mathrm{err}} < C_{\mathrm{esc}}$, es decir
+$p > 1 - C_{\mathrm{esc}}/C_{\mathrm{err}}$ \cite{chow1970}. Esta frontera \textbf{presupone} que $p$ es una
+probabilidad calibrada. Cuando el umbral se elige como cuantil de una \texttt{confidence} mal especificada,
+la política efectiva deja de ser la óptima para el coste real: la métrica de la matriz es, en el fondo, la
+pérdida de utilidad del despliegue.
+
+\subsection{Nota sobre RLCD}
+
+RLCD (ruido gaussiano de media cero en los logits, regla estrictamente propia, REINFORCE con baseline de
+grupo, temperatura post-hoc) es el mecanismo que produce estas \texttt{confidence}. La teoría garantiza que
+reportar honestamente es el óptimo bajo una regla propia \cite{gneiting2007}; el análisis de septiembre de
+2026 muestra que, en la práctica, el término RL equivale al gradiente de una cross-entropy suavizada con
+ruido, de modo que la inferencia sin ruido sale \textbf{sobre-confiada}
+\cite{arXiv2609.38850,lakoreai2026}. Esto explica \textbf{por qué} hace falta medir la calibración, pero no
+es el objeto de este trabajo: aquí no se propone un objetivo de entrenamiento, se construye el instrumento
+que mide su resultado.
