@@ -96,8 +96,8 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 
 ## 5. Git
 
-- **Nunca push directo a `main`.** Todo cambio va a una **rama separada → Pull Request → squash merge**.
-- `gh` CLI está autenticado (SSH). Ejemplo: `git checkout -b feat/algo && git push -u origin HEAD && gh pr create`.
+- **Este proyecto va directo a `main`**: sin ramas y sin PR (instrucción del autor, 10-oct-2026). Commit y `git push`.
+- `gh` CLI está autenticado (SSH) para la API cuando haga falta (p. ej. cambiar la visibilidad del repo).
 - Commits en español, mensajes claros.
 - **Ramas (09-oct-2026):** `main` es la buena y ya trae el paper (§4–§7) y la auditoría del `L0`. La rama
   **`feat/matriz-transferencia` está OBSOLETA** (historial previo al rebase sobre `main`): **no usarla ni

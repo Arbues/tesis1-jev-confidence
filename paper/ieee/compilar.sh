@@ -11,7 +11,9 @@ cd "$(dirname "$0")"
 
 if command -v latexmk >/dev/null 2>&1; then
     echo "[compilar] latexmk"
-    latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+    # -gg = corrida completa, ignorando el estado cacheado: si un intento previo fallo,
+    # latexmk guarda ese error y creeria que el PDF ya esta hecho y no recompilaria.
+    latexmk -gg -pdf -interaction=nonstopmode -halt-on-error main.tex
     latexmk -c
 else
     echo "[compilar] secuencia manual pdflatex + bibtex"

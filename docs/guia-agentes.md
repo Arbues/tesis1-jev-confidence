@@ -50,8 +50,8 @@ commitea; el paper los consume. _(Ver §6: el repo se clona en el Nitro.)_
 
 ## 4. Git
 
-**Nunca push directo a `main`.** Rama → PR → squash merge. `gh` autenticado (SSH).
-`git checkout -b feat/algo && git push -u origin HEAD && gh pr create`.
+**En este proyecto, todo va directo a `main`** (sin ramas ni PR; instrucción del autor, 10-oct-2026).
+`gh` sigue autenticado (SSH) para la API cuando haga falta.
 
 ---
 

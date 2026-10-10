@@ -343,7 +343,7 @@
     "esfuerzo_manual": "minimizar lo que el autor debe hacer a mano (especialmente anotacion y etiquetado)",
     "sobre_huecos": "el resultado no debe ser un hallazgo sino un artefacto",
     "lectura_rapida": "confunde siglas parecidas (JEV vs JEPA). Confirmar el eje antes de reencuadrar",
-    "git": "rama separada -> PR -> squash merge; NUNCA push directo a main (aplica a los repos que SI son git; esta carpeta no lo es)",
+    "git": "ESTE proyecto (tesis1-jev-confidence): todo directo a main, sin ramas ni PR (instruccion del autor, 10-oct-2026). Otros repos: rama separada -> PR -> squash merge",
     "seguridad": "cero contrasenas o secrets en .env ni en repos",
     "docker_servidor": "restart: always (no unless-stopped)",
     "regla_3_fallos": "si un enfoque falla 3 veces, parar y cambiar de perspectiva",

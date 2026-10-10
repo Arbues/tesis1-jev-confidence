@@ -208,7 +208,8 @@ metrología.** De ahí D1 y la Ruta 1.
 - **Formato:** respuestas con **tablas y pasos**; aprende mejor con **diagramas de arquitectura**.
 - **Formato de tesis:** **IEEE** (la norma R.R. 1439-2023-UNI admite APA o IEEE).
 - **Aporte interno** (matemática, mecanismos, código) valorado; puede vivir en el marco teórico.
-- **Git:** rama separada → PR → squash merge; **nunca push directo a main** (solo en repos que son git; **esta carpeta no lo es**).
+- **Git (este proyecto):** **todo directo a `main`, sin ramas ni PR** (instrucción del autor, 10-oct-2026).
+  En los demás repos: rama separada → PR → squash merge.
 - **Seguridad:** cero contraseñas o secrets en `.env` ni en repos; en docs, solo placeholders.
 - **Docker en el servidor:** `restart: always`.
 - **Si un enfoque falla 3 veces: parar y cambiar de perspectiva.**
