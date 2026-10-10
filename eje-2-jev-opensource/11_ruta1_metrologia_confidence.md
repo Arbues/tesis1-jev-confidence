@@ -3,7 +3,7 @@
 **Documento principal vigente** · eje 2 (Jev, Laya y el ecosistema de modelos de decisión) · 04-oct-2026
 Sustituye como *propuesta a ejecutar* a `10_tres_rutas_tesis1.md` (que queda como registro de la elección).
 
-> **Título provisional (ruta 1):** *Metrología y transferencia del campo `confidence` en modelos de
+> **Título (definitivo, 10-oct-2026):** *Metrología y transferencia del campo `confidence` en modelos de
 > decisión de pesos abiertos tipo Jev.*
 > **English:** *Metrology and Threshold Transfer of the `confidence` Field in Open-Weight Jev-Type
 > Decision Models.*

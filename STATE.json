@@ -275,7 +275,7 @@
 
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PRIVADO; se pasa a publico al tener resultados o el MVP del framework) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
-    "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
+    "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
     "alcance_congelado": "paper/00_plan_del_paper.md seccion 10 (04-oct-2026, decidido por el agente conforme a D1-D5): definiciones analiticas (pmax, Jev, entropia, margen) + AnyJev L0/L1 en la matriz; act_probability y open-decision-ai solo catalogo; modelos Laya 421M / Laya-typed-decisions / Kev-0.8B / tinyjev; datasets typed-decisions, kev-suites, Banking77, CLINC150, SST-5, WANLI; q=0.80 (+0.50/0.95). El paso 0 ya se corrio (08-oct-2026), el pre-registro esta publicado (10.5281/zenodo.23266795) y la matriz esta medida (corrida confirmatoria); no queda computo pendiente.",
     "resultados": "results/ - paso0_informe.md (go/no-go regenerable con src/paso0_informe.py) + raw/ (paso 0, una fila por decision con row_hash) + crudos/ (65185 mediciones confirmatorias) + matrix/ (la matriz: matriz_transferencia.csv, figuras, RESUMEN_MATRIZ.md y resumen.json)",
     "paper": {
@@ -303,10 +303,12 @@
 
   "tema": {
     "nombre": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev (eje 2, RUTA 1)",
-    "titulo_provisional": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev",
-    "titulo_provisional_en": "Metrology and Threshold Transfer of the confidence Field in Open-Weight Jev-Type Decision Models",
+    "titulo_definitivo": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev (fijado 10-oct-2026)",
+    "formato_tesis": "IEEE (la norma R.R. 1439-2023-UNI admite APA o IEEE; se fija IEEE)",
+    "licencias": "codigo Apache-2.0 (LICENSE, raiz); paper y docs CC-BY-4.0 (LICENSE-docs, raiz); CITATION.cff en la raiz",
+    "titulo_definitivo_en": "Metrology and Threshold Transfer of the confidence Field in Open-Weight Jev-Type Decision Models",
     "regla_de_estilo_titulo": "sin dos puntos, sin subtitulo, sin signos de interrogacion; frase nominal que declara propiedad + objeto + alcance + tipo de metodo",
-    "titulo_se_fija": "al cerrar la especificacion de la ruta",
+    "titulo_se_fija": "cerrado: fijado el 10-oct-2026 al cerrar la especificacion de la ruta",
     "tipo_contribucion_tesis1": "instrumento / metrologia (artefacto, no hallazgo)",
     "formato_tesis": "APA o IEEE (R.R. 1439-2023-UNI)"
   },
