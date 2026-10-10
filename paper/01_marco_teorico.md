@@ -5,6 +5,10 @@
 Este documento es la **base teórica** del paper. Cubre, en orden de dependencia, todo lo que hay que
 dominar y citar. Cada tema indica su fuente ancla (claves de `paper/02_referencias.bib`).
 
+> **Versión operativa:** la que rige la matriz y el paper es `paper/03_especificacion_confidence.md` (con sus
+> erratas en `docs/erratas_especificacion.md`); el borrador del paper está en
+> `paper/secciones/03_marco_teorico.md`.
+
 ---
 
 ## 1. Notación
@@ -14,7 +18,8 @@ dominar y citar. Cada tema indica su fuente ancla (claves de `paper/02_referenci
 - `p_max = max_i p_i`; `y ∈ {1…k}`: etiqueta correcta; `ŷ = argmax p`.
 - `a = 1[ŷ = y]`: acierto. `C`: el campo `confidence` **tal como lo emite cada implementación**.
 - Dos "definiciones" `C_A`, `C_B` son **equivalentes en orden** si existe `φ` estrictamente creciente con
-  `C_B = φ(C_A)`; entonces un umbral transfiere de forma exacta.
+  `C_B = φ(C_A)`; entonces un umbral transfiere de forma exacta **aplicando el mapa** (`τ_B = φ⁻¹(τ_A)`), no
+  copiando el número.
 
 ---
 
