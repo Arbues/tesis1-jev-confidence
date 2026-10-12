@@ -1,7 +1,7 @@
 {
   "proyecto": "Tesis 1 - Ciencia de la Computacion (FC-UNI)",
   "autor": "Arbues Enrique Perez V.",
-  "ultima_actualizacion": "2026-10-08",
+  "ultima_actualizacion": "2026-10-11",
   "pre_registro": {"doi": "10.5281/zenodo.23266795", "repositorio": "Zenodo", "archivo": "paper/04_pre_registro.md", "fecha": "2026-10-08", "nota": "PUBLICADO por el autor. Congela el metodo antes de la corrida confirmatoria: definiciones, modelos, datasets, cross-fitting K=5, q, bootstrap, FDR y los dos portes. Declara que el paso 0 y el piloto ya se habian ejecutado."},
   "estado": "PASO 0 EJECUTADO: GO (08-oct-2026, Acer Nitro). Laya (3 checkpoints) + Kev-0.8B medidos sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado y las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003. Informe: results/paso0_informe.md. RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
 
@@ -85,7 +85,7 @@
     ],
     "limitaciones_declaradas": "clinc150 (n=151) no es ejecutable en el checkpoint `none` de Laya (max_len=512 admite 126 opciones); kev-suites no carga (fallo del Hub). Extension prevista al Mac Mini: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev.",
     "auditoria_final_2026_10_08": "Zonas que NO se habian probado y su resultado: (1) perdida silenciosa de filas -> LIMPIA (0 saltadas en los 23 grupos; cada .jsonl tiene las filas que dice su .meta.json); (2) determinismo de matriz.py -> LIMPIA (dos corridas, hash identico); (3) balance de folds con ids reales -> LIMPIA (365-450 para ideal 400); (4) truncado silencioso en cardinalidad alta -> LIMPIA (Kev puntua las 77 opciones, Laya las 151, todas con p>0). FALLO ENCONTRADO: el debiasing L0 no convergia (paso 0.5/len(matriz), ~1000x demasiado pequeno): el prior quedaba en ~0 y las frecuencias de argmax apenas se movian, asi que el nivel L0 era indistinguible de raw. Corregido con paso adaptativo (frecuencias 168/294/416/222 -> 249/251/249/251), con test de regresion. Reportado como DESVIACION D1 en RESUMEN_MATRIZ.md seccion 7. El nivel principal raw NO se toco tras publicar el pre-registro.",
-    "herramientas": "src/jev_conf_metrics/ (libreria, 37 tests) + src/matriz/ (medir.py, matriz.py, figura.py, informe_matriz.py, correr_nucleo.sh, correr_confirmatoria.sh, correr_kev.sh). Skill del agente: `jev-confidence-metrology`."
+    "herramientas": "src/jev_conf_metrics/ (libreria, 37 tests) + src/matriz/ (medir.py, matriz.py, figura.py, informe_matriz.py, correr_nucleo.sh, correr_confirmatoria.sh, correr_kev.sh). Skills del agente: `jev-confidence-metrology` (propia del proyecto, con references/cifras-y-definiciones.md) + `ml-benchmark-evaluation`, `huggingface-datasets`, `huggingface-local-models` (instaladas 11-oct-2026)."
   },
   "reglas_de_diseno_del_autor": {
     "D1_artefacto_no_hallazgo": "El resultado es un ARTEFACTO (instrumento, dataset de mediciones crudas, especificacion, tabla que se regenera con un comando) y no un HALLAZGO.",
@@ -270,8 +270,22 @@
     {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal", "estado": "HECHO: publicado 10.5281/zenodo.23266795 (08-oct-2026)"},
     {"n": 8, "paso": "Fijar el titulo definitivo al cerrar la especificacion", "responsable": "autor"},
     {"n": 9, "paso": "Estudio del objetivo RLCD en paralelo - nivel que el Taller convierte en teoria"},
-    {"n": 10, "paso": "Redaccion del paper §1–§7 (borrador)", "responsable": "agente (t440)", "estado": "hecho: paper/secciones/ (09-oct-2026)"}
+    {"n": 10, "paso": "Redaccion del paper §1–§7 (borrador)", "responsable": "agente (t440)", "estado": "hecho: paper/secciones/ (09-oct-2026)"},
+    {"n": 11, "paso": "REPO-FRAMEWORK limpio: extraer el instrumento reutilizable (paquete instalable + adaptadores de proveedor + CLI + datasets + metricas + tests + docs + release con tag)", "responsable": "agente", "estado": "pendiente; el repo actual mezcla instrumento, exploracion (audit/, contexto/, eje-1-jepa/, _descartado/) y 65185 mediciones crudas", "decision_abierta": "mismo repo limpiado o repo nuevo; nombre candidato decision-calibration-bench"},
+    {"n": 12, "paso": "Soporte de modelos de PAGO por API key (Jev en la Vercel AI Gateway + endpoints OpenAI-compatible) y costo por 1000 decisiones", "responsable": "agente", "estado": "pendiente; precios y viabilidad ya calculados en contexto/00_veredicto_jev_typesafe.md seccion 3", "decision_abierta": "metodo de pago para la API key (autor)"},
+    {"n": 13, "paso": "VISIBILIDAD del paper y del repo-framework: README del framework que enlace paper + DOI + dataset crudo + figuras, y anuncio en los foros del ecosistema", "responsable": "agente + autor", "estado": "pendiente"},
+    {"n": 14, "paso": "BLINDAJE de prioridad y credito: versiones con DOI en Zenodo, tag/Release del repo, Software Heritage, CITATION.cff con cita obligatoria; opcional arXiv para sello temporal", "responsable": "autor", "estado": "pendiente; el pre-registro 10.5281/zenodo.23266795 ya cubre el metodo", "decision_abierta": "arXiv revela antes de sustentar (alcance vs prioridad)"},
+    {"n": 15, "paso": "PAPER EN INGLES versionado junto al espanol (paper/en/, misma numeracion; fuente unica en markdown)", "responsable": "agente", "estado": "pendiente"}
   ],
+
+  "pendientes_2026_10_11": {
+    "nota": "Anotados por el autor el 11-oct-2026, tras la exploracion de reentrada. Ninguno tiene computo pendiente. Detalle y sub-pasos: notes/pendientes-framework-y-paper.md",
+    "P1_repo_framework": "El repo actual esta 'sucio': mezcla el instrumento con la exploracion (audit/, contexto/, eje-1-jepa/, _descartado/) y con las mediciones crudas. Objetivo: un repo 100% framework, instalable y reutilizable por terceros para comparar modelos (adaptadores de proveedor, CLI, datasets, metricas, tests, docs, release versionado). DECISION DEL AUTOR: mismo repo limpiado o repo nuevo.",
+    "P2_modelos_de_pago": "Comparar no solo open-source: soportar modelos de pago por API key (Jev en la Vercel AI Gateway, modelo typesafe-ai/jev, y cualquier endpoint OpenAI-compatible). Costo bajo: el credito gratuito de la gateway (USD 5/mes) alcanza para el estudio y el total con los brazos baratos queda por debajo de USD 30 (contexto/00_veredicto_jev_typesafe.md seccion 3). Interesa reportar tambien costo por 1000 decisiones. DECISION DEL AUTOR: metodo de pago para la API key.",
+    "P3_visibilidad": "Que el paper y el framework se encuentren: README del framework con cita del paper, del DOI, del dataset crudo y de las figuras; anuncio en los foros del ecosistema listados en eje-2-jev-opensource/FUENTES.md, apuntando siempre al DOI.",
+    "P4_prioridad_y_credito": "Reservar el maximo de la investigacion para que nadie la replique y se lleve el credito: numeros de DOI por version en Zenodo, tag y Release en GitHub, deposito en Software Heritage, CITATION.cff con cita obligatoria; opcional arXiv para sello temporal. DECISION DEL AUTOR: revelar antes de sustentar (alcance) vs prioridad fechada. Las licencias actuales (Apache-2.0 codigo, CC-BY-4.0 paper/docs) ya exigen atribucion.",
+    "P5_paper_en_ingles": "Versionar el paper tambien en ingles para mayor alcance (paper/en/, misma numeracion que la version espanola y que la IEEE)."
+  },
 
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",

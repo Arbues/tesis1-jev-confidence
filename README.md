@@ -235,6 +235,23 @@ metrología.** De ahí D1 y la Ruta 1.
 **Riesgo a vigilar:** que aparezca la matriz (el ecosistema muta a diario). **Mitigación:** pre-registro con
 DOI temprano; el valor del instrumento sobrevive igual.
 
+### 10-bis. Pendientes nuevos (anotados el 11-oct-2026)
+
+Detalle, sub-pasos y criterios de cierre: **`notes/pendientes-framework-y-paper.md`**. Espejo máquina-legible:
+`STATE.json` → `pendientes_2026_10_11` y `siguientes_pasos` n=11…15. **Ninguno tiene cómputo pendiente**;
+tres exigen una decisión previa del autor (✋).
+
+| # | Pendiente | Qué implica | Responsable |
+|---|---|---|---|
+| N1 | **Repo-framework limpio** (el actual es "sucio") | Separar instrumento de exploración: paquete instalable + adaptadores de proveedor + CLI + tests + docs + release versionado. Reutilizable por terceros para comparar modelos | agente ✋ |
+| N2 | **Modelos de pago por API key** | Adaptadores para modelos cerrados (Jev en la Vercel AI Gateway `typesafe-ai/jev` y cualquier endpoint OpenAI-compatible) + costo por 1.000 decisiones. Viabilidad y precios ya calculados en `contexto/00_veredicto_jev_typesafe.md` §3 | agente ✋ |
+| N3 | **Visibilidad del paper y del framework** | README del framework que enlace paper + DOI + dataset crudo + figuras, y anuncio en los foros del ecosistema | agente + autor |
+| N4 | **Blindaje de prioridad y crédito** | DOI por versión (Zenodo) + tag/Release (GitHub) + Software Heritage + `CITATION.cff` con cita obligatoria; opcional arXiv como sello temporal | ✋ autor |
+| N5 | **Paper en inglés, versionado** | Traducir §1–§7 y la versión IEEE a `paper/en/`, misma numeración; fuente única en markdown | agente |
+
+✋ = decisión de autoría pendiente: (N1) mismo repo limpiado o repo nuevo · (N2) método de pago para la API key
+· (N4) revelar antes de sustentar (alcance) o esperar (prioridad).
+
 ---
 
 ## 11. Glosario mínimo
