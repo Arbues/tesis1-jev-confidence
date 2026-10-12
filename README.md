@@ -252,6 +252,25 @@ tres exigen una decisión previa del autor (✋).
 ✋ = decisión de autoría pendiente: (N1) mismo repo limpiado o repo nuevo · (N2) método de pago para la API key
 · (N4) revelar antes de sustentar (alcance) o esperar (prioridad).
 
+### 10-ter. Decisiones del 12-oct-2026 (cierran las tres ✋ de §10-bis)
+
+| Pendiente | Decisión del autor | Consecuencia |
+|---|---|---|
+| **N1** | **Repo nuevo `decision-calibration-bench`**: se importa el núcleo (`src/jev_conf_metrics/` + los 37 tests) y este repo queda como **archivo histórico de la tesis** | El instrumento se separa de la exploración sin podar 128 MB de `results/` ni las carpetas fuera de alcance |
+| **N2** | **El autor ya tiene API key de TypeSafe** → el brazo de pago se mide contra la **vía directa**, sin gateways ni revendedores | Coste = solo uso; no hace falta tarjeta nueva ni terceros. La clave vive en `~/.env` (nunca en el repo) y en docs va como `[VER ~/.env → <VAR>]` |
+| **N4** | **Pedir el endosso de arXiv ya**, con publicación **independiente de la sustentación**; mientras llega el endosso, **reservar el texto como preprint con DOI** | El preprint (Zenodo `publication/preprint`) da DOI y fecha **inmediatos**; arXiv se añade después como sello en la comunidad. Requiere versión completa **en inglés** → depende de N5 |
+
+**Correcciones verificadas el 12-oct-2026 (sustituyen lo que decía `contexto/00_veredicto_jev_typesafe.md` §3):**
+
+| Dato | Antes | Verificado hoy |
+|---|---|---|
+| Crédito gratuito de Vercel y Jev | "el estudio completo cabe en el crédito gratuito ($5/mes)" | **El free tier cubre solo un subconjunto del catálogo**; que incluya `typesafe-ai/jev` **no se pudo verificar** desde fuera (el endpoint público ignora el filtro). Con API key propia de TypeSafe queda sin objeto |
+| Precio de Jev | $0.042 / 1M entrada, $0 salida | **Confirmado en vivo** en el catálogo del gateway (458 modelos): `"input": "0.000000042"`, `"output": "0"` |
+| Economía de la corrida | — | Suite completa (5 datasets, 12.677 decisiones) ≈ **$0.33**; la restricción es de tarjeta/mínimo de compra, no de tokens |
+| Modelo nuevo del ecosistema | — | **`liquid/d1`**: *decision model* con API compatible System One, 65K de contexto → candidato a par de la matriz |
+
+Informes completos: `docs/informe-blindaje-prioridad-2026.md` · `notes/pago-jev-api-costos-2026-10-12.md`.
+
 ---
 
 ## 11. Glosario mínimo

@@ -164,12 +164,26 @@ cifras que la versión en español, y ambas se citan desde el README.
 
 ---
 
-## Falta información para actuar
+## Decisiones del 12-oct-2026 (cierran los ✋ de este documento)
 
-1. **N1 — casa del framework:** ¿repo nuevo (`decision-calibration-bench`) o este repo limpiado? Define si el
-   historial de exploración se conserva en el mismo lugar o queda como tag/archivo.
-2. **N2 — método de pago:** ¿hay tarjeta para la Vercel AI Gateway (USD 5/mes de crédito incluido)? Si no, el
-   brazo de pago espera y se sigue con pesos abiertos.
-3. **N4 — arXiv:** ¿preprint antes o después de la sustentación? Cambia qué se publica primero.
-4. N3 y N5 no bloquean nada: se pueden ejecutar en cuanto haya decisión sobre N1 (el framework es el soporte de
-   ambos).
+1. **N1 — casa del framework:** repo **nuevo** `decision-calibration-bench`; se importa el núcleo
+   (`src/jev_conf_metrics/` + los 37 tests) y **este repo queda como archivo histórico** de la tesis.
+   Razón: la auditoría del 12-oct muestra que el trabajo no es podar sino construir (no existe CLI; el
+   pipeline no está empaquetado; `medir` exige GPU/red sin proveedor simulado; los adaptadores de dataset
+   dependen de `datasets`+HF y ni está declarado).
+2. **N2 — pago:** **el autor ya tiene API key de TypeSafe** → el brazo de pago se mide por la vía **directa**,
+   sin gateways ni revendedores. La clave vive en `~/.env` (nunca en el repo); en docs va como
+   `[VER ~/.env → <VAR>]`. Uso estimado de la suite completa: ~USD 0.33.
+3. **N4 — arXiv:** **pedir el endosso ya** y publicar **independiente de la sustentación**. Mientras el
+   endosso llega (semanas, depende de un tercero), **reservar el texto como preprint con DOI**: registro
+   Zenodo `publication/preprint` (inmediato) y, opcional, OSF Preprints (pre-moderación ~2 semanas).
+   arXiv exige versión completa **en inglés** desde feb-2026 → depende de N5.
+
+## Falta información para actuar (actualizado 12-oct-2026)
+
+1. **N4 — endosso de arXiv:** ¿a quién se lo pides? Hace falta un autor con publicaciones en arXiv en
+   cs.CL / cs.LG (o cs.AI) que acepte endosar. El trámite lo inicias tú al intentar el primer envío; arXiv
+   te da el código que tu padrino debe introducir.
+2. **N1 — nombre definitivo del repo nuevo:** se sigue usando el candidato `decision-calibration-bench`.
+3. N3 y N5 siguen sin bloquear, pero dependen de que exista el framework (N1).
+

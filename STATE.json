@@ -1,7 +1,7 @@
 {
   "proyecto": "Tesis 1 - Ciencia de la Computacion (FC-UNI)",
   "autor": "Arbues Enrique Perez V.",
-  "ultima_actualizacion": "2026-10-11",
+  "ultima_actualizacion": "2026-10-12",
   "pre_registro": {"doi": "10.5281/zenodo.23266795", "repositorio": "Zenodo", "archivo": "paper/04_pre_registro.md", "fecha": "2026-10-08", "nota": "PUBLICADO por el autor. Congela el metodo antes de la corrida confirmatoria: definiciones, modelos, datasets, cross-fitting K=5, q, bootstrap, FDR y los dos portes. Declara que el paso 0 y el piloto ya se habian ejecutado."},
   "estado": "PASO 0 EJECUTADO: GO (08-oct-2026, Acer Nitro). Laya (3 checkpoints) + Kev-0.8B medidos sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado y las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003. Informe: results/paso0_informe.md. RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
 
@@ -285,6 +285,21 @@
     "P3_visibilidad": "Que el paper y el framework se encuentren: README del framework con cita del paper, del DOI, del dataset crudo y de las figuras; anuncio en los foros del ecosistema listados en eje-2-jev-opensource/FUENTES.md, apuntando siempre al DOI.",
     "P4_prioridad_y_credito": "Reservar el maximo de la investigacion para que nadie la replique y se lleve el credito: numeros de DOI por version en Zenodo, tag y Release en GitHub, deposito en Software Heritage, CITATION.cff con cita obligatoria; opcional arXiv para sello temporal. DECISION DEL AUTOR: revelar antes de sustentar (alcance) vs prioridad fechada. Las licencias actuales (Apache-2.0 codigo, CC-BY-4.0 paper/docs) ya exigen atribucion.",
     "P5_paper_en_ingles": "Versionar el paper tambien en ingles para mayor alcance (paper/en/, misma numeracion que la version espanola y que la IEEE)."
+  },
+
+  "decisiones_2026_10_12": {
+    "nota": "El autor cerro las tres decisiones que bloqueaban los pendientes_2026_10_11. Informes de respaldo: docs/informe-blindaje-prioridad-2026.md (blindaje verificado contra documentacion oficial) y notes/pago-jev-api-costos-2026-10-12.md (costos medidos con tiktoken sobre el payload real de src/matriz/adaptadores.py).",
+    "N1_casa_del_framework": "REPO NUEVO `decision-calibration-bench`: importar el nucleo src/jev_conf_metrics/ (stdlib puro, autocontenido) + los 37 tests + los orquestadores reempaquetados con CLI. Este repo (tesis1-jev-confidence) queda como ARCHIVO HISTORICO de la tesis (paper, exploracion, 128 MB de results/). Razon: la auditoria muestra que el trabajo no es podar sino construir (B1 no existe CLI, B2 el pipeline no esta empaquetado, B3 medir exige GPU/red sin proveedor simulado, B4 los adaptadores dependen de `datasets`+HF y ni esta declarado).",
+    "N2_brazo_de_pago": "EL AUTOR YA TIENE API KEY DE TYPESAFE: el brazo de pago se mide por la via DIRECTA de TypeSafe, sin gateways (Vercel/Netlify) ni revendedores. La clave vive en ~/.env y se lee por variable de entorno; en docs y ejemplos va como placeholder [VER ~/.env -> VAR], nunca literal. Coste = solo uso (~USD 0.33 la suite completa).",
+    "N4_prioridad": "arXiv: PEDIR EL ENDOSSO YA (obligatorio: con 0 papers en arXiv no basta el correo institucional; hace falta endosso personal de un autor del mismo dominio, y arXiv no lo otorga -> semanas de antelacion). La publicacion es INDEPENDIENTE de la sustentacion. Mientras llega el endosso, RESERVAR EL TEXTO COMO PREPRINT CON DOI: registro Zenodo tipo publication/preprint (inmediato, misma casa que el pre-registro) y, opcional, OSF Preprints (pre-moderacion ~2 semanas). arXiv exige version completa EN INGLES desde feb-2026 -> depende de N5. Sigue vigente: mover DOI por version, tag/Release, Software Heritage y CITATION.cff, y el aviso de que ningun DOI prueba fecha de autoria (para eso, OpenTimestamps sobre el hash del commit).",
+    "correcciones_verificadas": {
+      "vercel_free_tier": "CORREGIDO: el doc contexto/00_veredicto_jev_typesafe.md seccion 3.1 decia que el estudio completo cabia en el credito gratuito de la USD 5/mes. Verificado el 12-oct-2026: el free tier cubre solo un SUBCONJUNTO del catalogo (331 de 458 modelos) y que incluya typesafe-ai/jev NO se pudo verificar desde fuera (el endpoint publico devuelve el mismo payload con y sin el filtro freeTier; no expone el flag). Al tener API key propia de TypeSafe, la opcion queda sin objeto.",
+      "precio_de_jev": "CONFIRMADO EN VIVO (catalogo del gateway, 458 modelos): typesafe-ai/jev, pricing input 0.000000042 USD/token (= 0.042 USD por millon) y output 0 -> coincide con FUENTES.md.",
+      "economia_de_la_corrida": "La suite completa (5 datasets, 12.677 decisiones) cuesta ~USD 0.33; x3 semillas ~USD 0.99. La economia la manda el minimo de compra de cada plataforma, no el token.",
+      "opciones_de_pago_por_si_acaso": "Sin tarjeta: Netlify AI Gateway plan Free (300 creditos/mes; 180 creditos por USD de uso IA = USD 1.67 de uso). Con tarjeta: OpenRouter (compra minima USD 5.80, uso real USD 0.33). TypeSafe directo ya NO tiene lista de espera pero no da credito gratuito. jevtypesafeai.com es revendedor NO oficial a 0.42/M (10x).",
+      "modelo_nuevo": "liquid/d1 (liquid): decision model con API compatible System One, 65.536 de contexto, type evaluation. Candidato a par de la matriz."
+    },
+    "endosso_arxiv": "PENDIENTE DE ACCION DEL AUTOR: identificar a un autor con publicaciones en arXiv en cs.CL/cs.LG (o cs.AI) dispuesto a endosar, y solicitarlo. La solicitud la hace el propio autor al intentar el primer envio; arXiv indica el codigo de endosso que el padrino debe introducir."
   },
 
   "archivos": {
