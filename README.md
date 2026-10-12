@@ -271,6 +271,32 @@ tres exigen una decisión previa del autor (✋).
 
 Informes completos: `docs/informe-blindaje-prioridad-2026.md` · `notes/pago-jev-api-costos-2026-10-12.md`.
 
+### 10-quater. Contrato de la API directa de TypeSafe (12-oct-2026) — y dos avisos para el paper
+
+Documentado y verificado contra las fuentes oficiales (`api.typesafe.ai/openapi.json`, `openapi 3.1.0`, `info.version 0.2.0`;
+`docs.typesafe.ai/confidence`): **`docs/adaptador-typesafe-contrato.md`**.
+
+| Dato verificado | Valor |
+|---|---|
+| Rutas | Solo `POST /v1/systemone` y `GET /v1/models`. **No hay endpoint de lote**: el "lote" es el mapa `questions` |
+| Auth | `Authorization: Bearer <API_KEY>`, clave en `TYPESAFE_API_KEY` (nunca al repo) |
+| Campo de opciones | **`criteria`** (mapa en `choice`, array ordenado en `score`) — NO `options` ni `scale` |
+| `confidence` de `choice` | `(n·p_max−1)/(n−1)` → **es exactamente la definición `jev`** (solo cuenta el máximo) |
+| `confidence` de `score` | `max(0, 1 − Σpᵢ·\|i−m\|/MAD_unif)` → **otra fórmula, ordinal y sensible a la distancia** |
+| `noul` | Sin `confidence`; la doc sugiere `\|2p−1\|` si se quiere uno |
+| Versión | `response.model` (p. ej. `jev-1.13.0`) → es el `model_revision` por fila (D4) |
+
+**Aviso 1 — `score` es una QUINTA definición.** TypeSafe devuelve dos definiciones distintas del mismo campo según la
+primitiva, y la de `score` coincide con la familia de la `score_confidence` de Kev. Es material directo para el argumento
+central (el mismo campo, definiciones incompatibles) y sugiere añadir `conf_score` a la librería — **decisión del autor**,
+porque toca artefactos sellados por el pre-registro.
+
+**Aviso 2 — `output_tokens = 0` en el paper.** El proyecto lo afirma en 4 sitios (`01_marco_teorico.md:161`,
+`03_especificacion_confidence.md:24`, `secciones/04_metodo.md:20`, `secciones/05_resultados.md:192`,
+`04_pre_registro.md:52`). El *mecanismo* (no generar texto) es correcto, pero el **contador** de la API no está
+garantizado: la doc solo dice que la salida es gratis y sus ejemplos traen `output_tokens` 12 y 212. **Medir con una
+llamada real** antes de dejar la frase.
+
 ---
 
 ## 11. Glosario mínimo
