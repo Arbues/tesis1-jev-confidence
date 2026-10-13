@@ -329,6 +329,20 @@
     }
   },
 
+  "guia_cierre_pendientes_2026_10_12": {
+    "documento": "docs/guia-cierre-pendientes.md",
+    "que_es": "Documento operativo que reordena TODOS los pendientes (N1-N5 + los del autor) por dependencia, con quien hace cada cosa (autor/agente), criterio de cierre y coste. Es la guia a seguir; este bloque es su espejo resumido.",
+    "orden": [
+      "FASE 1 (gratis, hoy): Release v1.0.0 -> DOI automatico de Zenodo; preprint publication/preprint en espanol -> DOI propio; Software Heritage -> SWHID al CITATION.cff; ORCID importa los DOI; opcional OpenTimestamps (ots no instalado todavia).",
+      "FASE 2 (sin computo, autor): leer el borrador 1-7 y decidir el formato del PDF IEEE; confirmar las 9 referencias de paper/02_referencias_pendientes.md (corregir en el .bib, nunca como comentario: BibTeX aborta); extension declarada opcional con la medicion del brazo pagado (output_tokens != 0 y la rejilla de 0.01).",
+      "FASE 3 (t440, ~USD 0.33, sin GPU): adaptador typesafe-jev segun el contrato; DECISION DEL AUTOR sobre si conf_score (MAD_unif) entra en libreria y matriz como extension declarada; corrida sobre los datasets etiquetados con la rejilla de 0.01 declarada y columna de costo por 1.000 decisiones.",
+      "FASE 4 (repo nuevo decision-calibration-bench): paquete + CLI jevconf + backend simulado + tests portables + docs + release con DOI propio. Bloquea N3 y N5.",
+      "FASE 5: visibilidad (README del framework en ingles con DOI/paper/dataset/figuras, metadatos, anuncio en los foros) y paper/en/ con la misma numeracion -> arXiv cuando llegue el endosso (exige version completa en ingles desde feb-2026).",
+      "FASE 6 (opcional, Tesis 2): medir 4B-9B en el Mac Mini (Jeff-1, SemIf, jev-lite, Nimble-9B, tinyjev)."
+    ],
+    "no_hacer": "No tocar paper/04_pre_registro.md (texto depositado); no crear el Release antes de conectar Zenodo (ya conectado, no revertir); no anadir definiciones al nivel raw sellado (solo extension declarada); nunca la clave en el repo, logs ni filas; no decir 'output_tokens = 0' del brazo pagado (medido: no lo es); no usar jev-latest para medir (fijar jev-1.13.0 y registrar response.model); Jev != JEPA."
+  },
+
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",

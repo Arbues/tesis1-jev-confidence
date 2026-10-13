@@ -311,6 +311,16 @@ más frecuentes que en los brazos de pesos abiertos, que llegan con precisión c
 `notes/zenodo-deposito-borradores.md` (metadatos de los dos depósitos Zenodo: el automático del release y el
 preprint manual). El `.env` del autor va en `/home/arbues/.env` (no en el repo); `.gitignore` ahora lo cubre.
 
+### 10-quinquies. Guía de cierre: el flujo completo
+
+**`docs/guia-cierre-pendientes.md`** es el documento operativo que reordena todos los pendientes (`N1`–`N5` y los
+del autor) por **dependencia**, con quién hace cada cosa (✋ autor / 🤖 agente), el criterio de cierre y el coste.
+Resumen del orden: **Fase 1** reservar (Release→DOI, preprint→DOI, Software Heritage, ORCID) · **Fase 2** cerrar el
+paper (tu lectura, las 9 referencias, el PDF y la extensión declarada con la medición pagada) · **Fase 3** el brazo
+pagado (adaptador + corrida + costo por 1.000 decisiones) · **Fase 4** el repo del framework · **Fase 5** visibilidad
+e inglés (→ arXiv con endosso) · **Fase 6** Tesis 2.
+
+
 
 ---
 
