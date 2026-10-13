@@ -66,20 +66,18 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | `STATE.json` | El mismo estado en formato máquina-legible para agentes | vigente |
 | `.hermes.md` | Contexto de proyecto que Hermes auto-carga al arrancar | vigente |
 | **`paper/`** | **EL PAPER**: `00_plan_del_paper.md` (plan, claim, riesgos y correcciones), `01_marco_teorico.md` (marco teórico base), `02_referencias.bib`, `03_especificacion_confidence.md` (especificación formal), `04_pre_registro.md`, `secciones/` (borradores §1–§7), **`ieee/`** (versión IEEE en LaTeX: `main.tex` + `secciones/`; se compila con `compilar.sh`), **`figures/`** (las 8 figuras del paper) | **vigente** |
-| `docs/guia-agentes.md` | Guía de trabajo/handoff para agentes (AGENTS.md canónico pendiente de aprobación) | vigente |
 | `docs/libreria.md` | **API de la librería** `jev-conf-metrics`: definiciones, métricas, transferencia y puntos de extensión | vigente |
 | `docs/validacion-productos.md` | **Cómo validar los productos**, comando por comando (guía para el autor) | vigente |
 | **`eje-2-jev-opensource/11_ruta1_metrologia_confidence.md`** | **DOCUMENTO PRINCIPAL VIGENTE**: la Ruta 1 (artefacto, diseño de medición, marco teórico, paso 0, plan) | **vigente** |
 | `eje-2-jev-opensource/10_tres_rutas_tesis1.md` | Registro de las tres rutas entre las que se eligió | registro |
 | `eje-2-jev-opensource/FUENTES.md` | Inventario de las 49 fuentes del eje, verificadas con API | lectura obligatoria |
 | `eje-2-jev-opensource/08_estudio_ecosistema.md` | Estudio de campo: 20+ modelos con pesos, taxonomía por rigor, tabla de calibración, huecos | vigente |
-| `audit/jev-oss/` | 11 READMEs crudos de las implementaciones Jev + 2 categorías del índice curado | dato |
-| `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) + datos + scripts | ver §7 |
+| `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) | ver §7 |
 | **`results/`** | **ARTEFACTOS de medición**: `raw/` (paso 0), `crudos/` (65.185 mediciones confirmatorias, con `row_hash`), `matrix/` (la matriz, CSV + figuras + `RESUMEN_MATRIZ.md`) y `paso0_informe.md` | **vigente** |
-| `contexto/` | Material transversal y alternativas evaluadas (portafolio CC, viabilidad, costos) | contexto |
+| `contexto/` | Investigación previa (veredicto de Jev/TypeSafe y costos); su §3.1 lo corrige `notes/pago-jev-api-costos-2026-10-12.md` | contexto |
 | `src/figuras_paper.py` | Genera las 8 figuras del paper desde los artefactos medidos | vigente |
 | `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 37 tests en cada `push` | vigente |
-| `eje-1-jepa/`, `_descartado/` | **EJE DESCARTADO — FUERA DE ALCANCE.** No leer, no usar, no proponer subrutas | descartado |
+| `eje-1-jepa/`, `_descartado/` | **Eliminados del repo el 13-oct-2026** (eje descartado, fuera de alcance). Solo viven en el historial de git | eliminado |
 
 ### 3-bis. Estructura de trabajo y regla de orden
 
@@ -91,7 +89,7 @@ src/        CÓDIGO (librería jev-conf-metrics, pipeline) — se trabaja en el 
 results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz de transferencia)
 data/       Datasets descargados (los pesados NO se versionan)
 notes/      Apuntes, borradores y lluvia de ideas (aquí sí, suelto está bien)
-docs/       Guías (guia-agentes.md, libreria.md, validacion-productos.md)
+docs/       Guías (libreria.md, validacion-productos.md, erratas, contrato de la API, guía de cierre, releases)
 .github/    CI: los 37 tests en cada push/PR
 ```
 
@@ -156,7 +154,7 @@ de umbrales entre ellas** → **ese es el objeto de la Ruta 1.**
 | **Ruta 1 — Metrología de `confidence`** | ✅ **ELEGIDA (04-oct-2026)** | Artefacto puro, cero trabajo manual, riesgo bajo, densidad interna alta |
 | **Ruta B — Réplica controlada de RLCD** | ❌ descartada | Casi ocupada por `LakoreAI/sev` (26-sep: ablación completa, 30 corridas, checkpoints) |
 | **Ruta C — Cartografía del ecosistema** | ❌ descartada | Casi ocupada por `arXiv:2609.30216` (*Jev in the Wild*, 2.170 proyectos) |
-| **Eje 1 (JEPA/LeWM)** | ❌ descartado | **Instrucción expresa del autor.** Fuera de alcance; material en `eje-1-jepa/` |
+| **Eje 1 (JEPA/LeWM)** | ❌ descartado | **Instrucción expresa del autor.** Fuera de alcance; el material se eliminó del repo el 13-oct-2026 |
 | **T-B modelo vs harness** | ❌ descartado | Versión ingenua redundante (243 papers); es comparación, no núcleo de CC |
 | **T-C seguridad de agent skills** | ❌ descartado | 8/10 saturado (el más saturado de los tres) |
 | **T-A orden cero (ZO)** | 🔶 alternativa | 6/10; abierto solo en A1/A3/A4 |
@@ -177,7 +175,7 @@ Ejecutadas con subagentes el 19-sep-2026:
 | `audit/saturacion/auditoria_saturacion_modelo_vs_harness.md` | **6/10** | La pregunta ya está contestada y replicada (HV=18.48 vs MV=2.37 pp²) |
 | `audit/saturacion/informe_saturacion_agent_skills.md` | **8/10** | Ningún escáner supera el baseline "marcar todo" |
 
-Datos crudos y scripts también en `audit/saturacion/`.
+Los dumps y scripts de esas auditorías (arXiv/OpenAlex, ~3 MB) se eliminaron del repo el 13-oct-2026: son recuperables y no sostienen ninguna cifra del paper.
 
 ---
 
@@ -400,7 +398,7 @@ convergía (paso ~1000× demasiado pequeño), así que ese nivel era indistingui
 ---
 
 > **Registro histórico (eje descartado):** el material del **eje 1 (JEPA/LeWM/DINO)** — incluida su corrección
-> crítica del 25-sep-2026 — vive en `eje-1-jepa/` y `_descartado/`. Quedó **FUERA DE ALCANCE** por instrucción
+> crítica del 25-sep-2026 — **se eliminó del repo el 13-oct-2026** (solo en el historial de git). Quedó **FUERA DE ALCANCE** por instrucción
 > expresa del autor (confusión Jev/JEPA). **No trabajar sobre él ni proponer subrutas.**
 
 ---

@@ -81,13 +81,13 @@ llegar y que obliga a citar.
 o dejar el depósito en borrador para siempre (sin Publicar no hay DOI).
 
 ⚠️ El depósito incluye `results/` (120 MB, 65.185 mediciones). Es correcto, pero si se prefiere el dataset crudo
-como registro aparte, usar §C de `notes/zenodo-deposito-borradores.md`.
+como registro aparte, basta depositar el ZIP a mano (los metadatos están en `STATE.json` → `reserva_y_depositos`).
 
 ### 1.2 Preprint del paper → DOI propio (sin esperar a arXiv)
 
 | | |
 |---|---|
-| ✋ Autor | Zenodo → *New upload* → tipo `Publication` + subtipo `Preprint`; pegar los metadatos de `notes/zenodo-deposito-borradores.md` §B; subir `paper/ieee/main.pdf` |
+| ✋ Autor | ✅ **HECHO el 13-oct-2026**: el preprint está publicado con DOI `10.5281/zenodo.23329431` |
 | Idioma | Español. **Zenodo no exige inglés** (arXiv sí). |
 | Licencia | CC-BY-4.0 |
 | Cierre | DOI del preprint enlazado desde `README.md` y desde el `CITATION.cff` (`is supplemented by` / relación al instrumento) |
@@ -278,5 +278,5 @@ En la RTX 4050 solo caben los pequeños con encoder congelado y features cachead
 
 `docs/adaptador-typesafe-contrato.md` (contrato + verificación en vivo) · `docs/informe-blindaje-prioridad-2026.md`
 (mecanismos de reserva verificados) · `notes/pago-jev-api-costos-2026-10-12.md` (economía del brazo pagado) ·
-`docs/erratas_especificacion.md` E4 y E5 · `docs/release-v1.0.0.md` · `notes/zenodo-deposito-borradores.md` ·
+`docs/erratas_especificacion.md` E4–E6 · `docs/release-v1.0.0.md` y `release-v1.0.1.md` ·
 `README.md` §10-ter y §10-quater · `STATE.json` → `decisiones_2026_10_12` y `contrato_api_typesafe_2026_10_12`.

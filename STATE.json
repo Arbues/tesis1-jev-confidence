@@ -130,8 +130,8 @@
     "pipeline": "src/matriz/ (medir.py, matriz.py, informe_matriz.py, figura.py, adaptadores.py, backend_typesafe.py, correr_*.sh) · src/figuras_paper.py · src/paso0_go_no_go.py · src/paso0_informe.py",
     "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps) · results/raw/ y results/paso0_informe.md (paso 0)",
     "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib, 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + secciones/ + compilar.sh + main.pdf), figures/ (8 figuras)",
-    "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1–E6), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, release-v1.0.0.md, release-v1.0.1.md, guia-agentes.md",
-    "fuera_de_alcance": "eje-1-jepa/ y _descartado/ → NO leer, NO evaluar, NO proponer. exploración: audit/, contexto/, notes/, eje-2-jev-opensource/",
+    "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1–E6), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, handoff-t440.md, release-v1.0.0.md, release-v1.0.1.md",
+    "fuera_de_alcance": "eje-1-jepa/ y _descartado/ se ELIMINARON del repo el 13-oct-2026 (fuera de alcance; solo viven en el historial de git): no proponer subrutas de ahí. Exploración viva: audit/ (3 informes de saturación), contexto/, notes/, eje-2-jev-opensource/.",
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR."
   },
   "como_verificar": {
@@ -174,5 +174,11 @@
     "Tesis 1": "medir (instrumento) — hecho y reservado",
     "Tesis 2": "inducir (objetivo de entrenamiento RLCD)",
     "Taller": "demostrar (condiciones necesarias/suficientes, demostración)"
+  },
+  "limpieza_2026_10_13": {
+    "que_se_borro": "4,6 MB de documentación y datos que ya no se usan. Eliminados: (1) eje-1-jepa/ y _descartado/ — eje JEPA descartado, fuera de alcance; (2) audit/jev-oss/ — 13 copias crudas de READMEs públicos, ya destiladas en 08_estudio_ecosistema.md y FUENTES.md; (3) los dumps y scripts de audit/saturacion/ (arXiv/OpenAlex, ~3 MB) — recuperables y no sostienen ninguna cifra del paper (se conservan los 3 informes); (4) contexto/03_portafolio_temas_cc.md y 04_viabilidad_y_saturacion_ia.md — decisiones ya tomadas; (5) docs/guia-agentes.md — redundante con AGENTS.md; (6) notes/hallazgos.md, notes/pendientes-framework-y-paper.md y notes/zenodo-deposito-borradores.md — supersedidos, su contenido está en STATE.json, README y docs/; (7) .hermes/plans/ (un plan del 08-oct), .incoming/ (vacía) y downloads/ (un PDF del 19-sep).",
+    "por_que_es_seguro": "Todo queda en el historial de git (recuperable con git show/checkout del commit anterior). Ningún archivo borrado sostiene una cifra del paper ni es necesario para regenerar un artefacto.",
+    "actualizado_en_el_mismo_paso": "README.md (§3 índice, §3-bis árbol, §6, §7 y el registro histórico), .hermes.md (regla Jev≠JEPA y mapa), AGENTS.md (árbol y regla), docs/guia-cierre-pendientes.md (punteros al depósito ya hecho) y eje-2-jev-opensource/08_estudio_ecosistema.md (nota sobre las copias borradas).",
+    "que_quedo": "Raíz: README.md, STATE.json, .hermes.md, AGENTS.md, CITATION.cff, LICENSE, LICENSE-docs, .gitignore + carpetas. paper/, src/, tests/, results/ (artefactos), docs/ (9 guías), notes/ (2 notas vivas), eje-2-jev-opensource/ (4 docs), contexto/ (2), audit/saturacion/ (3 informes), data/ (.gitkeep)."
   }
 }

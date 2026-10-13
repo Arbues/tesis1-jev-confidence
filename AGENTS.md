@@ -10,8 +10,8 @@
 
 **Jev NO es JEPA.** Jev (TypeSafe System One) es un **modelo de decisión** que termina la inferencia con un
 *readout* de logits y **no genera texto**. JEPA es una familia de *world models*. **No tienen ninguna
-relación.** Todo el material de `eje-1-jepa/` y `_descartado/` está **FUERA DE ALCANCE**: no lo uses, no lo
-evalúes, no propongas subrutas de ahí. Si algo te hace dudar del eje, **pregunta antes de asumir**.
+relación.** El material de `eje-1-jepa/` y `_descartado/` está **FUERA DE ALCANCE** y se **eliminó del repo** el
+13-oct-2026: no propongas subrutas de ahí. Si algo te hace dudar del eje, **pregunta antes de asumir**.
 
 ---
 
@@ -45,11 +45,10 @@ crudas y script regenerador. **Instrumento, no hallazgo.** Documento principal:
 │   └─ matrix/          la matriz de transferencia
 ├─ data/                datasets descargados (NO se versionan los pesados; usa .gitignore)
 ├─ notes/               apuntes, borradores, lluvia de ideas (aquí sí, suelto está bien)
-├─ docs/                guías (p. ej. guia-agentes.md)
+├─ docs/                guías (libreria.md, validacion-productos.md, erratas, contrato, guías de cierre y release)
 ├─ eje-2-jev-opensource/  eje ACTIVO (docs del tema)
 ├─ audit/ · contexto/   material de apoyo
-├─ downloads/           PDFs y descargas puntuales
-└─ eje-1-jepa/ · _descartado/   FUERA DE ALCANCE (histórico; no tocar)
+└─ (eje-1-jepa/ y _descartado/ se eliminaron el 13-oct-2026: fuera de alcance; solo en el historial de git)
 ```
 
 **Regla simple para decidir dónde va algo:**

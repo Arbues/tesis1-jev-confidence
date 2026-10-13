@@ -2,6 +2,9 @@
 
 Estudio de campo · verificación con API de GitHub / Hugging Face / PyPI · corte 25-sep-2026
 
+> **Nota (13-oct-2026):** las copias crudas de los READMEs de las implementaciones (`audit/jev-oss/`) se
+> eliminaron del repo; son públicas en sus repositorios y las fuentes citadas aquí siguen en `FUENTES.md`.
+
 ---
 
 ## 0. Resumen ejecutivo
