@@ -360,6 +360,17 @@
     "gasto_acumulado_en_verificaciones": "7 llamadas en total (6 del contrato + 1 de humo): < USD 0.001."
   },
 
+  "referencias_verificadas_2026_10_12": {
+    "estado": "LAS 9 VERIFICACIONES RESUELTAS: paper/02_referencias_pendientes.md quedo vacia (solo con el resumen de lo aplicado y dos juicios de autoria pendientes). Corregidas en paper/02_referencias.bib y paper/ieee/referencias.bib, que quedan byte a byte identicos (sha256 698ead2d...).",
+    "verificado_por_el_agente": "Paginas de arXiv consultadas y confirmadas para 2609.38850 (Zhimin Gao, Pichao Wang; titulo 'OpenJev-RLCD: A Working RLCD Implementation'), 2609.33843 (autor unico Gowthamkumar Nandakishore), 2609.30216 (Guoming Ling, Muen Xue, Zijian Ye), 2609.26758 (Yu Sun, Junhao Xu, Jiajia Shi, Zijin Yang) y 2609.26550 (Yubo Li, Yidi Miao, Ramayya Krishnan, Rema Padman; 21-sep-2026). Confirmado tambien que Good (1952) es el origen de la regla LOGARITMICA.",
+    "hallazgos": "Los autores de arXiv2609.38850 estaban INVENTADOS en el .bib ('Gao, X. and Wang, Y.'); ahora llevan los reales. Tres titulos descriptivos se sustituyeron por los canonicos (38850, 33209, 26758) y se completo el de 26550. La nota de good1952 afirmaba que Good origino la regla esferica: FALSO (es la logaritmica); la nota quedo reducida a lo verificado.",
+    "compilacion": "Verificada por el agente: ./compilar.sh exit 0, main.pdf 11 paginas, main.bbl 34 bibitems, 0 apariciones de '[?]' en el texto del PDF -> 0 citas sin resolver. (Hay 7 entradas del .bib no citadas: preexistente, no es un fallo.)",
+    "juicios_de_autoria_pendientes": [
+      "La regla ESFERICA queda sin autoria propia: el texto la cubre citando good1952 y epstein1969 en el mismo grupo, que son la logaritmica y el RPS. La atribucion habitual es Roby (1964), pero el agente NO la pudo verificar en fuentes independientes. Alternativa: dejarla amparada en gneiting2007 (ya citada en el mismo parrafo). Decide el autor: anadir roby1964 previa verificacion, o dejarlo como esta.",
+      "Los titulos canonicos de arXiv sustituyen a los descriptivos en 3 entradas; si se prefieren los descriptivos, se revierten en un paso. Ninguna clave de cita cambio."
+    ]
+  },
+
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
