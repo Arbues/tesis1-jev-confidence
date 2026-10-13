@@ -23,12 +23,17 @@ license-url: "https://github.com/Arbues/tesis1-jev-confidence/blob/main/LICENSE"
 repository-code: "https://github.com/Arbues/tesis1-jev-confidence"
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.23328989
+    value: 10.5281/zenodo.23330647
     description: >-
-      Versión v1.0.0 del instrumento (librería, especificación, matriz de transferencia, dataset de
-      mediciones crudas, figuras y paper), depositada en Zenodo desde el Release de GitHub. El registro
-      declara además un DOI de concepto (10.5281/zenodo.23328888) que hoy **no resuelve** (404); no se
-      cita aquí hasta que resuelva.
+      Versión v1.0.1 del instrumento (librería, especificación, matriz de transferencia, dataset de
+      65.185 mediciones crudas, figuras, paper y adaptador del brazo pagado), depositada en Zenodo
+      automáticamente desde el Release de GitHub. Corrige las referencias del snapshot v1.0.0.
+  - type: doi
+    value: 10.5281/zenodo.23328988
+    description: "DOI de concepto del instrumento: apunta siempre a la última versión publicada."
+  - type: doi
+    value: 10.5281/zenodo.23328989
+    description: "Primera versión publicada (v1.0.0), conservada como histórica.
   - type: swh
     value: "swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0"
     description: >-

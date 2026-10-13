@@ -111,6 +111,24 @@ medición**, no por prudencia. Añadido en `docs/adaptador-typesafe-contrato.md`
 
 ---
 
+## E6 (menor) — la fecha del pre-registro y su archivo depositado
+
+**Texto original** (`paper/04_pre_registro.md`, cabecera): «Estado: **PUBLICADO**. DOI: **10.5281/zenodo.23266795**
+(Zenodo, 08-oct-2026)». La regla del propio archivo es que, una vez publicado, **no se modifica**.
+
+**Qué se encontró (verificado contra la API de Zenodo, 12-oct-2026).** El registro declara
+`publication_date = 2026-10-09` y `created = 2026-10-09T16:58Z`; la edición posterior (afiliación) subió la
+revisión a 5 pero **no** tocó ni la fecha ni el DOI. Además, el archivo **depositado** es una revisión previa a
+la publicación: dice «Estado: listo para subir», no contiene su propio DOI y difiere del local **solo** en esa
+cabecera de estado (el método es idéntico; 109 líneas en ambos).
+
+**Resolución.** El archivo **no se toca** (su inmutabilidad es justamente lo que el pre-registro promete) y **no**
+se crea una versión nueva del registro solo por la cabecera. La discrepancia queda registrada aquí y en
+`STATE.json`. Lo único que se corrige es lo que se afirma **fuera** del archivo: la fecha canónica del
+pre-registro es **09-oct-2026** (la que declara Zenodo).
+
+---
+
 ## E5 — `score` y `choice` no comparten la fórmula de `confidence`
 
 **Texto original** (`paper/03_especificacion_confidence.md` §1, tabla de primitivas): `choice` y `score`

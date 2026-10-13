@@ -393,6 +393,16 @@
     }
   },
 
+  "software_versiones_2026_10_13": {
+    "por_que_hay_una_v1_0_1": "La auditoria del ZIP de v1.0.0 (agente, 12-oct-2026) encontro que el snapshot archivado llevaba paper/02_referencias.bib, paper/ieee/referencias.bib y paper/ieee/main.pdf con las referencias ANTIGUAS: autores inventados ('Gao, X. and Wang, Y.'), titulos descriptivos ('Coherence and Negation in Decision Models (s + n = 1)', 'Name vs Definition Bias in Decision Models') y dos entradas con '{autores por confirmar}'. Cualquiera que descargara el software obtenia un paper con datos de referencia erroneos. Se publico una version nueva en lugar de reescribir el tag (los tags publicados no se reescriben).",
+    "v1_0_0": "10.5281/zenodo.23328989 (registro 23328989, tag 39a6856) - historico, se conserva",
+    "v1_0_1": "10.5281/zenodo.23330647 (registro 23330647, tag c966d5f, Release 2026-10-13T03:21:45Z) - ZIP de 16.92 MB / 247 archivos / 140.4 MB descomprimido. VERIFICADO por el agente descargando el ZIP: contiene src/matriz/backend_typesafe.py (el adaptador del brazo pagado) y el .bib con los titulos canonicos (0 rastros de los antiguos); el paper/ieee/main.pdf de dentro es BYTE-IDENTICO al local (md5 c9d7d9bb2a65e4addabb5da0663dc5a7).",
+    "doi_de_concepto": "10.5281/zenodo.23328988 - RESUELVE y apunta ya a la ultima version (23330647). OJO: el campo conceptdoi que devolvia la API para el registro v1.0.0 decia 10.5281/zenodo.23328888, valor que NO resuelve; el concepto real es 23328988. Corregido en CITATION.cff.",
+    "citation_cff": "Ahora cita la version vigente (23330647), el DOI de concepto (23328988), la version historica (23328989), el pre-registro (23266795), el SWHID de la revision v1.0.0 y el ORCID.",
+    "pendiente_de_relaciones": "Los tres registros aun no estan completamente enlazados entre si: el pre-registro no enlaza con nadie y el software no enlaza con el pre-registro ni con el preprint (el preprint si apunta a los dos). Es el unico hueco sustantivo que queda en Zenodo; se arregla con Edit -> Publish en cada registro (los DOI no cambian).",
+    "errata_E6": "La cabecera del pre-registro dice 'Zenodo, 08-oct-2026' pero el registro declara publication_date 2026-10-09 (created 2026-10-09T16:58Z). El archivo NO se toca (su propia regla: una vez publicado no se modifica) ni se crea version nueva solo por eso; queda registrado como errata E6 en docs/erratas_especificacion.md. Fecha canonica: 09-oct-2026."
+  },
+
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
