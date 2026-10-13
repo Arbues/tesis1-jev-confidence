@@ -80,3 +80,51 @@ no puede entrar en el diccionario `CONFIDENCES` de la librería. **Resolución:*
 como función propia y entra en la matriz solo en el bloque `n = 2`, comparada contra `p_max` (con
 quien es idéntica: `max(π, 1−π) = p_max`). Ya estaba así en la práctica; se documenta para que no
 parezca un olvido.
+
+---
+
+## E4 — `output_tokens = 0` no era una afirmación sobre el contador
+
+**Texto original** (`paper/03_especificacion_confidence.md` §1, `paper/01_marco_teorico.md` §10,
+`paper/secciones/04_metodo.md` §4.1, `paper/secciones/05_resultados.md` §5.2 y `paper/04_pre_registro.md`):
+
+> «no genera texto, luego `output_tokens = 0`» · «`output_tokens = 0` **por construcción**».
+
+**Por qué estaba mal.** La premisa (no hay bucle de decodificación, la inferencia termina con un
+*readout* de logits) es correcta y **medida** en los brazos de pesos abiertos: `output_tokens = 0` en
+las 65.185 filas de `results/crudos/` y en `results/raw/`. Lo que **no** se sigue de la premisa es el
+valor del **contador** del proveedor de pago. La documentación oficial de TypeSafe solo garantiza que
+la salida **no se cobra** y sus ejemplos publican `output_tokens` 12 (OpenAPI `Usage`) y 212 (página
+`primitives/choice`) — ver `docs/adaptador-typesafe-contrato.md` §0, punto A.
+
+**Resolución (12-oct-2026).** Se separa el mecanismo del contador: el paper afirma que **no se genera
+texto** y reporta `output_tokens = 0` **solo donde se midió** (brazos de pesos abiertos). El contador de
+la API de TypeSafe se reporta cuando exista una llamada real (brazo pagado). `paper/04_pre_registro.md`
+**no se toca**: es el texto depositado con DOI (10.5281/zenodo.23266795) y su frase se refiere, con
+razón, a los pesos abiertos.
+
+---
+
+## E5 — `score` y `choice` no comparten la fórmula de `confidence`
+
+**Texto original** (`paper/03_especificacion_confidence.md` §1, tabla de primitivas): `choice` y `score`
+aparecían devolviendo ambos «`confidence`», sin distinguir la fórmula.
+
+**Por qué está mal.** La documentación oficial de TypeSafe (`docs.typesafe.ai/confidence`, consultada el
+12-oct-2026) da **dos** fórmulas para el mismo campo según la primitiva:
+
+```
+choice:  confidence = (p_max − 1/n) / (1 − 1/n)                  ← es C_jev (solo cuenta el máximo)
+score:   confidence = max(0, 1 − Σᵢ pᵢ·|i − m| / MAD_unif)       ← ordinal, sensible a la distancia
+         con MAD_unif = (1/n)·Σᵢ |i − (n−1)/2|
+noul:    no devuelve `confidence`; la doc sugiere |2p − 1| = 2·max(p, 1−p) − 1
+```
+
+Con tres niveles, `(0, 0.5, 0.5)` da 0.25 y `(0.5, 0, 0.5)` da 0 con la fórmula de `score`, mientras
+que la de `choice` daría 0.25 a las dos.
+
+**Resolución.** Se documenta como una **quinta definición** del campo (dispersión ordinal) y se anota que
+la `score_confidence` de Kev pertenece a esa misma familia — lo que confirma que Kev espeja el adaptador
+de referencia de TypeSafe. Que entre o no en la librería y en la matriz **después** del pre-registro es
+decisión del autor (afecta artefactos sellados). Detalle del contrato: `docs/adaptador-typesafe-contrato.md`.
+

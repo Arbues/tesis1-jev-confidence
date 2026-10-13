@@ -158,7 +158,10 @@ Referencias: `vovk2005`, `angelopoulos2021`.
 **Jev (TypeSafe System One, `jev-1.13.0`).** Primitivos: `choice` (≤255 opciones; devuelve opción +
 `probabilities` + `confidence`), `score` (2–10 niveles ordinales; + `legend`), `noul` (0.0–1.0; **sin**
 `confidence`). Mecánica: **no genera texto**; termina con *readout* de logits en la posición de cada etiqueta
-y softmax **solo sobre las etiquetas permitidas** → `output_tokens = 0` **por construcción**. Estado
+y softmax **solo sobre las etiquetas permitidas**. Eso **no implica** que el contador `output_tokens` que
+reporta el proveedor valga 0: la documentación de TypeSafe solo garantiza que la salida **no se cobra**, y sus
+propios ejemplos traen valores mayores que cero. En los brazos de pesos abiertos medidos aquí el contador sí es
+0 (`results/crudos/*.jsonl`); el de la API de TypeSafe queda **pendiente de medir con una llamada real**. Estado
 compartido y preguntas aisladas → **no hay distribución conjunta**. TypeSafe **no publica** ECE, pérdida ni pesos.
 
 **Laya** (`NandhaKishorM/laya`, Apache-2.0, 421M = ModernBERT-large + cabeza que puntúa un token `[MASK]`).

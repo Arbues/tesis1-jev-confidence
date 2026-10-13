@@ -21,7 +21,8 @@ definición · **[O]** = opaca (aprendida), solo rango y medición.
 ## 1. El objeto y sus primitivas
 
 Un **modelo de decisión** recibe una pregunta y un conjunto cerrado de opciones y termina la inferencia con un
-*readout* de logits: **no genera texto**, luego `output_tokens = 0`. Tres primitivas:
+*readout* de logits: **no genera texto**. No debe confundirse con el contador `output_tokens` del proveedor
+(dato de facturación: TypeSafe no cobra la salida, pero no garantiza que el contador sea 0). Tres primitivas:
 
 | Primitiva | Entrada | Salida | n |
 |---|---|---|---|

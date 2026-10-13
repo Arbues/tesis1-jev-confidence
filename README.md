@@ -289,13 +289,19 @@ Documentado y verificado contra las fuentes oficiales (`api.typesafe.ai/openapi.
 **Aviso 1 — `score` es una QUINTA definición.** TypeSafe devuelve dos definiciones distintas del mismo campo según la
 primitiva, y la de `score` coincide con la familia de la `score_confidence` de Kev. Es material directo para el argumento
 central (el mismo campo, definiciones incompatibles) y sugiere añadir `conf_score` a la librería — **decisión del autor**,
-porque toca artefactos sellados por el pre-registro.
+porque toca artefactos sellados por el pre-registro. Registrado como **errata E5** en `docs/erratas_especificacion.md`.
 
-**Aviso 2 — `output_tokens = 0` en el paper.** El proyecto lo afirma en 4 sitios (`01_marco_teorico.md:161`,
-`03_especificacion_confidence.md:24`, `secciones/04_metodo.md:20`, `secciones/05_resultados.md:192`,
-`04_pre_registro.md:52`). El *mecanismo* (no generar texto) es correcto, pero el **contador** de la API no está
-garantizado: la doc solo dice que la salida es gratis y sus ejemplos traen `output_tokens` 12 y 212. **Medir con una
-llamada real** antes de dejar la frase.
+**Aviso 2 — `output_tokens = 0` en el paper: RESUELTO (12-oct-2026).** El autor aprobó separar el mecanismo del
+contador. El paper ahora afirma que **no se genera texto** y reporta `output_tokens = 0` **solo en los brazos de pesos
+abiertos, donde está medido** (65.185 filas); el contador de la API de TypeSafe se reportará cuando exista una llamada
+real. Corregido en `01_marco_teorico.md`, `03_especificacion_confidence.md`, `secciones/05_resultados.md` y
+`ieee/secciones/01_introduccion.tex` (recompilado: 11 páginas). `04_pre_registro.md` **no se tocó**: es el texto
+depositado con DOI y su frase se refiere, con razón, a los pesos abiertos. Registrado como **errata E4**.
+
+**Listo para publicar (bloquea solo tu OK):** `docs/release-v1.0.0.md` (notas del Release) y
+`notes/zenodo-deposito-borradores.md` (metadatos de los dos depósitos Zenodo: el automático del release y el
+preprint manual). El `.env` del autor va en `/home/arbues/.env` (no en el repo); `.gitignore` ahora lo cubre.
+
 
 ---
 

@@ -189,9 +189,11 @@ literatura del ecosistema y que son parte del instrumento:
 1. **La `choice_confidence` de Kev es la fórmula de Jev.** `(p_max − 1/K)/(1 − 1/K) ≡ (K·p_max − 1)/(K − 1)`,
    verificado numéricamente para `K ∈ {2,3,4,7,12}`. Estaban registradas como definiciones distintas; por la
    Proposición 1, ese par transfiere el umbral de forma exacta.
-2. **El campo `output_tokens` tiene tres significados.** Jev y Laya lo reportan como 0 (no hay generación);
-   Kev lo usa como recuento de tokens de la respuesta serializada (869.310 en las mismas 2.000 decisiones).
-   Es metrología del propio campo, no un fallo de Kev.
+2. **El campo `output_tokens` tiene tres significados.** En los brazos de pesos abiertos medidos aquí, Laya lo
+   reporta como 0 (no hay generación) y Kev como recuento de tokens de la respuesta serializada (869.310 en las
+   mismas 2.000 decisiones); es metrología del propio campo, no un fallo de Kev. El contador de la **API de
+   TypeSafe** no está medido: la documentación solo garantiza que la salida es gratuita y sus ejemplos muestran
+   valores mayores que cero, así que el valor se reporta solo cuando se mida con una llamada real.
 
 Y sobre la misma corrida, el ECE cambia por completo según la definición: en `laya-typed-decisions` va de
 **0.216** con `p_max` a **0.577** con la entropía normalizada, un factor **2.7×** sobre el mismo dato.
