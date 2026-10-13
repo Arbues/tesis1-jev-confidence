@@ -103,6 +103,12 @@ la API de TypeSafe se reporta cuando exista una llamada real (brazo pagado). `pa
 **no se toca**: es el texto depositado con DOI (10.5281/zenodo.23266795) y su frase se refiere, con
 razón, a los pesos abiertos.
 
+**Medido el 12-oct-2026 (t440, 6 llamadas reales a `api.typesafe.ai`).** El contador de la API pagada
+**no es 0**: `output_tokens` = **71** (3 preguntas), **58** (1 pregunta, n=5) y **31** (1 pregunta, n=2);
+`input_tokens` 308–406 por ítem. La decisión de separar mecanismo y contador queda **confirmada por
+medición**, no por prudencia. Añadido en `docs/adaptador-typesafe-contrato.md` §11.
+
+
 ---
 
 ## E5 — `score` y `choice` no comparten la fórmula de `confidence`

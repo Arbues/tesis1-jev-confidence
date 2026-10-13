@@ -582,8 +582,37 @@ rate limits 250k/1200 (no coinciden).
    `model_revision=response.model`, `backend="typesafe-api"`, y `row_hash`.
 7. **Errores:** reintentar con backoff en `429`/`529` (honrar `Retry-After`); `401` = clave; `422` =
    cuerpo inválido.
-8. **Antes de la corrida grande:** ejecutar C1–C7 (§8) para cerrar los puntos A–K y actualizar este
-   documento con los valores reales.
+8. **Copiar `usage` a cada fila**: `input_tokens` y `output_tokens` **tal como vienen** (en esta API
+   `output_tokens` **no** es 0; ver §11). Registrar también el coste por fila si se quiere la tabla de
+   costo por 1.000 decisiones.
+
+---
+
+
+## 11. Verificación en vivo (12-oct-2026, t440, sin GPU)
+
+Con la clave del autor (`TYPESAFE_API_KEY` en `~/.env`, nunca impresa) se ejecutaron **6 llamadas reales**:
+1 `GET /v1/models` y 5 `POST /v1/systemone`. Todas devolvieron `200`, ninguna `429`. Coste total < USD 0.0005.
+
+| Punto del §0 | Resultado en vivo |
+|---|---|
+| A · `output_tokens` | **NO es 0**: 71 (3 preguntas), 58 (1 pregunta, n=5), 31 (1 pregunta, n=2). El contador de la API pagada cuenta algo de la respuesta serializada. Queda **medido**, no supuesto |
+| B · catálogo | `GET /v1/models` → solo `jev-latest` y `jev-preview`; ambos alias, y también el ID versionado, se aceptan como entrada, y la respuesta devuelve siempre **`model: "jev-1.13.0"`** |
+| D · estructura | Confirmada campo por campo en `choice`, `score` y `noul` |
+| E · fórmula de `choice` | `confidence` `1.0` con `p=(1,0,0)` y `0.94` con `p=(0.05,0.95,0,0,0)`; el valor recalculado `(n·p_max−1)/(n−1)` = `0.9375` sobre las probabilidades **redondeadas** → coincide dentro de la rejilla |
+| F · fórmula de `score` | `0.68` devuelto vs `0.68333` recalculado con `MAD_unif` sobre `p=(0.01,0.62,0.37,0,0)` → coincide dentro de la rejilla |
+| G · `noul` | Sin campo `confidence` ✔ |
+| H · coste | `input_tokens` 308–406 por ítem con 2–5 opciones → **≈ USD 0.013–0.017 por 1.000 decisiones** |
+
+**Hallazgo metrológico nuevo (no estaba en la documentación): la API devuelve las probabilidades y la
+confianza redondeadas a 2 decimales.** Todas las respuestas observadas traen valores como `0.95`, `0.62`,
+`0.37`, `0.01`, `0.0`. Consecuencia para la matriz: en el brazo pagado la escala tiene una **rejilla de
+0.01**, así que los **empates en el umbral** (columna `n_empates_tau`) serán mucho más frecuentes que en los
+brazos de pesos abiertos, donde las distribuciones llegan con precisión completa. Hay que declararlo al medir
+este brazo y no mezclarlo sin más con los demás.
+
+**Lo que sigue sin verificar** (no se provocó a propósito): `401` con clave inválida, `422` con cuerpo
+inválido, `429`/`529` bajo carga, y el comportamiento del límite de 255 opciones.
 
 ---
 

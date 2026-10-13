@@ -291,12 +291,21 @@ primitiva, y la de `score` coincide con la familia de la `score_confidence` de K
 central (el mismo campo, definiciones incompatibles) y sugiere añadir `conf_score` a la librería — **decisión del autor**,
 porque toca artefactos sellados por el pre-registro. Registrado como **errata E5** en `docs/erratas_especificacion.md`.
 
-**Aviso 2 — `output_tokens = 0` en el paper: RESUELTO (12-oct-2026).** El autor aprobó separar el mecanismo del
-contador. El paper ahora afirma que **no se genera texto** y reporta `output_tokens = 0` **solo en los brazos de pesos
-abiertos, donde está medido** (65.185 filas); el contador de la API de TypeSafe se reportará cuando exista una llamada
-real. Corregido en `01_marco_teorico.md`, `03_especificacion_confidence.md`, `secciones/05_resultados.md` y
+**Aviso 2 — `output_tokens = 0` en el paper: RESUELTO Y CONFIRMADO POR MEDICIÓN (12-oct-2026).** El autor aprobó
+separar el mecanismo del contador, y la **primera llamada real** (clave del autor, desde el t440, sin GPU) lo
+confirmó: en la API pagada **`output_tokens` ≠ 0** (71 con 3 preguntas, 58 y 31 con una sola). El paper ahora afirma
+que **no se genera texto** y reporta `output_tokens = 0` **solo en los brazos de pesos abiertos, donde está medido**
+(65.185 filas). Corregido en `01_marco_teorico.md`, `03_especificacion_confidence.md`, `secciones/05_resultados.md` y
 `ieee/secciones/01_introduccion.tex` (recompilado: 11 páginas). `04_pre_registro.md` **no se tocó**: es el texto
-depositado con DOI y su frase se refiere, con razón, a los pesos abiertos. Registrado como **errata E4**.
+depositado con DOI. Registrado como **errata E4**.
+
+**Aviso 3 — la API pagada devuelve 2 decimales (hallazgo nuevo, 12-oct-2026).** Las 6 llamadas de verificación
+muestran `probabilities` y `confidence` **redondeadas a 0.01** (`0.95`, `0.62`, `0.37`, `0.01`). En el brazo pagado la
+escala es una rejilla de 0.01, así que los **empates en el umbral** (columna `n_empates_tau` de la matriz) serán mucho
+más frecuentes que en los brazos de pesos abiertos, que llegan con precisión completa. También se confirmó en vivo:
+`choice` = `(n·p_max−1)/(n−1)` (0.94 vs 0.9375 recalculado), `score` = `MAD_unif` (0.68 vs 0.68333), `noul` sin
+`confidence`, y el modelo responde siempre `jev-1.13.0`. Detalle: `docs/adaptador-typesafe-contrato.md` §11.
+
 
 **Listo para publicar (bloquea solo tu OK):** `docs/release-v1.0.0.md` (notas del Release) y
 `notes/zenodo-deposito-borradores.md` (metadatos de los dos depósitos Zenodo: el automático del release y el
