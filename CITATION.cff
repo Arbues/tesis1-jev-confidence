@@ -22,6 +22,13 @@ license: Apache-2.0
 license-url: "https://github.com/Arbues/tesis1-jev-confidence/blob/main/LICENSE"
 repository-code: "https://github.com/Arbues/tesis1-jev-confidence"
 identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23328989
+    description: >-
+      Versión v1.0.0 del instrumento (librería, especificación, matriz de transferencia, dataset de
+      mediciones crudas, figuras y paper), depositada en Zenodo desde el Release de GitHub. El registro
+      declara además un DOI de concepto (10.5281/zenodo.23328888) que hoy **no resuelve** (404); no se
+      cita aquí hasta que resuelva.
   - type: swh
     value: "swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0"
     description: >-

@@ -371,6 +371,16 @@
     ]
   },
 
+  "deposito_zenodo_2026_10_12": {
+    "estado": "VERIFICADO POR EL AGENTE contra la API publica de Zenodo. El deposito automatico del Release NO se quedo en borrador: se PUBLICO solo, 7 segundos despues del Release (creado 2026-10-13T00:59:43Z; Release 00:59:36Z).",
+    "doi_version": "10.5281/zenodo.23328989 (resuelve: https://doi.org/10.5281/zenodo.23328989 -> https://zenodo.org/records/23328989)",
+    "doi_concepto": "10.5281/zenodo.23328888 (el registro lo declara en su campo conceptdoi, pero HOY NO RESUELVE: GET https://doi.org/10.5281/zenodo.23328888 devuelve 404 y la API no devuelve ningun registro con ese conceptdoi. NO citarlo hasta que resuelva; reintentar la comprobacion mas adelante)",
+    "registro": "tipo Software, version v1.0.0, licencia apache2.0, titulo 'Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev', autor 'Perez Villegas, Arbaes Enrique' con ORCID 0009-0004-7605-6569 y afiliacion FC-UNI, keywords completas, archivo Arbues/tesis1-jev-confidence-v1.0.0.zip (16.9 MB), relacion isSupplementTo https://github.com/Arbues/tesis1-jev-confidence/tree/v1.0.0",
+    "por_que_el_autor_no_lo_encontraba": "La interfaz de Zenodo cambio: la pestana 'Uploads' se retiro en octubre de 2023 (ahora 'My dashboard' -> 'My uploads', https://zenodo.org/uploads); NO hay boton 'Upload' sino el icono '+' (Quick actions) -> 'New upload'; la integracion con GitHub vive en el MENU DE PERFIL (avatar arriba a la derecha) -> GitHub, https://zenodo.org/account/settings/github/; y en los depositos que vienen de un Release de GitHub NO existe boton 'Publicar' porque el Release ya publica. La frase antigua 'Zenodo -> Upload -> GitHub' describe una interfaz retirada.",
+    "pendiente_de_metadatos": "El PRE-REGISTRO 10.5281/zenodo.23266795 NO tiene afiliacion (el registro de software si la tiene). Se arregla con Editar -> Publicar en ese registro, sin cambiar el DOI.",
+    "guia_detallada": "notes/zenodo-publicar-guia-literal.md (guia literal clic a clic + diagnostico + tabla sintomas/causa/solucion, con 20 fuentes fechadas)"
+  },
+
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
