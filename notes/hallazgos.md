@@ -1,3 +1,4 @@
+> **HISTÓRICO (11-oct-2026).** Notas de la sesión de reentrada previa. El estado vigente es `STATE.json`.
 # Notes/hallazgos.md — reentrada de sesión (11-oct-2026)
 
 Registro de exploración mínima. Presupuesto gastado: bajo (~4k tokens). No se volcaron README.md ni

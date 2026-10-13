@@ -217,151 +217,47 @@ metrología.** De ahí D1 y la Ruta 1.
 
 ---
 
-## 10. Siguientes pasos concretos
+## 10. Plan original (04-oct-2026) y su estado
 
-| # | Paso | Nota |
+Los nueve pasos del plan quedaron así: **pasos 0–7 ✅** (ruta elegida, paso 0 go/no-go, alcance congelado,
+especificación formal, librería con tests, pipeline, matriz + dataset crudo, pre-registro con DOI) · **paso 8 ✅**
+(título definitivo fijado el 10-oct) · **paso 9** (estudio del objetivo RLCD) queda como material de **Tesis 2 /
+Taller**. El estado vigente y lo que falta están en §10-bis y en `STATE.json` → `pendientes`.
+
+### 10-bis. Estado del cierre (13-oct-2026)
+
+**La Tesis 1 está construida, medida y reservada.** No queda cómputo pendiente de la medición. Punto de
+reentrada: `STATE.json` → `README.md` → `docs/guia-cierre-pendientes.md` (flujo completo por fases).
+
+**Reserva con DOI** (verificada contra la API pública de Zenodo):
+
+| Producto | DOI / identificador | Notas |
 |---|---|---|
-| 0 | **Elegir la ruta** | ✅ hecho: **Ruta 1** (04-oct-2026) |
-| 1 | **Paso 0 go/no-go** | ✅ **hecho: GO (08-oct-2026, Acer Nitro)**. Laya (3 checkpoints) + Kev-0.8B sobre las 2.000 decisiones de `typed-decisions`: `output_tokens = 0` verificado y **las 5 métricas publicadas reproducidas con \|Δ\| ≤ 0.003**. Informe: **`results/paso0_informe.md`** · artefactos crudos en `results/raw/`. Ver §13 |
-| 2 | **Congelar** la lista de definiciones y datasets, y la cobertura objetivo | Alcance (autor) — **ya congelado** en `paper/00_plan_del_paper.md` §10 |
-| 3 | **Especificación formal** de cada definición | ✅ hecho: `paper/03_especificacion_confidence.md` |
-| 4 | **Librería** `jev-conf-metrics` + tests de conformidad | Automático — el cálculo de las definiciones ya vive en `src/paso0_go_no_go.py` (falta extraerlo a librería con tests) |
-| 5 | **Pipeline de medición**: pesos abiertos + datasets ya etiquetados (cero etiquetado propio) | ✅ **funcionando** (`src/paso0_go_no_go.py`: Laya + Kev + control crudo) |
-| 6 | **Matriz + dataset de mediciones crudas** (versión + hash por fila) | Mediciones crudas del paso 0 ya en `results/raw/`; falta la **matriz de transferencia** |
-| 7 | **Pre-registro con DOI** antes de la corrida principal | **Lo único que necesita al autor** (cuenta OSF/Zenodo) |
-| 8 | **Fijar el título definitivo** al cerrar la especificación | Ver §2 |
-| 9 | **Estudio del objetivo RLCD** (scoring rules, REINFORCE, ruido) en paralelo | Nivel que el Taller convierte en teoría |
+| Pre-registro del método | `10.5281/zenodo.23266795` (concepto `…23266794`) | Publicado el 09-oct-2026; el archivo depositado es la revisión previa (el método es idéntico) |
+| **Instrumento (software)** | **`10.5281/zenodo.23330647`** v1.0.1 (concepto `…23328988`; histórica v1.0.0 `…23328989`) | Se publica automáticamente desde el Release de GitHub. La v1.0.1 corrige las referencias que el snapshot v1.0.0 archivaba mal |
+| Preprint del paper | `10.5281/zenodo.23329431` (concepto `…23329430`) | PDF de 11 páginas, CC-BY-4.0, en español |
+| Archivo independiente | SWHID `swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0` | Software Heritage |
+| ORCID | 3 works | verificado en la API pública de ORCID |
 
-**Riesgo a vigilar:** que aparezca la matriz (el ecosistema muta a diario). **Mitigación:** pre-registro con
-DOI temprano; el valor del instrumento sobrevive igual.
+**Hecho en la sesión del 12–13 oct-2026:** Release `v1.0.0` y `v1.0.1` → depósitos automáticos en Zenodo ·
+archivo completo en Software Heritage · preprint depositado · 3 works en ORCID · `CITATION.cff` con 6
+identificadores (validado contra el esquema oficial: 0 errores) · las **9 referencias pendientes resueltas** (se
+corrigieron títulos y autores inventados en el `.bib`) · **erratas E4, E5 y E6** · **adaptador del brazo pagado**
+(`src/matriz/backend_typesafe.py`, 15 tests sin red → 52 en total; medido USD 0.018 por 1.000 decisiones) ·
+contrato de la API de TypeSafe verificado en vivo.
 
-### 10-bis. Pendientes nuevos (anotados el 11-oct-2026)
+**Lo que falta** — detalle y sub-pasos en `docs/guia-cierre-pendientes.md` y en `STATE.json` → `pendientes`:
 
-Detalle, sub-pasos y criterios de cierre: **`notes/pendientes-framework-y-paper.md`**. Espejo máquina-legible:
-`STATE.json` → `pendientes_2026_10_11` y `siguientes_pasos` n=11…15. **Ninguno tiene cómputo pendiente**;
-tres exigen una decisión previa del autor (✋).
-
-| # | Pendiente | Qué implica | Responsable |
-|---|---|---|---|
-| N1 | **Repo-framework limpio** (el actual es "sucio") | Separar instrumento de exploración: paquete instalable + adaptadores de proveedor + CLI + tests + docs + release versionado. Reutilizable por terceros para comparar modelos | agente ✋ |
-| N2 | **Modelos de pago por API key** | Adaptadores para modelos cerrados (Jev en la Vercel AI Gateway `typesafe-ai/jev` y cualquier endpoint OpenAI-compatible) + costo por 1.000 decisiones. Viabilidad y precios ya calculados en `contexto/00_veredicto_jev_typesafe.md` §3 | agente ✋ |
-| N3 | **Visibilidad del paper y del framework** | README del framework que enlace paper + DOI + dataset crudo + figuras, y anuncio en los foros del ecosistema | agente + autor |
-| N4 | **Blindaje de prioridad y crédito** | DOI por versión (Zenodo) + tag/Release (GitHub) + Software Heritage + `CITATION.cff` con cita obligatoria; opcional arXiv como sello temporal | ✋ autor |
-| N5 | **Paper en inglés, versionado** | Traducir §1–§7 y la versión IEEE a `paper/en/`, misma numeración; fuente única en markdown | agente |
-
-✋ = decisión de autoría pendiente: (N1) mismo repo limpiado o repo nuevo · (N2) método de pago para la API key
-· (N4) revelar antes de sustentar (alcance) o esperar (prioridad).
-
-### 10-ter. Decisiones del 12-oct-2026 (cierran las tres ✋ de §10-bis)
-
-| Pendiente | Decisión del autor | Consecuencia |
-|---|---|---|
-| **N1** | **Repo nuevo `decision-calibration-bench`**: se importa el núcleo (`src/jev_conf_metrics/` + los 37 tests) y este repo queda como **archivo histórico de la tesis** | El instrumento se separa de la exploración sin podar 128 MB de `results/` ni las carpetas fuera de alcance |
-| **N2** | **El autor ya tiene API key de TypeSafe** → el brazo de pago se mide contra la **vía directa**, sin gateways ni revendedores | Coste = solo uso; no hace falta tarjeta nueva ni terceros. La clave vive en `~/.env` (nunca en el repo) y en docs va como `[VER ~/.env → <VAR>]` |
-| **N4** | **Pedir el endosso de arXiv ya**, con publicación **independiente de la sustentación**; mientras llega el endosso, **reservar el texto como preprint con DOI** | El preprint (Zenodo `publication/preprint`) da DOI y fecha **inmediatos**; arXiv se añade después como sello en la comunidad. Requiere versión completa **en inglés** → depende de N5 |
-
-**Correcciones verificadas el 12-oct-2026 (sustituyen lo que decía `contexto/00_veredicto_jev_typesafe.md` §3):**
-
-| Dato | Antes | Verificado hoy |
-|---|---|---|
-| Crédito gratuito de Vercel y Jev | "el estudio completo cabe en el crédito gratuito ($5/mes)" | **El free tier cubre solo un subconjunto del catálogo**; que incluya `typesafe-ai/jev` **no se pudo verificar** desde fuera (el endpoint público ignora el filtro). Con API key propia de TypeSafe queda sin objeto |
-| Precio de Jev | $0.042 / 1M entrada, $0 salida | **Confirmado en vivo** en el catálogo del gateway (458 modelos): `"input": "0.000000042"`, `"output": "0"` |
-| Economía de la corrida | — | Suite completa (5 datasets, 12.677 decisiones) ≈ **$0.33**; la restricción es de tarjeta/mínimo de compra, no de tokens |
-| Modelo nuevo del ecosistema | — | **`liquid/d1`**: *decision model* con API compatible System One, 65K de contexto → candidato a par de la matriz |
-
-Informes completos: `docs/informe-blindaje-prioridad-2026.md` · `notes/pago-jev-api-costos-2026-10-12.md`.
-
-### 10-quater. Contrato de la API directa de TypeSafe (12-oct-2026) — y dos avisos para el paper
-
-Documentado y verificado contra las fuentes oficiales (`api.typesafe.ai/openapi.json`, `openapi 3.1.0`, `info.version 0.2.0`;
-`docs.typesafe.ai/confidence`): **`docs/adaptador-typesafe-contrato.md`**.
-
-| Dato verificado | Valor |
+| ✋ Autor | 🤖 Agente |
 |---|---|
-| Rutas | Solo `POST /v1/systemone` y `GET /v1/models`. **No hay endpoint de lote**: el "lote" es el mapa `questions` |
-| Auth | `Authorization: Bearer <API_KEY>`, clave en `TYPESAFE_API_KEY` (nunca al repo) |
-| Campo de opciones | **`criteria`** (mapa en `choice`, array ordenado en `score`) — NO `options` ni `scale` |
-| `confidence` de `choice` | `(n·p_max−1)/(n−1)` → **es exactamente la definición `jev`** (solo cuenta el máximo) |
-| `confidence` de `score` | `max(0, 1 − Σpᵢ·\|i−m\|/MAD_unif)` → **otra fórmula, ordinal y sensible a la distancia** |
-| `noul` | Sin `confidence`; la doc sugiere `\|2p−1\|` si se quiere uno |
-| Versión | `response.model` (p. ej. `jev-1.13.0`) → es el `model_revision` por fila (D4) |
+| Leer §1–§7 y decidir si el PDF IEEE lo representa (es lo último que cierra la Tesis 1) | Repo nuevo `decision-calibration-bench` (paquete + CLI `jevconf` + proveedor simulado + docs + release con DOI) |
+| Dos juicios de referencias: la regla **esférica** quedó sin autoría propia · mantener los títulos canónicos | Corrida del **brazo pagado** (~USD 0.33, sin GPU), tras la decisión de `conf_score` |
+| Decidir si `conf_score` (la fórmula que el API real devuelve en `score`) entra como **extensión declarada** | Visibilidad (N3) y paper en inglés (N5) |
+| arXiv: hace falta **endosso personal** (0 papers en arXiv) | |
+| (Opcional, cosmético) cerrar el grafo de relaciones en Zenodo | |
 
-**Aviso 1 — `score` es una QUINTA definición.** TypeSafe devuelve dos definiciones distintas del mismo campo según la
-primitiva, y la de `score` coincide con la familia de la `score_confidence` de Kev. Es material directo para el argumento
-central (el mismo campo, definiciones incompatibles) y sugiere añadir `conf_score` a la librería — **decisión del autor**,
-porque toca artefactos sellados por el pre-registro. Registrado como **errata E5** en `docs/erratas_especificacion.md`.
-
-**Aviso 2 — `output_tokens = 0` en el paper: RESUELTO Y CONFIRMADO POR MEDICIÓN (12-oct-2026).** El autor aprobó
-separar el mecanismo del contador, y la **primera llamada real** (clave del autor, desde el t440, sin GPU) lo
-confirmó: en la API pagada **`output_tokens` ≠ 0** (71 con 3 preguntas, 58 y 31 con una sola). El paper ahora afirma
-que **no se genera texto** y reporta `output_tokens = 0` **solo en los brazos de pesos abiertos, donde está medido**
-(65.185 filas). Corregido en `01_marco_teorico.md`, `03_especificacion_confidence.md`, `secciones/05_resultados.md` y
-`ieee/secciones/01_introduccion.tex` (recompilado: 11 páginas). `04_pre_registro.md` **no se tocó**: es el texto
-depositado con DOI. Registrado como **errata E4**.
-
-**Aviso 3 — la API pagada devuelve 2 decimales (hallazgo nuevo, 12-oct-2026).** Las 6 llamadas de verificación
-muestran `probabilities` y `confidence` **redondeadas a 0.01** (`0.95`, `0.62`, `0.37`, `0.01`). En el brazo pagado la
-escala es una rejilla de 0.01, así que los **empates en el umbral** (columna `n_empates_tau` de la matriz) serán mucho
-más frecuentes que en los brazos de pesos abiertos, que llegan con precisión completa. También se confirmó en vivo:
-`choice` = `(n·p_max−1)/(n−1)` (0.94 vs 0.9375 recalculado), `score` = `MAD_unif` (0.68 vs 0.68333), `noul` sin
-`confidence`, y el modelo responde siempre `jev-1.13.0`. Detalle: `docs/adaptador-typesafe-contrato.md` §11.
-
-
-**Listo para publicar (bloquea solo tu OK):** `docs/release-v1.0.0.md` (notas del Release) y
-`notes/zenodo-deposito-borradores.md` (metadatos de los dos depósitos Zenodo: el automático del release y el
-preprint manual). El `.env` del autor va en `/home/arbues/.env` (no en el repo); `.gitignore` ahora lo cubre.
-
-### 10-sexies. Fase 1 en ejecución — Release y archivo (12/13-oct-2026)
-
-| Paso | Estado | Dato |
-|---|---|---|
-| **Release `v1.0.0`** | ✅ **publicado** (13-oct-2026) | commit `39a6856` · https://github.com/Arbues/tesis1-jev-confidence/releases/tag/v1.0.0 |
-| Depósito automático en Zenodo (v1.0.0) | ✅ **PUBLICADO** (13-oct-2026 UTC, 7 s después del Release) | `10.5281/zenodo.23328989` · *Software* · Apache-2.0 · ORCID + FC-UNI · ZIP 16,9 MB. **No hubo que pulsar nada**: el Release lo publica solo |
-| **Depósito Zenodo (v1.0.1)** | ✅ **PUBLICADO** (13-oct-2026, automático) | `10.5281/zenodo.23330647` · corrige lo que el snapshot v1.0.0 archivaba mal: el `.bib` y el `main.pdf` con las **referencias antiguas**. Verificado: el ZIP nuevo trae `main.pdf` **byte-idéntico** al actual (`md5 c9d7d9bb…`) y el adaptador del brazo pagado |
-| **DOI de concepto del instrumento** | ✅ resuelve al último | `10.5281/zenodo.23328988` (el campo `conceptdoi` del registro v1.0.0 decía `…23328888`, que **no resuelve**; el concepto real es `…23328988`) |
-| **Software Heritage** | ✅ **archivado** (visita completa) | SWHID de la revisión: `swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0` · snapshot `swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd` · ya en `CITATION.cff` |
-| **Preprint con DOI** | ✅ **PUBLICADO** (13-oct-2026) | **`10.5281/zenodo.23329431`** (concepto `…23329430`) · tipo *Publication → Preprint* · CC-BY-4.0 · español · autor con ORCID y afiliación · PDF `main (1).pdf`, 489.093 B, **byte-idéntico** al `paper/ieee/main.pdf` compilado (md5 `c9d7d9bb…`) · concepto: `10.5281/zenodo.23329430`. **Auditado**: faltan solo palabras clave y enlaces a los otros dos registros (Edit → Publish, sin cambiar DOI) |
-| ORCID | ⏳ pendiente del autor | importar los DOI como *works* |
-
-### 10-septies. Brazo pagado: adaptador listo y probado contra la API real (12-oct-2026)
-
-`src/matriz/backend_typesafe.py` implementa el brazo de pago siguiendo el contrato verificado
-(`docs/adaptador-typesafe-contrato.md`): lee `TYPESAFE_API_KEY` de `~/.env`, fija `jev-1.13.0` (y **falla**
-si el servidor responde otro build, regla D4), traduce `criteria` (mapa en `choice`, array ordenado en
-`score`), reintenta `429/500/502/503/504/529` con backoff, y contabiliza `input_tokens`/`output_tokens` y
-**costo por 1.000 decisiones**. Tope de gasto declarable con `--presupuesto-usd`.
-
-- **15 tests nuevos sin red** (`tests/test_backend_typesafe.py`, transporte inyectado) → **52 tests en total**.
-- Uso: `python src/matriz/medir.py --model typesafe --dataset banking77 --limite 200 --presupuesto-usd 1`.
-- **Prueba de humo contra la API real** (1 ítem, 3 preguntas: `choice` n=4, `score` n=5, `noul`): filas
-  correctas, `correct` calculado, `output_tokens` registrado y **USD 0.018 por 1.000 decisiones**.
-- Detalle medido en esa prueba que confirma el titular en vivo: la **misma** distribución da
-  `conf_pmax` 0.8100 · `conf_jev` 0.7467 · `conf_ent` 0.6493 · `conf_margin` 0.6200.
-
-### 10-octies. Referencias: las 9 verificaciones pendientes, resueltas (12-oct-2026)
-
-`paper/02_referencias_pendientes.md` **quedó vacía**: las 9 entradas se confirmaron en su fuente y se corrigieron
-en `paper/02_referencias.bib` y `paper/ieee/referencias.bib` (byte a byte idénticos, SHA `698ead2d…`). El agente
-verificó de forma independiente las páginas de arXiv de `38850`, `33843`, `30216`, `26758` y `26550`, y que Good
-(1952) es el origen de la **regla logarítmica**. Dos hallazgos de trazabilidad: los autores de `arXiv2609.38850`
-estaban **inventados** en el `.bib` (ahora: Gao, Zhimin y Wang, Pichao) y tres títulos se sustituyeron por los
-canónicos. Compilación verificada: `main.pdf` 11 páginas, 0 citas sin resolver (34 `\bibitem`, 0 `[?]`).
-
-**Dos juicios de autoría pendientes** (no los decide el agente): (a) la regla **esférica** queda sin autoría propia
-—se cita `\cite{good1952,epstein1969}`, que son la logarítmica y el RPS—; la atribución habitual es Roby (1964),
-pero **no se pudo verificar** en fuentes independientes; (b) los títulos canónicos sustituyen a los descriptivos
-(revertibles en un paso). Detalle en `paper/02_referencias_pendientes.md`.
-
-### 10-quinquies. Guía de cierre: el flujo completo
-
-**`docs/guia-cierre-pendientes.md`** es el documento operativo que reordena todos los pendientes (`N1`–`N5` y los
-del autor) por **dependencia**, con quién hace cada cosa (✋ autor / 🤖 agente), el criterio de cierre y el coste.
-Resumen del orden: **Fase 1** reservar (Release→DOI, preprint→DOI, Software Heritage, ORCID) · **Fase 2** cerrar el
-paper (tu lectura, las 9 referencias, el PDF y la extensión declarada con la medición pagada) · **Fase 3** el brazo
-pagado (adaptador + corrida + costo por 1.000 decisiones) · **Fase 4** el repo del framework · **Fase 5** visibilidad
-e inglés (→ arXiv con endosso) · **Fase 6** Tesis 2.
-
-
+Guías: `docs/guia-cierre-pendientes.md` (flujo por fases) · `notes/zenodo-publicar-guia-literal.md` (la interfaz
+real de Zenodo, con etiquetas literales) · `docs/release-v1.0.1.md` (qué cambia y por qué).
 
 ---
 

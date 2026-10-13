@@ -1,3 +1,6 @@
+> **USADO Y CERRADO (13-oct-2026).** Los metadatos de §A y §B se aplicaron: el depósito automático del software
+> y el preprint están publicados (DOIs `10.5281/zenodo.23330647` y `10.5281/zenodo.23329431`). Se conserva como
+> plantilla para depósitos futuros; la interfaz real de Zenodo está en `notes/zenodo-publicar-guia-literal.md`.
 # Borradores de depósito en Zenodo (12-oct-2026)
 
 Dos depósitos independientes. El **A** es automático (GitHub→Zenodo, ya habilitado por el autor); el **B**

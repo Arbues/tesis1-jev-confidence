@@ -1,3 +1,6 @@
+> **SUPERSEDIDO (13-oct-2026).** El reparto vigente de pendientes vive en `STATE.json` → `pendientes` y el flujo
+> por fases, con criterios de cierre, en `docs/guia-cierre-pendientes.md`. Se conserva como registro de las
+> decisiones del 11-oct-2026 (los tres ✋ ya están resueltos: repo nuevo, TypeSafe directo, arXiv con endosso).
 # Pendientes anotados (11-oct-2026) — repo-framework, modelos de pago, visibilidad, prioridad y paper en inglés
 
 Instrucción del autor (11-oct-2026), tras la exploración de reentrada (`notes/hallazgos.md`).

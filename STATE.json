@@ -1,500 +1,178 @@
 {
-  "proyecto": "Tesis 1 - Ciencia de la Computacion (FC-UNI)",
-  "autor": "Arbues Enrique Perez V.",
-  "ultima_actualizacion": "2026-10-12",
-  "pre_registro": {"doi": "10.5281/zenodo.23266795", "repositorio": "Zenodo", "archivo": "paper/04_pre_registro.md", "fecha": "2026-10-08", "nota": "PUBLICADO por el autor. Congela el metodo antes de la corrida confirmatoria: definiciones, modelos, datasets, cross-fitting K=5, q, bootstrap, FDR y los dos portes. Declara que el paso 0 y el piloto ya se habian ejecutado."},
-  "estado": "PASO 0 EJECUTADO: GO (08-oct-2026, Acer Nitro). Laya (3 checkpoints) + Kev-0.8B medidos sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado y las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003. Informe: results/paso0_informe.md. RUTA ELEGIDA: Ruta 1 - Metrologia del campo `confidence` (especificacion + libreria jev-conf-metrics + arnes de conformidad + matriz de transferencia de umbrales). Documento principal vigente: eje-2-jev-opensource/11_ruta1_metrologia_confidence.md",
-
-  "decision_2026_10_04": {
-    "que_paso": "El autor eligio la RUTA 1 entre las rutas vigentes, tras un sondeo en vivo que reordeno el panorama.",
-    "ruta_elegida": "RUTA 1 - Metrologia y transferencia del campo confidence",
-    "razon": "Es la unica que sigue abierta como INSTRUMENTO (no como hallazgo), es artefacto puro (D1), no exige anotacion (D2), y su matematica cabe entera en el marco teorico. El autor confirmo que el aporte interno/teorico puede vivir en el marco teorico, no en el resultado.",
-    "equipos_disponibles": {
-      "mac_mini": "Apple Silicon, memoria unificada - sirve para modelos de 4B a 9B en 4-bit",
-      "acer_nitro": "RTX 4050 Laptop 6 GB - modelos pequenos (Laya 421M, Kev 0.8B, tinyjev) con encoder congelado y features cacheadas",
-      "thinkpad_t440": "SIN GPU (solo iGPU Intel). Corre Hermes: orquesta y redacta, NO ejecuta inferencia",
-      "nota": "Frontera de computo del autor = Mac Mini + RTX 4050. Nada mas, nada menos. Nada de nube."
-    }
-  },
-
-  "sondeo_2026_10_04": {
-    "nota": "Verificado en vivo. Cambia el riesgo de dos de las tres rutas del documento 10.",
-    "rutas_viejas_estado": {
-      "B_replica_RLCD": "CASI OCUPADA. Le Duc Minh, 'What RLCD's RL Term Actually Does' (26-sep-2026): reprodujo RLCD sobre Laya tensor-for-tensor, 30 corridas, ablaciones (CE-only vs RL+CE vs RL-only, barrido de sigma, de pesos de recompensa y de composicion), codigo + resultados por corrida + checkpoints publicados (github.com/LakoreAI/sev; HF LakoreAI/laya-typed-decisions-ce-1024; HF minhleduc/rlcd-e2-checkpoints). Conclusion: el termino RL es el gradiente de la entropia cruzada suavizada con ruido (lema de Stein) y hace la inferencia sobre-confianza; la unica palanca real fue el presupuesto de tokens de opcion.",
-      "C_cartografia": "CASI OCUPADA. arXiv:2609.30216 'Jev in the Wild: A Data-Driven Analysis of the Jev Model's Functionality, Applications and Ecosystem' (2170 proyectos de GitHub al 22-sep-2026, taxonomia, propositos, distribucion de atencion). Ademas awesomejev.com se refresca a diario y hay varios directorios curados (yibie/awesome-jev, BeatAPI 228 proyectos).",
-      "A_metrologia": "SIGUE ABIERTA como instrumento. Solo hay anecdotas (rohitghumare.com midio la formula de Jev sobre 30 tickets y hallo que la confidence de Laya difiere hasta 0.24) y medicion DENTRO de una sola definicion (arXiv:2609.33843, q=pmax, un modelo). La MATRIZ sistematica entre definiciones x modelos x datasets no existe."
-    },
-    "hallazgos_utiles": [
-      "Hay mas definiciones de confidence de las que decian las notas previas: Jev (n*pmax-1)/(n-1); Laya choice/score = 1 - H(p)/log k; Laya noul = max(p,1-p); Laya answer_confidence = pmax; Laya action.act_probability (cabeza aprendida, sin senal util, AUROC 0.30); jev-lite pmax; AnyJev raw/L0/L1; logit-classifier prior aprendido; open-decision-ai confidence propia.",
-      "Reconciliacion de la contradiccion 'Laya sobre-confiada vs sub-confiada': el model card (0.466 -> 0.081 con refit) es macro-ECE sobre sus suites; arXiv:2609.33843 mide el checkpoint TAL CUAL se distribuye (con su tabla de temperatura por numero de opciones plegada dentro del peso) y encuentra SUB-confianza (ECE 0.214; T=0.469 la lleva a 0.037) por un defecto de configuracion. No se contradicen: miden artefactos distintos.",
-      "Modelos/herramientas nuevos detectados: open-decision-ai (50M, ECE 0.047, abstencion), AnyJev (Nokia, Apache-2.0, capa sin entrenamiento), daf-jev (toolkit, Zenodo)."
-    ]
-  },
-
-  "paso0_2026_10_08": {
-    "nota": "Paso 0 go/no-go ejecutado en el Acer Nitro (RTX 4050 6 GB, WSL2). Veredicto: GO. Informe completo regenerable: results/paso0_informe.md (lo genera src/paso0_informe.py desde results/raw/).",
-    "criterios": {
-      "primitivos_corren": "SI. Laya (3 checkpoints) y Kev-0.8B sobre LocalLLaMA/typed-decisions split=test: 400 casos / 2000 decisiones (4 flujos x 100 casos).",
-      "output_tokens_cero": "SI en Laya (todas las filas de los 3 checkpoints). En Kev NO: el mismo campo significa otra cosa (ver hallazgos).",
-      "ece_publicado_reproducido": "SI. Las 5 metricas del README de Laya en los 3 checkpoints. laya-typed-decisions: ECE 0.213 -> 0.2157; accuracy 0.766 -> 0.7685; Brier 0.062 -> 0.0615; soft acc 0.471 -> 0.4707; score MAE 0.242 -> 0.2424. |delta| <= 0.003 en las cinco."
-    },
-    "convenciones_descubiertas": {
-      "metricas_de_Laya": "soft accuracy y Brier se calculan CONTRA LA DISTRIBUCION COMPLETA DEL PROFESOR, no contra la etiqueta: soft acc = sum(p_modelo * p_profesor) y Brier = sum((p_modelo - p_profesor)^2). El ECE si se calcula sobre answer_confidence = max(p) con 15 bins de igual ancho (laya.common.ece_score, replicado en ece_laya()). Verificado por coincidencia exacta con los numeros publicados.",
-      "laya_multilingual_discrepa": "ECE +0.033 y score MAE +0.074 respecto a lo publicado. Es el checkpoint que NO trae temperaturas ajustadas (temperature=[1.0,1.0,1.0], temperature_by_options={}). Queda documentado, no corregido."
-    },
-    "hallazgos": [
-      "La choice_confidence de Kev ES la formula de Jev: (p_max - 1/K)/(1 - 1/K) == (K*p_max - 1)/(K - 1), verificado numericamente para K=2,3,4,7,12. Estaban registradas como definiciones distintas. Por la Proposicion 1, ese par transfiere el umbral de forma EXACTA.",
-      "La score_confidence de Kev es una TERCERA familia: max(0, 1 - E|nivel - moda| / D), dispersion ordinal. Kev declara que ambas formulas espejan el adaptador de referencia de TypeSafe (system-one-adapter 0.2.1).",
-      "Kev NO emite campo `confidence` en `noul` (igual que Jev): 400 de sus 2000 filas no lo tienen.",
-      "El campo output_tokens tiene TRES significados: Jev y Laya = 0 (no hay generacion); Kev = 'billing-style figure: tokens of the serialised answers' (kev/api.py:163) -> 869310 en total, max 480 por llamada.",
-      "El ECE de la MISMA corrida cambia por definicion. laya-typed-decisions: pmax 0.2157, Jev 0.4256, entropia 0.5766, margen 0.5109 (factor 2.7x entre extremos). kev-0.8b: pmax 0.0610, Jev 0.2283, entropia 0.3627, margen 0.2739. english: 0.1766 / 0.1661 / 0.2301 / 0.1941. multilingual: 0.3175 / 0.2551 / 0.2118 / 0.2436.",
-      "laya-typed-decisions trae una temperatura INVALIDA para choice:11+ (0.1006, un endurecedor ~10x) que el propio paquete rechaza y sustituye por 0.5 con un RuntimeWarning: 'Treat confidence from the affected entries as uncalibrated'."
-    ],
-    "entorno": {
-      "maquina": "Arbues-AxeNitro (WSL2), RTX 4050 Laptop 6 GB",
-      "python_torch": "Python 3.12.14 + torch 2.14.1+cu126",
-      "trampa": "El torch que instala PyPI es cu130 y el driver del Nitro es 556.19 (CUDA 12.5): 'CUDA initialization: The NVIDIA driver on your system is too old'. Hay que instalar torch==2.14.1+cu126 desde https://download.pytorch.org/whl/cu126 o la GPU no arranca.",
-      "kev": "No se carga con transformers (es LoRA + cabeza pointer sobre Qwen/Qwen3.5-0.8B-Base). Se sirve desde github.com/jaredpalmer/kev (commit 5e42a7a0) con `uv run --extra serve python -m kev.serve --run jaredpalmer/kev-0.8b --port 8008`; el script le habla por HTTP (/v1/systemone).",
-      "costo_usd": "0"
-    },
-    "artefactos": {
-      "informe": "results/paso0_informe.md",
-      "crudos": "results/raw/paso0_raw_{laya_typed-decisions,laya_english,laya_multilingual,kev_kev-latest}.jsonl (una fila por decision, con las 4 definiciones calculadas sobre la misma distribucion + model + model_revision + row_hash)",
-      "resumenes": "results/raw/paso0_summary_*.json",
-      "versiones": "results/raw/paso0_versions.json (sha del Hub por modelo + commit del repo kev)"
-    }
-  },
-
-  "matriz_2026_10_08": {
-    "nota": "MATRIZ DE TRANSFERENCIA MEDIDA — CORRIDA CONFIRMATORIA (la que declara el pre-registro DOI 10.5281/zenodo.23266795), sobre el conjunto COMPLETO de cada dataset. Informe regenerable: results/matrix/RESUMEN_MATRIZ.md (src/matriz/informe_matriz.py); matriz: results/matrix/matriz_transferencia.csv; crudos: results/crudos/.",
-    "alcance_medido": "23 grupos = 5 configuraciones de modelo (Laya none / Laya typed-decisions / Laya multilingual / Kev-0.8B / control crudo Qwen3.5-0.8B-Base) x 5 datasets (typed-decisions 400 casos, sst5 1101, wanli 5000, banking77 3076, clinc150 3100; clinc150 no es ejecutable en el checkpoint `none`). 65185 decisiones. 3564 celdas = (A->B) x modelo x dataset x n x q x nivel. Sustituye al PILOTO (17600 decisiones, 3672 celdas) que fue la puesta a punto.",
-    "determinismo": "En typed-decisions (unico dataset donde el piloto ya cubria el split entero) los 5 modelos reprodujeron el MISMO numero exacto en la confirmatoria: 0.4860 / 0.3595 / 0.3515 / 0.7685 / 0.4595. Mismo entorno + mismos datos = mismos resultados.",
-    "archivo_contaminado_del_piloto": "El piloto tenia un residuo de la corrida previa al arreglo de colision: convaiinnovations__laya__clinc150.jsonl contenia datos de `multilingual` etiquetados como `none` (ese checkpoint no puede con n=151, asi que el archivo nunca se sobrescribio). La matriz del piloto uso esa celda con datos falsos. Eliminado en la confirmatoria (por eso 3672 - 108 = 3564 celdas).",
-    "cardinalidades": [2, 3, 4, 5, 77, 151],
-    "diseno": "Cross-fitting K=5 (semilla 20261008, fold por sha256), q = 0.80 / 0.50 / 0.95, bootstrap de items B=2000, BH-FDR alpha=0.05, niveles AnyJev raw / L0 / L1 (L0 y L1 ajustados SOLO en calibracion).",
-    "resultado_central": "Sobre 65185 distribuciones (todas las filas de los crudos), la diferencia entre la definicion de confidence mas alta y la mas baja de la MISMA distribucion: mediana 0.288, p90 0.434, maximo 0.848.",
-    "claim_cuantificado": "NIVEL PRINCIPAL raw (el que congela el pre-registro): 348 celdas con mapa cerrado (1044 contando los 3 niveles). Error absoluto medio del porte: 0.2528 directo vs 0.0123 con mapa (20x); sin las celdas dominadas por empates: 0.2337 vs 0.0021 (109x); solo modelos entrenados: 0.2289 vs 0.0020 (113x); solo n>=3: 0.2015 vs 0.0021 (96x). Niveles de sensibilidad: L0 0.2190 vs 0.0059 (37x); L1 0.3022 vs 0.0024 (126x). El porte directo llega a perder TODA la cobertura (delta=0.80, cobertura_B=0).",
-    "el_promedio_no_es_el_resumen": "La distribucion de delta es BIMODAL: hay pares que coinciden por identidad matematica y pares que fallan en grande. El titular es la tabla POR PAR (A->B) del informe seccion 3b. Peor par: pmax->ent (mediana 0.767, cambia la FORMA). Mejor: margin->jev (0.002, porque a n=2 son la misma funcion).",
-    "dos_capas_del_hallazgo": "1) ESCALA: ni entre definiciones equivalentes en orden viaja el numero (jev y pmax estan en escalas afines distintas); el mapa si transfiere (delta ~0.004). 2) FORMA: entre clases distintas (pmax<->ent, pmax<->margen) no existe mapa estricto: no hay numero NI mapa. Ver docs/erratas_especificacion.md E2.",
-    "hallazgos_colaterales": [
-      "Kev-0.8B: accuracy 0.813 en banking77 (n=77) frente a 0.377 de Laya -> el ecosistema si entrena para cardinalidad alta.",
-      "clinc150 (n=151) NO es ejecutable en 2 de los 3 checkpoints de Laya (max_len=512 solo admite 126 opciones); el limite documentado de Jev (<=255) no es alcanzable en esta implementacion. En el checkpoint typed-decisions si corre.",
-      "kev-suites no carga (fallo de generacion en el Hub, 08-oct-2026).",
-      "El control crudo (Qwen3.5-0.8B-Base sin entrenar) tiene salidas saturadas: su umbral cae sobre valores muy empatados y eso infla delta_mapa (el mapa no puede dar q exacto si hay empates masivos). Por eso la comparacion limpia excluye esas celdas; la columna n_empates_tau lo declara por celda.",
-      "A n=2, C_jev y C_mar son LA MISMA funcion (2*pmax-1): su porte directo da delta~0 por identidad, no por transferencia."
-    ],
-    "limitaciones_declaradas": "clinc150 (n=151) no es ejecutable en el checkpoint `none` de Laya (max_len=512 admite 126 opciones); kev-suites no carga (fallo del Hub). Extension prevista al Mac Mini: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev.",
-    "auditoria_final_2026_10_08": "Zonas que NO se habian probado y su resultado: (1) perdida silenciosa de filas -> LIMPIA (0 saltadas en los 23 grupos; cada .jsonl tiene las filas que dice su .meta.json); (2) determinismo de matriz.py -> LIMPIA (dos corridas, hash identico); (3) balance de folds con ids reales -> LIMPIA (365-450 para ideal 400); (4) truncado silencioso en cardinalidad alta -> LIMPIA (Kev puntua las 77 opciones, Laya las 151, todas con p>0). FALLO ENCONTRADO: el debiasing L0 no convergia (paso 0.5/len(matriz), ~1000x demasiado pequeno): el prior quedaba en ~0 y las frecuencias de argmax apenas se movian, asi que el nivel L0 era indistinguible de raw. Corregido con paso adaptativo (frecuencias 168/294/416/222 -> 249/251/249/251), con test de regresion. Reportado como DESVIACION D1 en RESUMEN_MATRIZ.md seccion 7. El nivel principal raw NO se toco tras publicar el pre-registro.",
-    "herramientas": "src/jev_conf_metrics/ (libreria, 37 tests) + src/matriz/ (medir.py, matriz.py, figura.py, informe_matriz.py, correr_nucleo.sh, correr_confirmatoria.sh, correr_kev.sh). Skills del agente: `jev-confidence-metrology` (propia del proyecto, con references/cifras-y-definiciones.md) + `ml-benchmark-evaluation`, `huggingface-datasets`, `huggingface-local-models` (instaladas 11-oct-2026)."
-  },
-  "reglas_de_diseno_del_autor": {
-    "D1_artefacto_no_hallazgo": "El resultado es un ARTEFACTO (instrumento, dataset de mediciones crudas, especificacion, tabla que se regenera con un comando) y no un HALLAZGO.",
-    "D2_minimo_trabajo_manual": "Cero anotacion, cero etiquetado humano, cero crowdsourcing, cero kappa. El autor solo define alcance, decide y redacta. Prohibida toda ruta cuyo nucleo sea el unico hueco abierto (ground truth humano con kappa).",
-    "D3_maxima_automatizacion": "Descarga de pesos, corridas de inferencia, metricas, tablas, figuras, BibTeX, libreria y pre-registro los hace el agente.",
-    "D4_referencias_y_comparaciones": "Cada cifra con su fuente; cada fila declara si fue medida aqui o es auto-reportada.",
-    "D5_costo_y_hardware": "Costo 0 USD. Equipos: Mac Mini + RTX 4050 Laptop 6 GB. El thinkpad-t440 no tiene GPU (orquesta). Nada de nube ni GPUs de 80 GB.",
-    "nota_matematica": "El autor aclaro que la matematica NO tiene que ser el nucleo del resultado: es suficiente con que este en el marco teorico del paper. El resultado de Tesis 1 puede ser metrologia/instrumento."
-  },
-
-  "ruta_elegida_ruta_1": {
-    "objeto": "El campo confidence en modelos de decision tipo Jev de pesos abiertos",
-    "problema": "El mismo campo tiene varias definiciones incompatibles y no existe estudio sistematico de transferencia de umbrales entre ellas",
-    "artefacto": "Especificacion formal + libreria jev-conf-metrics con tests de conformidad + matriz de transferencia de umbrales (definicion x definicion x modelo x dataset) + dataset de mediciones crudas + script regenerador + figura heatmap",
-    "por_que_sobrevive": "Es el instrumento, no el hallazgo; quien afirme que los umbrales no transfieren tendra que citar la matriz (patron Guo et al. 2017)",
-    "definiciones_a_cubrir": [
-      "Jev (n*pmax-1)/(n-1)",
-      "Laya choice/score: 1 - H(p)/log k",
-      "Laya noul: max(p,1-p)",
-      "Laya answer_confidence: pmax",
-      "Kev choice_confidence: (pmax - 1/K)/(1 - 1/K) == la formula de Jev (IDENTIFICADA el 08-oct-2026)",
-      "Kev score_confidence: max(0, 1 - E|nivel - moda| / D) - familia ordinal, tercera clase",
-      "laya-multilingual: sin temperaturas ajustadas (T=1.0) - declararlo en la matriz",
-      "Laya action.act_probability (cabeza aprendida)",
-      "jev-lite: pmax",
-      "AnyJev: raw / L0 / L1",
-      "logit-classifier: prior aprendido",
-      "open-decision-ai: confidence propia"
-    ],
-    "modelos": "Laya base 421M, Laya-typed-decisions 421M, Laya-multilingual 322M, Kev 0.5B/0.8B, Nimble-9B (4-bit), Jeff-1 (Qwen3-4B), jev-lite (Gemma 4 E4B), tinyjev 596M, chaoliangUNSW Jev-Style 2B, open-decision-150m, + control AnyJev/Qwen3-8B",
-    "datasets": "typed-decisions, kev-suites, WANLI, Banking77, CLINC150, MedHallu, AG News, SST-5, DAIR Emotion (todos ya etiquetados; cero anotacion propia)",
-    "documento": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md"
-  },
-
-  "objeto_de_estudio": {
-    "referencia_cerrada": {
-      "que_es": "Jev (TypeSafe System One), anunciado el 18-sep-2026. Modelo actual jev-1.13.0",
-      "fundador": "TypeSafe AI, fundada por Diogo Almeida (co-inventor de RLHF)",
-      "primitivos": {
-        "choice": "cual de N opciones; devuelve opcion + probabilities + confidence; limite 255 opciones",
-        "score": "donde en una escala ordenada; devuelve score fraccional + legend + probabilities + confidence; 2-10 niveles",
-        "noul": "es verdad esto; devuelve probabilidad 0.0-1.0; NO tiene campo confidence"
-      },
-      "mecanica": "No genera texto: termina la inferencia con un readout de los logits en la posicion de cada etiqueta y aplica softmax solo sobre las etiquetas permitidas. output_tokens = 0 por construccion. Latencia 70-500 ms. Precio 0.042 USD por millon de tokens de entrada, coste de salida cero",
-      "estado_compartido_preguntas_aisladas": "Todas las preguntas de una llamada se evaluan contra la misma codificacion del estado, en paralelo y sin verse entre si. Consecuencia: no hay distribucion conjunta",
-      "confidence": "En choice/score NO es la probabilidad ganadora: mide concentracion. Formula publicada (n*pmax - 1)/(n - 1)",
-      "sin_test_time_compute": "No hay bucle de decodificacion. Debilidades declaradas: aritmetica, conteo, comparacion de fechas, multi-hop, lectura literal",
-      "prompt_congelado": "Mover un salto de linea mueve los logits y con ellos los umbrales ya calibrados",
-      "lo_que_no_publica": "Ni paper, ni perdida, ni dataset, ni pesos, ni un solo numero de calibracion (ni ECE ni diagrama de fiabilidad)"
-    },
-    "RLCD": {
-      "nombre": "Reinforcement Learning for Calibrated Decisions",
-      "exploracion": "Ruido gaussiano de media cero inyectado en los logits, proyectado a media cero para no distorsionar el softmax",
-      "sigma": "Annealing de 1.0 a 0.3",
-      "recompensa": "Reglas de puntuacion estrictamente propias: log score con suelo -9.21 + 0.75 * spherical score; para score ordinal se resta el Ranked Probability Score",
-      "ventaja": "Media y desviacion de la recompensa sobre el grupo de candidatos ruidosos, estilo GRPO (8 candidatos)",
-      "actualizacion": "REINFORCE con baseline de grupo, sin cross-entropy supervisada (en la practica se anade CE suave contra distribuciones del profesor)",
-      "despues": "Se ajusta una temperatura con la red congelada minimizando cross-entropy",
-      "propiedad_buscada": "La recompensa esperada se maximiza solo si el modelo reporta sus probabilidades verdaderas",
-      "analisis_cerrado": "El termino RL equivale al gradiente de la cross-entropy suavizada con ruido (lema de Stein) y hace la inferencia sobre-confianza; la unica palanca real fue el presupuesto de tokens de opcion (LakoreAI/sev, 26-sep-2026)"
-    },
-    "laya": {
-      "que_es": "La implementacion de RLCD de referencia y el unico proyecto que publica el bucle completo",
-      "repo": "github.com/NandhaKishorM/laya",
-      "hf": "convaiinnovations/laya",
-      "licencia": "Apache-2.0",
-      "tamano": "421M (ModernBERT-large 395M + cabeza propia)",
-      "arquitectura_de_decision": "Cabeza que puntua un token [MASK] colocado en la opcion",
-      "encoder_congelable": "Si: las features se cachean y todo el barrido cabe en la RTX 4050 de 6 GB",
-      "numeros_declarados": "in-task macro accuracy 0.838 / macro ECE 0.060; zero-shot 0.651 / 0.207; intent routing 0.991 / ECE 0.009",
-      "dato_clave": "Macro-ECE 0.466 -> 0.081 refiteando una temperatura por (tipo de pregunta, numero de opciones). PERO arXiv:2609.33843 mide el checkpoint TAL CUAL se distribuye y lo encuentra SUB-confiado (0.214) por su tabla de temperatura plegada; T=0.469 -> 0.037",
-      "limites": "zero-shot typed-decisions 0.362; ordinal score el mas debil (SST-5 0.372); solo ingles el checkpoint base; khmer 0.000 de precision con 0.952 de confianza",
-      "confidence": "1 - entropia normalizada (choice/score); max(p,1-p) para noul (NO la formula de Jev)",
-      "predecesor": "arXiv:2503.23303 (SalesRLAgent, Nandakishor M, 30-mar-2025)"
-    },
-    "variantes": {
-      "laya-multilingual": "mmBERT-base, 322M, 1024 tokens (hasta 8192), 100+ idiomas",
-      "laya-typed-decisions": "421M, fine-tuned sobre el split de entrenamiento del benchmark"
-    }
-  },
-
-  "ecosistema_verificado": {
-    "escala": "152 repos (corte 25-sep) -> 2170 proyectos segun arXiv:2609.30216 (corte 22-sep); 20+ modelos con pesos, 2 datasets de entrenamiento abiertos, ~30 arneses independientes",
-    "modelos_por_rigor": {
-      "tier_A": {
-        "Laya": "Apache-2.0, 421M, receta completa",
-        "Kev": "github.com/jaredpalmer/kev, Apache-2.0, Qwen3.5/3.8, 0.5B a 27B (7 checkpoints), kev-0.8B entrena en 4 GB de VRAM",
-        "Nimble": "bespokelabsai/nimble, Qwen3.5-9B + LoRA, 2676 train + 324 retenidos publicados, sin licencia declarada",
-        "SemIf": "TheoLeeCJ/SemIf-OpenJev, MIT, temperatura por carga de trabajo con ECE fuera de muestra"
-      },
-      "tier_B": {
-        "Jeff-1": "GestaltLabs, LoRA Qwen3-4B, la comparacion en vivo mas rigurosa: 9730 filas humanas, Jeff 0.8183 vs Jev 0.8283, ECE 0.0807 vs 0.0932",
-        "jev-lite": "vagmi/jev-lite, QLoRA NF4 sobre Gemma 4 E4B, ECE 0.019; hallazgo: p_max gana a la entropia normalizada (AUROC 0.816)",
-        "jebadiah": "frontier-infra/jebadiah-9b-v0/v1, la temperatura de score aprendida de targets del profesor EMPEORA la calibracion en rubricas humanas; la v1 lo corrige"
-      },
-      "tier_C_sin_entrenamiento": ["daseinlabs/open-jev (MIT, Gemma 3 4B)", "anyjev (Nokia, Apache-2.0, niveles raw/L0/L1)", "logit-classifier (Qwen3-VL-4B)", "tydex (ECE 0.350 a 0.023 con T=2.7)", "tinyjev (596M)", "chaoliangUNSW/Jev-Style-Qwen3.5-2B (ECE 0.017)", "open-decision-ai (50M, ECE 0.047)"],
-      "descartar": ["openjevpro (PolyForm Noncommercial, no es open source)", "vagmi/jevlite (repo sin licencia)", "envios en bloque sin pruebas"]
-    },
-    "datasets": {
-      "LocalLLaMA/typed-decisions": "2000 decisiones / 4 flujos de trabajo, Apache-2.0 (el benchmark compartido)",
-      "jaredpalmer/kev-suites": "suites de evaluacion congeladas",
-      "nimble": "2676 train + 324 retenidos",
-      "alisawuffles/WANLI": "CC-BY-4.0",
-      "externos": "Banking77, CLINC150, MedHallu (1000 items), AG News, SST-5, DAIR Emotion"
-    },
-    "arneses": ["ASSAY-001", "jev-ood-calibration", "jev-acento", "jev-verify", "jev-orderby-bench", "jevcal", "DecisionBench", "Jev Does Not Play Dice", "AnyJev bench", "jev-fanout-bench", "jevals.com", "Jeff"]
-  },
-
-  "el_dato_central_del_eje": {
-    "hallazgo": "El ecosistema abierto refuto empiricamente la premisa central de Jev: donde hay calibracion, vino de un ajuste de temperatura post-hoc sobre datos propios, no del objetivo de entrenamiento",
-    "tabla_ece_verificada": {
-      "Jev_1_13_0": "NO PUBLICADO por TypeSafe",
-      "Laya_sin_refit": 0.466,
-      "Laya_con_refit": 0.081,
-      "Laya_in_task": 0.060,
-      "Laya_checkpoint_tal_cual": 0.214,
-      "Jeff_1": 0.0807,
-      "Jev_segun_Gestalt": 0.0932,
-      "jev_lite": 0.019,
-      "tydex_gemma4_31b": "0.350 a 0.023 con T=2.7"
-    },
-    "lectura": "En todos los proyectos que midieron con honestidad, la calibracion NO vino del metodo de entrenamiento: vino de un ajuste de temperatura post-hoc sobre datos etiquetados propios"
-  },
-
-  "deltas_2026_10_01_cierre_de_huecos": {
-    "hueco_1_por_que_RLCD_no_calibra": "CERRADO. arXiv:2609.38850 + reproduccion independiente (LakoreAI/sev) con el lema de Stein",
-    "hueco_2_metrologia_de_confidence": "PARCIALMENTE CERRADO. Estudio pre-registrado UCLA (DENTRO de una definicion). La transferencia ENTRE definiciones sigue abierta -> es el objeto de la RUTA 1",
-    "hueco_3_sesgo_de_posicion_y_etiqueta": "CERRADO. arXiv:2609.26758 + arXiv:2609.26550",
-    "hueco_4_ground_truth_humano_con_kappa": "ABIERTO pero excluido por D2 (anotacion manual)",
-    "hueco_5_descomposicion_del_error": "CERRADO en lo esencial",
-    "hueco_6_coherencia_negacion_axiomas": "CERRADO. arXiv:2609.33209",
-    "calibracion_de_Laya": "CERRADO. arXiv:2609.33843",
-    "cartografia_del_ecosistema": "OCUPADA. arXiv:2609.30216 (Jev in the Wild) + awesomejev.com",
-    "consecuencia": "El 'cuanto' y el 'por que' estan ocupados. Lo que queda libre es el INSTRUMENTO de metrologia. De ahi D1 y la RUTA 1"
-  },
-
-  "computo_y_costo": {
-    "gpu": "Mac Mini (Apple Silicon) + RTX 4050 Laptop 6 GB. Los modelos 4B-9B en 4-bit; los pequenos (Laya 421M, Kev 0.8B) en la 4050 con encoder congelado y features cacheadas",
-    "servidor": "thinkpad-t440 SIN GPU: solo orquesta y redacta",
-    "costo_monetario_usd": "0",
-    "cuello_real": "horas de inferencia, no dinero"
-  },
-
-  "cadena_de_decisiones": {
-    "elegido": "RUTA 1 (metrologia y transferencia del campo confidence) sobre el eje 2 (Jev/Laya), 04-oct-2026",
-    "descartados": [
-      {"candidato": "Eje 1 - JEPA / LeWM / DINO", "razon": "DESCARTADO POR INSTRUCCION EXPRESA del autor. Fuera de alcance"},
-      {"candidato": "Ruta B (replica controlada de RLCD)", "razon": "Casi ocupada por LakoreAI/sev (26-sep-2026): ablacion completa con codigo, 30 corridas y checkpoints. Riesgo alto"},
-      {"candidato": "Ruta C (cartografia del ecosistema)", "razon": "Casi ocupada por arXiv:2609.30216 (Jev in the Wild) + directorios refrescados a diario"},
-      {"candidato": "Eje 2, hueco 4 (ground truth humano con kappa)", "razon": "Unico hueco abierto pero exige anotacion manual, prohibida por D2"}
-    ]
-  },
-
-  "hechos_verificados_del_eje": [
-    "El ecosistema abierto refuto empiricamente la premisa central de Jev: TypeSafe no ha publicado ni un ECE",
-    "Hay varias definiciones incompatibles del campo confidence y cero estudios sistematicos de transferencia de umbrales entre ellas",
-    "Una sola distribucion de 3 opciones da tres numeros distintos segun la definicion (0.288 / 0.3199 / 0.5253)",
-    "Laya: el model card dice over-confident (0.466->0.081); el checkpoint tal cual se distribuye es SUB-confiado (0.214) por su tabla de temperatura plegada",
-    "jebadiah: la temperatura de score aprendida de targets del profesor transfiere a typed-decisions pero empeora la calibracion en rubricas humanas",
-    "Jev Does Not Play Dice: sobre un dado justo y oculto, Jev elige la cara 1 en 400 de 400",
-    "AnyJev: un noul de spam da 0.62 con el contenido y 0.70 con N-A (prior de posicion); dividiendo por ese prior el juicio se invierte a 0.41",
-    "Laya expone una cabeza 'act' con act_probability que no tiene senal util (AUROC 0.30); se recomienda gatear con confidence (AUROC 0.77)",
-    "MEDIDO el 08-oct-2026: la choice_confidence de Kev es ALGEBRAICAMENTE la formula de Jev, (K*pmax-1)/(K-1); estaban registradas como definiciones distintas",
-    "MEDIDO el 08-oct-2026: el campo output_tokens tiene TRES significados (Jev/Laya = 0 porque no hay generacion; Kev = recuento de tokens de la respuesta serializada, 869310 en 2000 decisiones)",
-    "MEDIDO el 08-oct-2026: sobre la MISMA corrida de laya-typed-decisions (2000 decisiones), el ECE va de 0.2157 (pmax) a 0.5766 (entropia normalizada) - factor 2.7x por cambiar la definicion",
-    "MEDIDO el 08-oct-2026: las metricas publicadas de Laya (soft accuracy, Brier) se calculan contra la DISTRIBUCION DEL PROFESOR, no contra la etiqueta"
-  ],
-
-  "riesgo_principal": {
-    "riesgo": "Que la matriz ya exista o que aparezca rapido (el ecosistema muta a diario)",
-    "mitigacion": "Verificado el 04-oct-2026: no existe. La ruta vive de modelos con pesos versionados y hasheados, no de la ventana temporal; version + hash por fila; pre-registro con DOI antes de la corrida principal"
-  },
-
-  "siguientes_pasos": [
-    {"n": 0, "paso": "ELEGIDA la Ruta 1 (hecho el 04-oct-2026)", "documento": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md"},
-    {"n": 1, "paso": "PASO 0 go/no-go: HECHO el 08-oct-2026 en el Acer Nitro -> GO. Laya (3 checkpoints) + Kev-0.8B sobre las 2000 decisiones de typed-decisions; output_tokens=0 verificado; las 5 metricas publicadas de Laya reproducidas con |delta|<=0.003", "documento": "results/paso0_informe.md", "artefactos": "results/raw/"},
-    {"n": 2, "paso": "Congelar la lista de definiciones y de datasets, y la cobertura objetivo", "responsable": "autor (alcance)", "estado": "ya congelado en paper/00_plan_del_paper.md seccion 10"},
-    {"n": 3, "paso": "Especificacion formal de cada definicion", "responsable": "autor (redaccion)", "estado": "hecho: paper/03_especificacion_confidence.md"},
-    {"n": 4, "paso": "Libreria jev-conf-metrics + tests de conformidad (extraer lo ya validado en src/paso0_go_no_go.py)", "responsable": "agente", "estado": "hecho: src/jev_conf_metrics/ (37 tests)"},
-    {"n": 5, "paso": "Pipeline de medicion (pesos abiertos + datasets ya etiquetados)", "responsable": "agente", "estado": "funcionando en src/paso0_go_no_go.py (Laya + Kev + control crudo)"},
-    {"n": 6, "paso": "Matriz de transferencia + dataset de mediciones crudas (version + hash por fila)", "responsable": "agente", "estado": "hecha (corrida confirmatoria): results/matrix/matriz_transferencia.csv (3564 celdas) + results/crudos/ (65185 filas)"},
-    {"n": 7, "paso": "Pre-registro con DOI antes de la medicion principal", "estado": "HECHO: publicado 10.5281/zenodo.23266795 (08-oct-2026)"},
-    {"n": 8, "paso": "Fijar el titulo definitivo al cerrar la especificacion", "responsable": "autor"},
-    {"n": 9, "paso": "Estudio del objetivo RLCD en paralelo - nivel que el Taller convierte en teoria"},
-    {"n": 10, "paso": "Redaccion del paper §1–§7 (borrador)", "responsable": "agente (t440)", "estado": "hecho: paper/secciones/ (09-oct-2026)"},
-    {"n": 11, "paso": "REPO-FRAMEWORK limpio: extraer el instrumento reutilizable (paquete instalable + adaptadores de proveedor + CLI + datasets + metricas + tests + docs + release con tag)", "responsable": "agente", "estado": "pendiente; el repo actual mezcla instrumento, exploracion (audit/, contexto/, eje-1-jepa/, _descartado/) y 65185 mediciones crudas", "decision_abierta": "mismo repo limpiado o repo nuevo; nombre candidato decision-calibration-bench"},
-    {"n": 12, "paso": "Soporte de modelos de PAGO por API key (Jev en la Vercel AI Gateway + endpoints OpenAI-compatible) y costo por 1000 decisiones", "responsable": "agente", "estado": "pendiente; precios y viabilidad ya calculados en contexto/00_veredicto_jev_typesafe.md seccion 3", "decision_abierta": "metodo de pago para la API key (autor)"},
-    {"n": 13, "paso": "VISIBILIDAD del paper y del repo-framework: README del framework que enlace paper + DOI + dataset crudo + figuras, y anuncio en los foros del ecosistema", "responsable": "agente + autor", "estado": "pendiente"},
-    {"n": 14, "paso": "BLINDAJE de prioridad y credito: versiones con DOI en Zenodo, tag/Release del repo, Software Heritage, CITATION.cff con cita obligatoria; opcional arXiv para sello temporal", "responsable": "autor", "estado": "pendiente; el pre-registro 10.5281/zenodo.23266795 ya cubre el metodo", "decision_abierta": "arXiv revela antes de sustentar (alcance vs prioridad)"},
-    {"n": 15, "paso": "PAPER EN INGLES versionado junto al espanol (paper/en/, misma numeracion; fuente unica en markdown)", "responsable": "agente", "estado": "pendiente"}
-  ],
-
-  "pendientes_2026_10_11": {
-    "nota": "Anotados por el autor el 11-oct-2026, tras la exploracion de reentrada. Ninguno tiene computo pendiente. Detalle y sub-pasos: notes/pendientes-framework-y-paper.md",
-    "P1_repo_framework": "El repo actual esta 'sucio': mezcla el instrumento con la exploracion (audit/, contexto/, eje-1-jepa/, _descartado/) y con las mediciones crudas. Objetivo: un repo 100% framework, instalable y reutilizable por terceros para comparar modelos (adaptadores de proveedor, CLI, datasets, metricas, tests, docs, release versionado). DECISION DEL AUTOR: mismo repo limpiado o repo nuevo.",
-    "P2_modelos_de_pago": "Comparar no solo open-source: soportar modelos de pago por API key (Jev en la Vercel AI Gateway, modelo typesafe-ai/jev, y cualquier endpoint OpenAI-compatible). Costo bajo: el credito gratuito de la gateway (USD 5/mes) alcanza para el estudio y el total con los brazos baratos queda por debajo de USD 30 (contexto/00_veredicto_jev_typesafe.md seccion 3). Interesa reportar tambien costo por 1000 decisiones. DECISION DEL AUTOR: metodo de pago para la API key.",
-    "P3_visibilidad": "Que el paper y el framework se encuentren: README del framework con cita del paper, del DOI, del dataset crudo y de las figuras; anuncio en los foros del ecosistema listados en eje-2-jev-opensource/FUENTES.md, apuntando siempre al DOI.",
-    "P4_prioridad_y_credito": "Reservar el maximo de la investigacion para que nadie la replique y se lleve el credito: numeros de DOI por version en Zenodo, tag y Release en GitHub, deposito en Software Heritage, CITATION.cff con cita obligatoria; opcional arXiv para sello temporal. DECISION DEL AUTOR: revelar antes de sustentar (alcance) vs prioridad fechada. Las licencias actuales (Apache-2.0 codigo, CC-BY-4.0 paper/docs) ya exigen atribucion.",
-    "P5_paper_en_ingles": "Versionar el paper tambien en ingles para mayor alcance (paper/en/, misma numeracion que la version espanola y que la IEEE)."
-  },
-
-  "decisiones_2026_10_12": {
-    "nota": "El autor cerro las tres decisiones que bloqueaban los pendientes_2026_10_11. Informes de respaldo: docs/informe-blindaje-prioridad-2026.md (blindaje verificado contra documentacion oficial) y notes/pago-jev-api-costos-2026-10-12.md (costos medidos con tiktoken sobre el payload real de src/matriz/adaptadores.py).",
-    "N1_casa_del_framework": "REPO NUEVO `decision-calibration-bench`: importar el nucleo src/jev_conf_metrics/ (stdlib puro, autocontenido) + los 37 tests + los orquestadores reempaquetados con CLI. Este repo (tesis1-jev-confidence) queda como ARCHIVO HISTORICO de la tesis (paper, exploracion, 128 MB de results/). Razon: la auditoria muestra que el trabajo no es podar sino construir (B1 no existe CLI, B2 el pipeline no esta empaquetado, B3 medir exige GPU/red sin proveedor simulado, B4 los adaptadores dependen de `datasets`+HF y ni esta declarado).",
-    "N2_brazo_de_pago": "EL AUTOR YA TIENE API KEY DE TYPESAFE: el brazo de pago se mide por la via DIRECTA de TypeSafe, sin gateways (Vercel/Netlify) ni revendedores. La clave vive en ~/.env y se lee por variable de entorno; en docs y ejemplos va como placeholder [VER ~/.env -> VAR], nunca literal. Coste = solo uso (~USD 0.33 la suite completa).",
-    "N4_prioridad": "arXiv: PEDIR EL ENDOSSO YA (obligatorio: con 0 papers en arXiv no basta el correo institucional; hace falta endosso personal de un autor del mismo dominio, y arXiv no lo otorga -> semanas de antelacion). La publicacion es INDEPENDIENTE de la sustentacion. Mientras llega el endosso, RESERVAR EL TEXTO COMO PREPRINT CON DOI: registro Zenodo tipo publication/preprint (inmediato, misma casa que el pre-registro) y, opcional, OSF Preprints (pre-moderacion ~2 semanas). arXiv exige version completa EN INGLES desde feb-2026 -> depende de N5. Sigue vigente: mover DOI por version, tag/Release, Software Heritage y CITATION.cff, y el aviso de que ningun DOI prueba fecha de autoria (para eso, OpenTimestamps sobre el hash del commit).",
-    "correcciones_verificadas": {
-      "vercel_free_tier": "CORREGIDO: el doc contexto/00_veredicto_jev_typesafe.md seccion 3.1 decia que el estudio completo cabia en el credito gratuito de la USD 5/mes. Verificado el 12-oct-2026: el free tier cubre solo un SUBCONJUNTO del catalogo (331 de 458 modelos) y que incluya typesafe-ai/jev NO se pudo verificar desde fuera (el endpoint publico devuelve el mismo payload con y sin el filtro freeTier; no expone el flag). Al tener API key propia de TypeSafe, la opcion queda sin objeto.",
-      "precio_de_jev": "CONFIRMADO EN VIVO (catalogo del gateway, 458 modelos): typesafe-ai/jev, pricing input 0.000000042 USD/token (= 0.042 USD por millon) y output 0 -> coincide con FUENTES.md.",
-      "economia_de_la_corrida": "La suite completa (5 datasets, 12.677 decisiones) cuesta ~USD 0.33; x3 semillas ~USD 0.99. La economia la manda el minimo de compra de cada plataforma, no el token.",
-      "opciones_de_pago_por_si_acaso": "Sin tarjeta: Netlify AI Gateway plan Free (300 creditos/mes; 180 creditos por USD de uso IA = USD 1.67 de uso). Con tarjeta: OpenRouter (compra minima USD 5.80, uso real USD 0.33). TypeSafe directo ya NO tiene lista de espera pero no da credito gratuito. jevtypesafeai.com es revendedor NO oficial a 0.42/M (10x).",
-      "modelo_nuevo": "liquid/d1 (liquid): decision model con API compatible System One, 65.536 de contexto, type evaluation. Candidato a par de la matriz."
-    },
-    "endosso_arxiv": "PENDIENTE DE ACCION DEL AUTOR: identificar a un autor con publicaciones en arXiv en cs.CL/cs.LG (o cs.AI) dispuesto a endosar, y solicitarlo. La solicitud la hace el propio autor al intentar el primer envio; arXiv indica el codigo de endosso que el padrino debe introducir."
-  },
-
-  "contrato_api_typesafe_2026_10_12": {
-    "nota": "Contrato de la API DIRECTA documentado por el agente contra las fuentes oficiales: https://api.typesafe.ai/openapi.json (HTTP 200, openapi 3.1.0, info.version 0.2.0, 14158 bytes) y https://docs.typesafe.ai/confidence servido como .md. Verificado por el agente (no solo reportado). Documento completo: docs/adaptador-typesafe-contrato.md (591 lineas, con semaforo verificado/no verificado y 7 comandos curl de cierre).",
-    "endpoints": "Solo dos rutas: POST /v1/systemone y GET /v1/models. NO hay endpoint de lote: el 'lote' es el mapa `questions` (1 item = 1 request). Auth: cabecera `Authorization: Bearer <API_KEY>`; la clave se lee de la variable de entorno TYPESAFE_API_KEY (nunca al repo ni a los logs).",
-    "nombre_del_campo": "El campo de las opciones/niveles se llama `criteria` (y no `options`/`scale`, como dicen varios sitios de terceros): en `choice` es un MAPA nombre->descripcion (sin orden) y en `score` un ARRAY ORDENADO (la posicion fija el nivel, empezando en 0; 2-10 niveles segun la prosa, el OpenAPI solo fija minItems:1). En `noul` es opcional y aclara que cuenta como si/no.",
-    "respuesta": "choice -> {type, choice, confidence, probabilities}; score -> {type, score (promedio ponderado, puede ser fraccionario), confidence, legend, probabilities con las mismas claves que legend}; noul -> {type, noul} SIN campo confidence. El sobre trae `model` (el build que respondio; usar `response.model` como model_revision) y `usage` {input_tokens, output_tokens}.",
-    "hallazgo_definiciones": "CONFIRMADO EN LA DOC OFICIAL (docs.typesafe.ai/confidence): TypeSafe usa DOS formulas distintas para el MISMO campo `confidence` segun la primitiva. `choice`: confidence = (p_max - 1/n)/(1 - 1/n) = (n*p_max - 1)/(n-1) -> es EXACTAMENTE la definicion `jev` del proyecto (solo cuenta el maximo: (0.6,0.3,0.1) y (0.6,0.2,0.2) dan ambas 0.4). `score`: confidence = max(0, 1 - SUM p_i*|i-m| / MAD_unif) con MAD_unif = (1/n)*SUM |i - (n-1)/2| -> medida ORDINAL sensible a la distancia (con 3 niveles, (0,0.5,0.5)->0.25 y (0.5,0,0.5)->0; la formula de choice daria 0.25 a ambas). `noul`: no devuelve confidence; la doc sugiere |2p-1| si se quiere uno. Consecuencia: aparece una QUINTA definicion (dispersion ordinal) y es la que el API real devuelve en `score`; ademas coincide con la familia de la score_confidence de Kev (max(0, 1 - E|nivel - moda| / D)), lo que confirma que Kev espeja el adaptador de referencia.",
-    "impacto_en_el_paper": [
-      "RESUELTO (E4, 12-oct-2026): el proyecto afirmaba en 4 sitios que `output_tokens = 0` por construccion (paper/01_marco_teorico.md, paper/03_especificacion_confidence.md, paper/secciones/04_metodo.md, paper/secciones/05_resultados.md y paper/04_pre_registro.md). El mecanismo (no generar texto) es correcto y esta medido en los brazos de pesos abiertos, pero el CONTADOR de la API no esta garantizado: la doc oficial solo dice 'Output tokens are currently free of charge' y sus EJEMPLOS muestran output_tokens 12 (OpenAPI) y 212 (pagina de primitives/choice). El autor decidio separar mecanismo de contador: el paper ya solo afirma `output_tokens = 0` donde se midio. paper/04_pre_registro.md no se toca. Ver avisos_resueltos_2026_10_12.",
-      "La tabla de primitivas de paper/03_especificacion_confidence.md (lineas 27-31) presenta `score` devolviendo `confidence` sin declarar que es OTRA formula. Con la doc oficial en mano, esa tabla gana una columna/nota: el mismo campo, dos definiciones dentro del mismo producto."
-    ],
-    "pendiente_de_llamada_real": "Sin clave no se puede cerrar: valor real de output_tokens, confirmacion de `primitives/choice` (payload de ejemplo), y la cabecera/codigos de error en vivo (401/422/429/529 declarados). Los 7 comandos curl estan en docs/adaptador-typesafe-contrato.md seccion 8; todos leen $TYPESAFE_API_KEY.",
-    "avisos_resueltos_2026_10_12": {
-      "E4_output_tokens": "RESUELTO por decision del autor: el paper separa el mecanismo (no genera texto) del CONTADOR del proveedor. Se reporta output_tokens = 0 solo donde esta medido (brazos de pesos abiertos, 65185 filas). Corregidos paper/01_marco_teorico.md, paper/03_especificacion_confidence.md, paper/secciones/05_resultados.md y paper/ieee/secciones/01_introduccion.tex (recompilado: 11 paginas). paper/04_pre_registro.md NO se toca (texto depositado con DOI; su frase se refiere a los pesos abiertos). Documentado como errata E4.",
-      "E5_score_es_otra_definicion": "Registrada como errata E5. QUE ENTRE O NO en la libreria y en la matriz depende del autor (afecta artefactos sellados por el pre-registro): opciones = extension declarada con test y celda nueva; solo marco teorico; Tesis 2; o decidir tras la llamada real."
-    },
-    "estado_de_la_reserva_2026_10_12": "El autor YA conecto Zenodo <-> GitHub y habilito el repositorio, asi que el release archivado automaticamente es el unico paso que falta para tener DOI. Preparados y sin publicar: docs/release-v1.0.0.md (notas del Release v1.0.0) y notes/zenodo-deposito-borradores.md (metadatos de los dos depositos: el automatico del release y el preprint manual `publication/preprint` en espanol, que reserva el texto sin esperar al endosso de arXiv). El .env va en /home/arbues/.env (fuera del repo) y .gitignore ya cubre .env y .env.*.",
-    "compute_necesario": "NADA de lo inmediato necesita GPU: (a) la prueba de la clave y (b) medir el brazo Jev por la API son HTTP puro desde el t440 (el modelo corre en TypeSafe; coste estimado ~USD 0.33 la suite completa); (c) anadir una definicion nueva a la matriz NO exige re-inferir, porque cada fila de results/crudos/*.jsonl guarda `probs`, `labels`, `n_options` y `type` -> se recalcula en CPU en minutos. Solo la GPU del Nitro hace falta para re-medir o medir NUEVOS brazos de pesos abiertos (Jeff-1, tinyjev, Nimble-9B, ...).",
-    "verificacion_en_vivo_2026_10_12": {
-      "que_se_hizo": "6 llamadas reales desde el t440 (sin GPU) con la clave del autor en ~/.env: 1 GET /v1/models + 5 POST /v1/systemone. Todas 200, ninguna 429. Coste total < USD 0.0005. Detalle: docs/adaptador-typesafe-contrato.md seccion 11.",
-      "output_tokens": "NO ES 0 en la API pagada: 71 (3 preguntas), 58 (1 pregunta n=5), 31 (1 pregunta n=2). input_tokens 308-406 por item -> ~USD 0.013-0.017 por 1.000 decisiones. La errata E4 (separar mecanismo de contador) queda CONFIRMADA POR MEDICION.",
-      "catalogo": "GET /v1/models devuelve solo dos nombres: jev-latest y jev-preview (release 2026-09-10). Los alias y el ID versionado se aceptan como entrada, y la respuesta devuelve siempre model = 'jev-1.13.0' -> usar ese valor como model_revision por fila.",
-      "formulas_confirmadas": "choice: confidence == (n*pmax-1)/(n-1) dentro de la rejilla (0.94 devuelto vs 0.9375 recalculado). score: 0.68 devuelto vs 0.68333 recalculado con MAD_unif. noul: sin campo confidence.",
-      "hallazgo_nuevo_redondeo": "NUEVO Y NO DOCUMENTADO: la API devuelve probabilities y confidence REDONDEADAS A 2 DECIMALES (0.95, 0.62, 0.37, 0.01, 0.0). Consecuencia metrologica para la matriz: el brazo pagado vive en una rejilla de 0.01, asi que los empates en el umbral (columna n_empates_tau) seran mucho mas frecuentes que en los brazos de pesos abiertos (precision completa). Declararlo al medir ese brazo y no mezclarlo sin mas con los demas.",
-      "sin_verificar": "401 con clave invalida, 422 con cuerpo invalido, 429/529 bajo carga y el limite de 255 opciones (no se provocaron a proposito)."
-    }
-  },
-
-  "guia_cierre_pendientes_2026_10_12": {
-    "documento": "docs/guia-cierre-pendientes.md",
-    "que_es": "Documento operativo que reordena TODOS los pendientes (N1-N5 + los del autor) por dependencia, con quien hace cada cosa (autor/agente), criterio de cierre y coste. Es la guia a seguir; este bloque es su espejo resumido.",
-    "orden": [
-      "FASE 1 (gratis, hoy): Release v1.0.0 -> DOI automatico de Zenodo; preprint publication/preprint en espanol -> DOI propio; Software Heritage -> SWHID al CITATION.cff; ORCID importa los DOI; opcional OpenTimestamps (ots no instalado todavia).",
-      "FASE 2 (sin computo, autor): leer el borrador 1-7 y decidir el formato del PDF IEEE; confirmar las 9 referencias de paper/02_referencias_pendientes.md (corregir en el .bib, nunca como comentario: BibTeX aborta); extension declarada opcional con la medicion del brazo pagado (output_tokens != 0 y la rejilla de 0.01).",
-      "FASE 3 (t440, ~USD 0.33, sin GPU): adaptador typesafe-jev segun el contrato; DECISION DEL AUTOR sobre si conf_score (MAD_unif) entra en libreria y matriz como extension declarada; corrida sobre los datasets etiquetados con la rejilla de 0.01 declarada y columna de costo por 1.000 decisiones.",
-      "FASE 4 (repo nuevo decision-calibration-bench): paquete + CLI jevconf + backend simulado + tests portables + docs + release con DOI propio. Bloquea N3 y N5.",
-      "FASE 5: visibilidad (README del framework en ingles con DOI/paper/dataset/figuras, metadatos, anuncio en los foros) y paper/en/ con la misma numeracion -> arXiv cuando llegue el endosso (exige version completa en ingles desde feb-2026).",
-      "FASE 6 (opcional, Tesis 2): medir 4B-9B en el Mac Mini (Jeff-1, SemIf, jev-lite, Nimble-9B, tinyjev)."
-    ],
-    "no_hacer": "No tocar paper/04_pre_registro.md (texto depositado); no crear el Release antes de conectar Zenodo (ya conectado, no revertir); no anadir definiciones al nivel raw sellado (solo extension declarada); nunca la clave en el repo, logs ni filas; no decir 'output_tokens = 0' del brazo pagado (medido: no lo es); no usar jev-latest para medir (fijar jev-1.13.0 y registrar response.model); Jev != JEPA."
-  },
-
-  "fase1_en_ejecucion_2026_10_12": {
-    "release": "PUBLICADO v1.0.0 el 13-oct-2026 (commit 39a6856, que era el HEAD de main): https://github.com/Arbues/tesis1-jev-confidence/releases/tag/v1.0.0. Las notas del Release salen de docs/release-v1.0.0.md. Zenodo esta conectado, asi que el depósito se crea solo: FALTA QUE EL AUTOR LO PUBLIQUE (Zenodo -> Upload -> GitHub -> revisar metadatos -> Publicar) para que emita DOI de version y de concepto.",
-    "software_heritage": "ARCHIVADO. Save Code Now pedido el 12-oct-2026 (peticion 2554709, visit_type git, sin body: con body da TypeError). Visita COMPLETA; snapshot swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd; SWHID de la revision v1.0.0 = swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0 (el sha1_git de una revision de git coincide con el sha del commit). Ya anadido a CITATION.cff (type: swh) y validado contra el esquema oficial (0 errores).",
-    "preprint": "PENDIENTE DEL AUTOR: registro Zenodo publication/preprint en espanol con paper/ieee/main.pdf y los metadatos de notes/zenodo-deposito-borradores.md seccion B.",
-    "orcid": "PENDIENTE DEL AUTOR: importar los DOI como works en 0009-0004-7605-6569.",
-    "referencias": "EN CURSO (subagente): verificacion de las 9 referencias pendientes en paper/02_referencias.bib + paper/ieee/referencias.bib (copias identicas, 41 entradas) contra fuentes autoritativas; compila despues con latexmk."
-  },
-
-  "brazo_pagado_2026_10_12": {
-    "adaptador": "src/matriz/backend_typesafe.py (backend `typesafe` del pipeline). Implementa el contrato verificado: clave desde TYPESAFE_API_KEY o ~/.env (nunca al repo), model fijo jev-1.13.0 con fallo explicito si el servidor responde otro build (D4), criteria traducido (mapa en choice, array ordenado en score), reintentos con backoff en 429/5xx, contabilidad de input/output tokens y costo por 1.000 decisiones, y tope de gasto con --presupuesto-usd.",
-    "registro_en_el_pipeline": "src/paso0_go_no_go.py (build_backend + BACKENDS) y src/matriz/medir.py (--model typesafe, VRAM 0 porque es HTTP puro).",
-    "tests": "15 tests nuevos en tests/test_backend_typesafe.py con transporte inyectado (sin red, sin clave, sin gasto): normalizacion de criteria, payload enviado, usage por respuesta, contabilidad de costo, reintento en 429, 422 sin reintento, presupuesto agotado, modelo distinto al fijado, claves desde entorno y desde ~/.env. TOTAL del repo: 52 tests, todos en verde en el t440.",
-    "prueba_de_humo_real": "1 llamada real con el adaptador sobre un caso de forma realista (choice n=4, score n=5, noul): las 3 filas salieron correctas con conf_pmax/conf_jev/conf_ent/conf_margin, correct y row_hash; input_tokens 434, output_tokens 82, costo USD 0.000018 -> USD 0.01823 por 1.000 decisiones. En la MISMA distribucion: conf_pmax 0.8100, conf_jev 0.7467, conf_ent 0.6493, conf_margin 0.6200 (el titular del paper, reproducido en vivo con el brazo pagado).",
-    "pendiente": "La corrida sobre los datasets etiquetados (~USD 0.33 la suite completa, sin GPU). Antes: decidir si conf_score (MAD_unif) entra en la libreria y la matriz como extension declarada, y declarar la rejilla de 0.01 del brazo pagado.",
-    "gasto_acumulado_en_verificaciones": "7 llamadas en total (6 del contrato + 1 de humo): < USD 0.001."
-  },
-
-  "referencias_verificadas_2026_10_12": {
-    "estado": "LAS 9 VERIFICACIONES RESUELTAS: paper/02_referencias_pendientes.md quedo vacia (solo con el resumen de lo aplicado y dos juicios de autoria pendientes). Corregidas en paper/02_referencias.bib y paper/ieee/referencias.bib, que quedan byte a byte identicos (sha256 698ead2d...).",
-    "verificado_por_el_agente": "Paginas de arXiv consultadas y confirmadas para 2609.38850 (Zhimin Gao, Pichao Wang; titulo 'OpenJev-RLCD: A Working RLCD Implementation'), 2609.33843 (autor unico Gowthamkumar Nandakishore), 2609.30216 (Guoming Ling, Muen Xue, Zijian Ye), 2609.26758 (Yu Sun, Junhao Xu, Jiajia Shi, Zijin Yang) y 2609.26550 (Yubo Li, Yidi Miao, Ramayya Krishnan, Rema Padman; 21-sep-2026). Confirmado tambien que Good (1952) es el origen de la regla LOGARITMICA.",
-    "hallazgos": "Los autores de arXiv2609.38850 estaban INVENTADOS en el .bib ('Gao, X. and Wang, Y.'); ahora llevan los reales. Tres titulos descriptivos se sustituyeron por los canonicos (38850, 33209, 26758) y se completo el de 26550. La nota de good1952 afirmaba que Good origino la regla esferica: FALSO (es la logaritmica); la nota quedo reducida a lo verificado.",
-    "compilacion": "Verificada por el agente: ./compilar.sh exit 0, main.pdf 11 paginas, main.bbl 34 bibitems, 0 apariciones de '[?]' en el texto del PDF -> 0 citas sin resolver. (Hay 7 entradas del .bib no citadas: preexistente, no es un fallo.)",
-    "juicios_de_autoria_pendientes": [
-      "La regla ESFERICA queda sin autoria propia: el texto la cubre citando good1952 y epstein1969 en el mismo grupo, que son la logaritmica y el RPS. La atribucion habitual es Roby (1964), pero el agente NO la pudo verificar en fuentes independientes. Alternativa: dejarla amparada en gneiting2007 (ya citada en el mismo parrafo). Decide el autor: anadir roby1964 previa verificacion, o dejarlo como esta.",
-      "Los titulos canonicos de arXiv sustituyen a los descriptivos en 3 entradas; si se prefieren los descriptivos, se revierten en un paso. Ninguna clave de cita cambio."
-    ]
-  },
-
-  "deposito_zenodo_2026_10_12": {
-    "estado": "VERIFICADO POR EL AGENTE contra la API publica de Zenodo. El deposito automatico del Release NO se quedo en borrador: se PUBLICO solo, 7 segundos despues del Release (creado 2026-10-13T00:59:43Z; Release 00:59:36Z).",
-    "doi_version": "10.5281/zenodo.23328989 (resuelve: https://doi.org/10.5281/zenodo.23328989 -> https://zenodo.org/records/23328989)",
-    "doi_concepto": "10.5281/zenodo.23328888 (el registro lo declara en su campo conceptdoi, pero HOY NO RESUELVE: GET https://doi.org/10.5281/zenodo.23328888 devuelve 404 y la API no devuelve ningun registro con ese conceptdoi. NO citarlo hasta que resuelva; reintentar la comprobacion mas adelante)",
-    "registro": "tipo Software, version v1.0.0, licencia apache2.0, titulo 'Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev', autor 'Perez Villegas, Arbaes Enrique' con ORCID 0009-0004-7605-6569 y afiliacion FC-UNI, keywords completas, archivo Arbues/tesis1-jev-confidence-v1.0.0.zip (16.9 MB), relacion isSupplementTo https://github.com/Arbues/tesis1-jev-confidence/tree/v1.0.0",
-    "por_que_el_autor_no_lo_encontraba": "La interfaz de Zenodo cambio: la pestana 'Uploads' se retiro en octubre de 2023 (ahora 'My dashboard' -> 'My uploads', https://zenodo.org/uploads); NO hay boton 'Upload' sino el icono '+' (Quick actions) -> 'New upload'; la integracion con GitHub vive en el MENU DE PERFIL (avatar arriba a la derecha) -> GitHub, https://zenodo.org/account/settings/github/; y en los depositos que vienen de un Release de GitHub NO existe boton 'Publicar' porque el Release ya publica. La frase antigua 'Zenodo -> Upload -> GitHub' describe una interfaz retirada.",
-    "pendiente_de_metadatos": "El PRE-REGISTRO 10.5281/zenodo.23266795 NO tiene afiliacion (el registro de software si la tiene). Se arregla con Editar -> Publicar en ese registro, sin cambiar el DOI.",
-    "guia_detallada": "notes/zenodo-publicar-guia-literal.md (guia literal clic a clic + diagnostico + tabla sintomas/causa/solucion, con 20 fuentes fechadas)",
-    "preprint_2026_10_12": {
-      "doi": "10.5281/zenodo.23329431 (concepto 10.5281/zenodo.23329430, los dos RESUELVEN)",
-      "auditoria_agente": "Publicado el 13-oct-2026 (deposito real 12-oct 21:18 Lima). Tipo Publication->Preprint, version 1.0, licencia cc-by-4.0, idioma spa, un solo creador con ORCID y afiliacion, descripcion real (el Resumen del paper, no un placeholder). El PDF depositado es BYTE-IDENTICO al local: md5 c9d7d9bb2a65e4addabb5da0663dc5a7, 489093 bytes, 11 paginas, y ya contiene los titulos canonicos de arXiv corregidos. DOI resuelve (200).",
-      "arreglos_pendientes_edit_publish": [
-        "PALABRAS CLAVE: el campo quedo vacio. Pegar: Jev, confidence, calibracion, transferencia de umbrales, modelos de decision, pesos abiertos, RLCD, metrologia",
-        "RELACIONES: el registro no enlaza con los otros dos. Anadir 10.5281/zenodo.23266795 (Publication/Preprint, relacion References) y 10.5281/zenodo.23328989 (Software, Is supplemented by); opcional el repo de GitHub (Software, Is supplemented by)",
-        "AFILIACION: quedo como 'National University of Engineering'; unificar a 'Facultad de Ciencias, Universidad Nacional de Ingenieria (FC-UNI), Lima, Peru' para casar con el registro de software y con el propio PDF",
-        "OPCIONAL: fecha de publicacion 2026-10-12 (fecha local del deposito) y version v1.0.0 para casar con el software"
-      ],
-      "no_hace_falta": "Renombrar el archivo (obligaria a crear una NUEVA VERSION del registro) y recompilar el PDF para citar el DOI del software: cosmetico, se puede dejar asi. El concept DOI propio del preprint (23329430) separado de los otros dos es esperado en depositos independientes.",
-      "otro_pendiente": "El PRE-REGISTRO 10.5281/zenodo.23266795 sigue sin afiliacion (los otros dos si la tienen): Edit -> Publish, sin cambiar el DOI."
-    }
-  },
-
-  "software_versiones_2026_10_13": {
-    "por_que_hay_una_v1_0_1": "La auditoria del ZIP de v1.0.0 (agente, 12-oct-2026) encontro que el snapshot archivado llevaba paper/02_referencias.bib, paper/ieee/referencias.bib y paper/ieee/main.pdf con las referencias ANTIGUAS: autores inventados ('Gao, X. and Wang, Y.'), titulos descriptivos ('Coherence and Negation in Decision Models (s + n = 1)', 'Name vs Definition Bias in Decision Models') y dos entradas con '{autores por confirmar}'. Cualquiera que descargara el software obtenia un paper con datos de referencia erroneos. Se publico una version nueva en lugar de reescribir el tag (los tags publicados no se reescriben).",
-    "v1_0_0": "10.5281/zenodo.23328989 (registro 23328989, tag 39a6856) - historico, se conserva",
-    "v1_0_1": "10.5281/zenodo.23330647 (registro 23330647, tag c966d5f, Release 2026-10-13T03:21:45Z) - ZIP de 16.92 MB / 247 archivos / 140.4 MB descomprimido. VERIFICADO por el agente descargando el ZIP: contiene src/matriz/backend_typesafe.py (el adaptador del brazo pagado) y el .bib con los titulos canonicos (0 rastros de los antiguos); el paper/ieee/main.pdf de dentro es BYTE-IDENTICO al local (md5 c9d7d9bb2a65e4addabb5da0663dc5a7).",
-    "doi_de_concepto": "10.5281/zenodo.23328988 - RESUELVE y apunta ya a la ultima version (23330647). OJO: el campo conceptdoi que devolvia la API para el registro v1.0.0 decia 10.5281/zenodo.23328888, valor que NO resuelve; el concepto real es 23328988. Corregido en CITATION.cff.",
-    "citation_cff": "Ahora cita la version vigente (23330647), el DOI de concepto (23328988), la version historica (23328989), el pre-registro (23266795), el SWHID de la revision v1.0.0 y el ORCID.",
-    "pendiente_de_relaciones": "Los tres registros aun no estan completamente enlazados entre si: el pre-registro no enlaza con nadie y el software no enlaza con el pre-registro ni con el preprint (el preprint si apunta a los dos). Es el unico hueco sustantivo que queda en Zenodo; se arregla con Edit -> Publish en cada registro (los DOI no cambian).",
-    "errata_E6": "La cabecera del pre-registro dice 'Zenodo, 08-oct-2026' pero el registro declara publication_date 2026-10-09 (created 2026-10-09T16:58Z). El archivo NO se toca (su propia regla: una vez publicado no se modifica) ni se crea version nueva solo por eso; queda registrado como errata E6 en docs/erratas_especificacion.md. Fecha canonica: 09-oct-2026."
-  },
-
-  "archivos": {
-    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
-    "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",
-    "alcance_congelado": "paper/00_plan_del_paper.md seccion 10 (04-oct-2026, decidido por el agente conforme a D1-D5): definiciones analiticas (pmax, Jev, entropia, margen) + AnyJev L0/L1 en la matriz; act_probability y open-decision-ai solo catalogo; modelos Laya 421M / Laya-typed-decisions / Kev-0.8B / tinyjev; datasets typed-decisions, kev-suites, Banking77, CLINC150, SST-5, WANLI; q=0.80 (+0.50/0.95). El paso 0 ya se corrio (08-oct-2026), el pre-registro esta publicado (10.5281/zenodo.23266795) y la matriz esta medida (corrida confirmatoria); no queda computo pendiente.",
-    "resultados": "results/ - paso0_informe.md (go/no-go regenerable con src/paso0_informe.py) + raw/ (paso 0, una fila por decision con row_hash) + crudos/ (65185 mediciones confirmatorias) + matrix/ (la matriz: matriz_transferencia.csv, figuras, RESUMEN_MATRIZ.md y resumen.json)",
-    "libreria": "src/jev_conf_metrics/ (definiciones, metricas, transferencia, recursos; stdlib puro, 37 tests). Empaquetada con pyproject.toml (pip install -e .) y con CI en .github/workflows/tests.yml. API y extension en docs/libreria.md",
-    "paper_ieee": "paper/ieee/ - version IEEE en LaTeX (clase IEEEtran): main.tex + secciones/ + referencias.bib + compilar.sh + README.md + main.pdf. COMPILA en el t440 con latexmk -gg (TeX Live instalado, con texlive-lang-spanish): 11 paginas, 0 errores, 0 citas sin resolver, 0 desbordes. Las 8 figuras (paper/figures/, PDF vectorial) las genera src/figuras_paper.py",
-    "validacion": "docs/validacion-productos.md - como validar cada producto (comandos y resultado esperado) + lo que solo puede validar el autor",
-    "paper": {
-      "plan": "paper/00_plan_del_paper.md",
-      "marco_teorico": "paper/01_marco_teorico.md",
-      "referencias": "paper/02_referencias.bib",
-      "especificacion": "paper/03_especificacion_confidence.md (formaliza cada definicion, con proposiciones y tests de conformidad)",
-      "secciones": "paper/secciones/01_introduccion.md, 02_trabajos_relacionados.md, 03_marco_teorico.md, 04_metodo.md, 05_resultados.md, 06_discusion.md, 07_conclusion.md (§1–§7, borradores del 08–09-oct-2026)"
-    },
-    "guia_agentes": "AGENTS.md (raiz, canonico) + docs/guia-agentes.md (version resumida)",
-    "punto_de_entrada": "README.md",
-    "estructura": "paper/ (el paper) · eje-2-jev-opensource/ (eje ACTIVO) · docs/ · eje-1-jepa/ (fuera de alcance) · contexto/ · audit/{saturacion,jev-oss}/ · _descartado/",
-    "eje_2_jev_oss": {
-      "ruta_elegida": "eje-2-jev-opensource/11_ruta1_metrologia_confidence.md (DOCUMENTO PRINCIPAL VIGENTE)",
-      "rutas_propuestas": "eje-2-jev-opensource/10_tres_rutas_tesis1.md (registro de la eleccion)",
-      "fuentes": "eje-2-jev-opensource/FUENTES.md (49 fuentes verificadas)",
-      "estudio": "eje-2-jev-opensource/08_estudio_ecosistema.md"
-    },
-    "eje_1_jepa": "FUERA DE ALCANCE",
-    "descartado": "_descartado/09_ruta1_cartografia_ejecutable.md (ruta JEPA, descartada)",
-    "contexto": ["contexto/04_viabilidad_y_saturacion_ia.md", "contexto/03_portafolio_temas_cc.md", "contexto/00_veredicto_jev_typesafe.md", "contexto/02_tabla_costos_jev.csv"],
-    "auditorias": "audit/saturacion/ (3 informes + datos crudos + scripts)",
-    "readmes_crudos": "audit/jev-oss/ (13 READMEs)"
-  },
-
+  "proyecto": "Tesis 1 — Ciencia de la Computación (FC-UNI)",
+  "autor": "Arbués Enrique Pérez V. · ORCID 0009-0004-7605-6569 · FC-UNI",
+  "ultima_actualizacion": "2026-10-13",
+  "como_usar": "Punto de reentrada. Leer: este STATE.json → README.md → docs/guia-cierre-pendientes.md. Cualquier cambio del repo se refleja aquí y en README.md en el mismo paso.",
+  "estado_en_una_linea": "Tesis 1 CONSTRUIDA, MEDIDA Y RESERVADA (3 depósitos con DOI + Software Heritage + ORCID). No queda cómputo pendiente de la medición; lo que falta está en `pendientes`.",
   "tema": {
-    "nombre": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev (eje 2, RUTA 1)",
-    "titulo_definitivo": "Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev (fijado 10-oct-2026)",
-    "formato_tesis": "IEEE (la norma R.R. 1439-2023-UNI admite APA o IEEE; se fija IEEE)",
-    "licencias": "codigo Apache-2.0 (LICENSE, raiz); paper y docs CC-BY-4.0 (LICENSE-docs, raiz); CITATION.cff en la raiz",
-    "titulo_definitivo_en": "Metrology and Threshold Transfer of the confidence Field in Open-Weight Jev-Type Decision Models",
-    "regla_de_estilo_titulo": "sin dos puntos, sin subtitulo, sin signos de interrogacion; frase nominal que declara propiedad + objeto + alcance + tipo de metodo",
-    "titulo_se_fija": "cerrado: fijado el 10-oct-2026 al cerrar la especificacion de la ruta",
-    "tipo_contribucion_tesis1": "instrumento / metrologia (artefacto, no hallazgo)",
-    "formato_tesis": "APA o IEEE (R.R. 1439-2023-UNI)"
+    "nombre": "Metrología y transferencia del campo `confidence` en modelos de decisión de pesos abiertos tipo Jev",
+    "titulo_en": "Metrology and Threshold Transfer of the confidence Field in Open-Weight Jev-Type Decision Models",
+    "tipo_contribucion": "instrumento / metrología (arteFacto, no hallazgo). La matemática vive en el marco teórico.",
+    "formato": "IEEE (la R.R. 1439-2023-UNI admite APA o IEEE) — ya maquetado y compilado",
+    "licencias": "Apache-2.0 el código · CC-BY-4.0 el paper y los docs · CITATION.cff en la raíz"
   },
-
-  "marco_teorico_minimo": [
-    "Calibracion, diagramas de fiabilidad, discriminacion vs calibracion (Guo et al. 2017)",
-    "Metricas: ECE (igual ancho vs igual masa), MCE, Brier, NLL (Naeini et al. 2015; Brier 1950)",
-    "Reglas de puntuacion estrictamente propias: log, spherical, RPS (Gneiting & Raftery 2007; Good 1952; Epstein 1969)",
-    "Estadisticos de confianza: pmax, margen, entropia H, entropia normalizada H/log k",
-    "Prediccion selectiva: cobertura, risk-coverage, AURC, abstencion (Chow 1970; Geifman & El-Yaniv 2017; Jitkrittum et al. 2023)",
-    "Calibracion post-hoc: temperature scaling, Platt, isotonic (Guo 2017; Zadrozny & Elkan 2002)",
-    "Conformal prediction (Vovk; Angelopoulos & Bates 2021)",
-    "El objeto: readout de logits, primitivos, output_tokens=0, sin distribucion conjunta",
-    "RLCD: ruido en logits, regla propia, REINFORCE con baseline, temperatura post-hoc",
-    "Estadistica de evaluacion: bootstrap, IC, pre-registro, FDR, tamano de muestra"
+  "objeto_de_estudio": {
+    "que_es_un_modelo_de_decision": "Recibe un estado y preguntas tipadas y termina la inferencia con un readout de logits sobre las etiquetas permitidas: NO genera texto. Tres primitivas: choice (2..255 opciones), score (2..10 niveles ordinales, con legend), noul (0..1, sin campo confidence). Estado compartido y preguntas aisladas → no hay distribución conjunta.",
+    "el_campo_confidence": "El mismo nombre cubre definiciones incompatibles. En TypeSafe: choice = (n·p_max−1)/(n−1) (concentración, NO la probabilidad ganadora); score = max(0, 1 − Σpᵢ·|i−m|/MAD_unif) (ordinal, sensible a la distancia); noul no lo tiene. En el ecosistema: Laya choice/score = 1 − entropía normalizada, answer_confidence = p_max; Kev choice = la fórmula de Jev, Kev score = familia ordinal; jev-lite = p_max; AnyJev = niveles L0/L1.",
+    "laya": "NandhaKishorM/laya (Apache-2.0, 421M = ModernBERT-large + cabeza que puntúa un token [MASK]). Única implementación que publica el bucle RLCD completo. Encoder congelable → features cacheadas.",
+    "RLCD": "Ruido gaussiano de media cero en los logits (σ 1.0→0.3) + regla de puntuación estrictamente propia (log con suelo −9.21 + 0.75·spherical; RPS para score) + REINFORCE con baseline de grupo + temperatura post-hoc.",
+    "dato_central_del_eje": "El ecosistema abierto REFUTÓ empíricamente la premisa de Jev: donde hay calibración, vino de un ajuste de temperatura post-hoc sobre datos propios, no del objetivo de entrenamiento. TypeSafe no ha publicado ni un ECE ni los pesos. La contradicción 'Laya sobre-confiada (0.466→0.081 con refit) vs sub-confiada (0.214 tal cual se distribuye)' se reconcilió: miden artefactos distintos.",
+    "ecosistema": "Verificado: Laya, Kev (0.5B–27B), Nimble (Qwen3.5-9B+LoRA), SemIf, Jeff-1, jev-lite, jebadiah, tydex, tinyjev, open-decision-ai, AnyJev (Nokia), daf-jev y el nuevo `liquid/d1` (decision model con API compatible System One, 65K contexto, visto el 12-oct-2026 en el catálogo del gateway). Fuera del alcance por licencia: openjevpro (PolyForm). Fuentes: eje-2-jev-opensource/FUENTES.md (49) y 08_estudio_ecosistema.md."
+  },
+  "reserva_y_depositos": {
+    "nota": "Los tres depósitos están PUBLICADOS y verificados contra la API pública de Zenodo. Los DOI son la prueba de prioridad con fecha.",
+    "pre_registro": {
+      "doi": "10.5281/zenodo.23266795",
+      "concepto": "10.5281/zenodo.23266794",
+      "fecha_canonica": "2026-10-09 (publication_date del registro)",
+      "archivo": "paper/04_pre_registro.md",
+      "nota": "Congela el método antes de la corrida confirmatoria. El archivo depositado es la revisión previa a publicar (dice 'listo para subir' y no lleva su propio DOI); el método es idéntico al local. No se toca (errata E6)."
+    },
+    "software": {
+      "version_vigente": "10.5281/zenodo.23330647 (v1.0.1)",
+      "historica": "10.5281/zenodo.23328989 (v1.0.0)",
+      "concepto": "10.5281/zenodo.23328988",
+      "nota": "Se publica AUTOMÁTICAMENTE desde el Release de GitHub. La v1.0.1 existe porque el ZIP de v1.0.0 archivaba el paper y el .bib con las referencias ANTIGUAS (autores inventados); verificado que el ZIP de v1.0.1 trae los títulos canónicos y un main.pdf byte-idéntico al actual (md5 c9d7d9bb2a65e4addabb5da0663dc5a7)."
+    },
+    "preprint": {
+      "doi": "10.5281/zenodo.23329431",
+      "concepto": "10.5281/zenodo.23329430",
+      "nota": "PDF del paper (11 páginas, español, CC-BY-4.0). Enlaza con el pre-registro (references) y con el software (isSupplementedBy)."
+    },
+    "software_heritage": "Archivado. SWHID de la revisión v1.0.0: swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0 (snapshot swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd). Está en CITATION.cff.",
+    "orcid": "VERIFICADO (API pública de ORCID, 13-oct-2026): el perfil 0009-0004-7605-6569 tiene 3 works (preprint, software, pre-registro)."
+  },
+  "medicion_congelada": {
+    "alcance": "23 grupos = 5 configuraciones de modelo (Laya none / typed-decisions / multilingual, Kev-0.8B, control crudo Qwen3.5-0.8B-Base) × 5 datasets. 65.185 decisiones, 3.564 celdas.",
+    "cifras_titulares": "La brecha entre la definición más alta y la más baja de la MISMA distribución: mediana 0.288 (p90 0.434, máx 0.848). Porte de umbral, nivel `raw`: 0.2337 directo vs 0.0021 con mapa = 109× (312 celdas sin empates dominantes). ECE de la misma corrida: pmax 0.216 → ent 0.577 (2.7×). El promedio engaña (bimodal): el titular es la tabla POR PAR del informe §3b.",
+    "dos_capas": "1) ESCALA: entre definiciones equivalentes en orden el número no viaja, el mapa sí. 2) FORMA: entre clases distintas (pmax↔ent) no hay número ni mapa.",
+    "diseno": "Cross-fitting K=5 (semilla 20261008, fold por sha256), q ∈ {0.80, 0.50, 0.95}, bootstrap de ítems B=2000, BH-FDR α=0.05, niveles `raw` / `L0` / `L1` (L0/L1 ajustados solo en calibración). Nivel principal = `raw` (el que congela el pre-registro).",
+    "desviacion_declarada": "D1: el debiaser L0 no convergía (paso ~1000× demasiado pequeño); corregido con paso adaptativo y test de regresión, reportado en RESUMEN_MATRIZ.md §7 y §4 del paper.",
+    "hallazgos": [
+      "La choice_confidence de Kev ES la fórmula de Jev (verificado para K=2,3,4,7,12).",
+      "El campo output_tokens tiene tres significados: en los brazos de pesos abiertos Laya = 0 y Kev = recuento de tokens de la respuesta serializada (869.310 en 2.000 decisiones); en la API de pago NO es 0 (medido 71 / 58 / 31).",
+      "Kev-0.8B: accuracy 0.813 en banking77 (n=77) frente a 0.377 de Laya → el ecosistema sí entrena para cardinalidad alta.",
+      "clinc150 (n=151) no es ejecutable en el checkpoint `none` de Laya (max_len=512 admite 126 opciones).",
+      "La API de pago devuelve probabilities y confidence REDONDEADAS a 2 decimales (rejilla de 0.01): los empates de umbral no son comparables con los brazos de pesos abiertos."
+    ]
+  },
+  "hecho_12_13_oct_2026": {
+    "nota": "Sesión de cierre: se pasó de 'instrumento medido' a 'instrumento reservado y verificable'. Detalle en README §10-bis y en docs/.",
+    "reserva": "Release v1.0.0 y v1.0.1 en GitHub → Zenodo archivó automáticamente (los DOIs se emiten y publican solos; en un depósito de GitHub NO hay botón Publicar). Software Heritage completo. Preprint depositado. 3 works en ORCID. CITATION.cff con los 6 identificadores (versión vigente, concepto, histórica, pre-registro, SWHID, ORCID) validado contra el esquema oficial (0 errores).",
+    "referencias": "Las 9 verificaciones de trazabilidad (D4) RESUELTAS: paper/02_referencias_pendientes.md quedó vacía. Se corrigieron 3 títulos inventados y autores inventados ('Gao, X. and Wang, Y.' → Zhimin Gao, Pichao Wang; '{CMU}' → los cuatro autores reales), y la nota falsa de good1952 (Good 1952 es la regla LOGARÍTMICA, no la esférica). Los dos .bib quedan idénticos. Compilación verificada: 11 páginas, 34 bibitems, 0 citas sin resolver.",
+    "brazo_pagado": "src/matriz/backend_typesafe.py (backend `typesafe` del pipeline): clave desde TYPESAFE_API_KEY o ~/.env, model fijo jev-1.13.0 con fallo si el servidor responde otro build, criteria traducido (mapa en choice, array ordenado en score), reintentos con backoff, costo por 1.000 decisiones y tope con --presupuesto-usd. 15 tests sin red → 52 tests en total. Prueba de humo real: USD 0.018 por 1.000 decisiones (gasto total de todas las verificaciones < USD 0.001).",
+    "contrato_de_la_api": "Verificado en vivo (docs/adaptador-typesafe-contrato.md): solo POST /v1/systemone y GET /v1/models (sin lote, 1 ítem = 1 request); el campo de opciones es `criteria`; la respuesta trae model y usage; noul sin confidence; choice = fórmula de Jev; score = MAD_unif.",
+    "erratas": "E1–E3 previas; E4 (output_tokens: mecanismo ≠ contador, aplicada en markdown y LaTeX), E5 (score y choice no comparten fórmula), E6 (fecha del pre-registro: 09-oct según el registro; el archivo no se toca).",
+    "documentos_nuevos": [
+      "docs/adaptador-typesafe-contrato.md",
+      "docs/informe-blindaje-prioridad-2026.md",
+      "docs/guia-cierre-pendientes.md",
+      "docs/release-v1.0.0.md",
+      "docs/release-v1.0.1.md",
+      "notes/zenodo-publicar-guia-literal.md",
+      "notes/pago-jev-api-costos-2026-10-12.md",
+      "notes/zenodo-deposito-borradores.md"
+    ]
+  },
+  "pendientes": [
+    {
+      "n": 1,
+      "quien": "autor",
+      "que": "Leer el borrador §1–§7 (paper/secciones/) o el PDF (paper/ieee/main.pdf, 11 páginas) y decidir si el IEEE lo representa. Da observaciones.",
+      "estado": "pendiente — es lo último que cierra la Tesis 1"
+    },
+    {
+      "n": 2,
+      "quien": "autor",
+      "que": "Dos juicios de referencias: (a) la regla ESFÉRICA quedó sin autoría propia (el texto cita good1952+epstein1969, que son la logarítmica y el RPS): ¿perseguir y añadir Roby (1964) o dejarla amparada en gneiting2007? (b) ¿mantener los títulos canónicos de arXiv en las 3 entradas corregidas?",
+      "estado": "pendiente"
+    },
+    {
+      "n": 3,
+      "quien": "autor",
+      "que": "Decidir si la definición que el API real devuelve en `score` (MAD_unif) entra en la librería y en la matriz como EXTENSIÓN DECLARADA (posterior al pre-registro).",
+      "estado": "pendiente"
+    },
+    {
+      "n": 4,
+      "quien": "autor",
+      "que": "Opcional y de baja prioridad: cerrar el grafo de relaciones en Zenodo (el pre-registro no enlaza con nadie ni el software con el paper; el preprint sí apunta a los dos) y, si se quiere, cambiar el DOI del work del software en ORCID al de concepto (…23328988).",
+      "estado": "pendiente, cosmético"
+    },
+    {
+      "n": 5,
+      "quien": "agente",
+      "que": "REPO NUEVO `decision-calibration-bench` (framework): importar el núcleo src/jev_conf_metrics/ (stdlib puro, autocontenido) + los 52 tests + orquestadores reempaquetados con CLI (`jevconf list-brazos|medir|matriz|informe|figuras`), proveedor SIMULADO para correr sin GPU/red, adaptadores de proveedor, docs, y su propio release con DOI. Este repo queda como archivo histórico de la tesis. Bloqueadores medidos: no existe CLI; el pipeline no está empaquetado (solo se empaqueta jev_conf_metrics); `medir` exige GPU o red; los adaptadores de dataset dependen de `datasets`+HF y `datasets` no está declarado.",
+      "estado": "siguiente tarea del agente"
+    },
+    {
+      "n": 6,
+      "quien": "agente",
+      "que": "Corrida real del brazo pagado sobre los datasets etiquetados (~USD 0.33 la suite completa, sin GPU), declarando la rejilla de 0.01 y con columna de costo por 1.000 decisiones. Depende de la decisión n=3.",
+      "estado": "pendiente, bloqueada por n=3"
+    },
+    {
+      "n": 7,
+      "quien": "autor + agente",
+      "que": "Visibilidad (N3): README del framework en inglés citando paper + DOI + dataset + figuras, metadatos del paquete, announcement en los foros del ecosistema. Paper en inglés (N5) → paper/en/ con la misma numeración. arXiv: requiere ENDOSSO personal (el autor tiene 0 papers en arXiv y desde ene-2026 no basta el correo institucional) y versión completa en inglés desde feb-2026.",
+      "estado": "pendiente"
+    },
+    {
+      "n": 8,
+      "quien": "autor",
+      "que": "Tesis 2 (opcional): medir 4B–9B en el Mac Mini (Jeff-1, SemIf, jev-lite, Nimble-9B, tinyjev) y atacar el objetivo de entrenamiento.",
+      "estado": "otro alcance"
+    }
   ],
-
-  "plan_tres_etapas": {
-    "tesis_1": {"aporte": "instrumento de metrologia del campo confidence (especificacion + libreria + matriz de transferencia)", "tipo": "artefacto / medicion"},
-    "tesis_2": {"aporte": "modificacion del objetivo de entrenamiento RLCD que induzca calibracion", "tipo": "algoritmica"},
-    "taller": {"aporte": "por que una regla estrictamente propia no basta: condiciones necesarias/suficientes y demostracion", "tipo": "teorica"}
+  "artefactos": {
+    "punto_de_reentrada": "STATE.json → README.md → .hermes.md (auto-cargado) → docs/guia-cierre-pendientes.md",
+    "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (52) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
+    "pipeline": "src/matriz/ (medir.py, matriz.py, informe_matriz.py, figura.py, adaptadores.py, backend_typesafe.py, correr_*.sh) · src/figuras_paper.py · src/paso0_go_no_go.py · src/paso0_informe.py",
+    "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps) · results/raw/ y results/paso0_informe.md (paso 0)",
+    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib, 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + secciones/ + compilar.sh + main.pdf), figures/ (8 figuras)",
+    "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1–E6), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, release-v1.0.0.md, release-v1.0.1.md, guia-agentes.md",
+    "fuera_de_alcance": "eje-1-jepa/ y _descartado/ → NO leer, NO evaluar, NO proponer. exploración: audit/, contexto/, notes/, eje-2-jev-opensource/",
+    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR."
   },
-
-  "preferencias_usuario": {
-    "idioma": "espanol",
-    "estilo": "respuestas finales cortas; sin relleno; tablas y pasos; explicar simple si no entiende",
-    "aprendizaje": "mejor con imagenes y graficos de arquitectura",
-    "perspectiva_cc": "el aporte interno (matematica, mecanismos, codigo) se valora; puede vivir en el marco teorico, no necesariamente en el resultado",
-    "esfuerzo_manual": "minimizar lo que el autor debe hacer a mano (especialmente anotacion y etiquetado)",
-    "sobre_huecos": "el resultado no debe ser un hallazgo sino un artefacto",
-    "lectura_rapida": "confunde siglas parecidas (JEV vs JEPA). Confirmar el eje antes de reencuadrar",
-    "git": "ESTE proyecto (tesis1-jev-confidence): todo directo a main, sin ramas ni PR (instruccion del autor, 10-oct-2026). Otros repos: rama separada -> PR -> squash merge",
-    "seguridad": "cero contrasenas o secrets en .env ni en repos",
-    "docker_servidor": "restart: always (no unless-stopped)",
-    "regla_3_fallos": "si un enfoque falla 3 veces, parar y cambiar de perspectiva",
-    "hardware": "Mac Mini (Apple Silicon) + Acer Nitro RTX 4050 Laptop 6 GB; el thinkpad-t440 no tiene GPU"
+  "como_verificar": {
+    "tests": ".venv/bin/python -m pytest   # 52 tests, corren en el t440 sin GPU",
+    "matriz_regenerable": ".venv/bin/python src/matriz/informe_matriz.py && git diff --stat   # debe salir VACÍO",
+    "figuras": ".venv/bin/python src/figuras_paper.py   # 8 figuras",
+    "paper": "cd paper/ieee && ./compilar.sh   # main.pdf, 11 páginas (usa latexmk -gg)",
+    "entorno": "El .venv es de uv (sin pip): uv pip install --python .venv/bin/python -e \".[dev,figuras]\". TeX Live está instalado en el t440."
   },
-
+  "trampas": [
+    "JEV NO ES JEPA. Jev es un modelo de decisión (readout de logits, no genera texto). eje-1-jepa/ y _descartado/ están fuera de alcance.",
+    "torch de PyPI es cu130 y el driver del Nitro es 556.19 (CUDA 12.5) → instalar el build cu126.",
+    "Kev retiene 4.8 GB de los 6 GB de VRAM: nunca en paralelo con Laya.",
+    "clinc150 (n=151) no es ejecutable en el checkpoint `none` de Laya; kev-suites no carga (fallo del Hub).",
+    "BibTeX no admite comentarios dentro de las entradas ni nombres multibyte sin escapar; latexmk cachea el error previo → usar -gg.",
+    "El fix del piloto contaminado (convaiinnovations__laya__clinc150.jsonl) ya está en la confirmatoria: 3.672 − 108 = 3.564 celdas.",
+    "API de TypeSafe: el campo es `criteria` (no options/scale); no hay lote; output_tokens ≠ 0; probabilities y confidence redondeadas a 0.01; usar jev-1.13.0 (los alias jev-latest/jev-preview se resuelven a ese ID y el alias se mueve).",
+    "Zenodo cambió la interfaz: 'Uploads' ya no existe (ahora My dashboard → My uploads); no hay botón Upload (es el icono + → New upload); GitHub está en el menú de PERFIL; y en un depósito que viene de un Release de GitHub NO hay botón Publicar (el Release publica solo). El DOI de un Release es irreversible, y los FICHEROS solo se pueden cambiar en los primeros 45 días.",
+    "La clave de TypeSafe vive en /home/arbues/.env como TYPESAFE_API_KEY: nunca al repo, a los logs ni a una fila. .gitignore cubre .env.",
+    "El archivo paper/04_pre_registro.md NO se modifica (su propia regla): los cambios van como errata."
+  ],
+  "reglas": {
+    "D1": "Artefacto, no hallazgo: especificación + librería + matriz + dataset crudo + script regenerador.",
+    "D2": "Cero anotación/etiquetado humano (solo datasets ya etiquetados).",
+    "D3": "Máxima automatización: descargas, corridas, métricas, tablas, figuras, BibTeX y depósitos los hace el agente.",
+    "D4": "Cada cifra con su fuente; cada fila declara si es medida aquí o auto-reportada (versión + hash por fila).",
+    "D5": "Costo 0 USD. Mac Mini + RTX 4050; el t440 NO tiene GPU (orquesta y redacta).",
+    "git": "Directo a main en este repo. La rama feat/matriz-transferencia está obsoleta.",
+    "Si cambias algo": "Actualiza README.md y STATE.json en el mismo paso. Si un enfoque falla 3 veces, parar y cambiar de perspectiva.",
+    "Decisiones de autoría": "Alcance, licencia, formato, título, qué entra y qué no: proponer y PREGUNTAR al autor."
+  },
   "glosario": {
-    "Jev": "TypeSafe System One. Modelo de DECISION, no de lenguaje: readout de logits, no genera texto. NADA que ver con JEPA",
-    "JEPA": "Joint-Embedding Predictive Architecture, familia de world models. FUERA DE ALCANCE",
-    "RLCD": "Reinforcement Learning for Calibrated Decisions. Ruido gaussiano en los logits + regla estrictamente propia + REINFORCE con baseline + temperatura post-hoc",
-    "regla_estrictamente_propia": "regla de puntuacion cuyo optimo es reportar la probabilidad verdadera (log, spherical, RPS)",
-    "readout": "terminar la inferencia leyendo los logits en la posicion de cada etiqueta, sin generar tokens",
-    "noul": "primitivo booleano de Jev (0.0 a 1.0); no tiene campo confidence",
-    "choice": "primitivo de eleccion entre N opciones (hasta 255)",
-    "score": "primitivo ordinal de 2 a 10 niveles",
-    "confidence": "campo con definiciones incompatibles: Jev (n*pmax-1)/(n-1); Laya 1-entropia normalizada; pmax; prior aprendido; etc.",
-    "ECE": "Expected Calibration Error",
-    "Brier": "puntuacion de Brier (error cuadratico de las probabilidades)",
-    "kappa": "acuerdo inter-anotador. NO EXISTE en este ecosistema; excluido por diseno (D2)",
-    "cobertura": "fraccion de casos que el modelo decide responder; 'accuracy on answered' es su companera",
-    "transferencia_de_umbral": "aplicar a la definicion B el umbral calibrado en la definicion A; cuanto se degrada cobertura/precision",
-    "typed_decisions": "LocalLLaMA/typed-decisions, el benchmark compartido (2000 decisiones, 4 flujos, Apache-2.0)"
+    "Jev": "TypeSafe System One. Modelo de DECISIÓN: readout de logits, output_tokens = 0 por construcción (en los brazos de pesos abiertos; el contador de la API de pago no es 0). NADA que ver con JEPA.",
+    "RLCD": "Reinforcement Learning for Calibrated Decisions: ruido en los logits + regla estrictamente propia + REINFORCE con baseline + temperatura post-hoc.",
+    "transferencia_de_umbral": "Aplicar a la definición B el umbral calibrado en A; cuánto se degradan cobertura y precisión. El porte directo se equivoca ~109× más que el porte con mapa.",
+    "rejilla_de_0.01": "Granularidad de las probabilidades que devuelve la API de pago de TypeSafe; explica los empates de umbral en ese brazo.",
+    "readout": "Terminar la inferencia leyendo los logits en la posición de cada etiqueta, sin generar tokens."
+  },
+  "plan_tres_etapas": {
+    "Tesis 1": "medir (instrumento) — hecho y reservado",
+    "Tesis 2": "inducir (objetivo de entrenamiento RLCD)",
+    "Taller": "demostrar (condiciones necesarias/suficientes, demostración)"
   }
 }
