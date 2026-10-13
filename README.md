@@ -336,6 +336,20 @@ si el servidor responde otro build, regla D4), traduce `criteria` (mapa en `choi
 - Detalle medido en esa prueba que confirma el titular en vivo: la **misma** distribución da
   `conf_pmax` 0.8100 · `conf_jev` 0.7467 · `conf_ent` 0.6493 · `conf_margin` 0.6200.
 
+### 10-octies. Referencias: las 9 verificaciones pendientes, resueltas (12-oct-2026)
+
+`paper/02_referencias_pendientes.md` **quedó vacía**: las 9 entradas se confirmaron en su fuente y se corrigieron
+en `paper/02_referencias.bib` y `paper/ieee/referencias.bib` (byte a byte idénticos, SHA `698ead2d…`). El agente
+verificó de forma independiente las páginas de arXiv de `38850`, `33843`, `30216`, `26758` y `26550`, y que Good
+(1952) es el origen de la **regla logarítmica**. Dos hallazgos de trazabilidad: los autores de `arXiv2609.38850`
+estaban **inventados** en el `.bib` (ahora: Gao, Zhimin y Wang, Pichao) y tres títulos se sustituyeron por los
+canónicos. Compilación verificada: `main.pdf` 11 páginas, 0 citas sin resolver (34 `\bibitem`, 0 `[?]`).
+
+**Dos juicios de autoría pendientes** (no los decide el agente): (a) la regla **esférica** queda sin autoría propia
+—se cita `\cite{good1952,epstein1969}`, que son la logarítmica y el RPS—; la atribución habitual es Roby (1964),
+pero **no se pudo verificar** en fuentes independientes; (b) los títulos canónicos sustituyen a los descriptivos
+(revertibles en un paso). Detalle en `paper/02_referencias_pendientes.md`.
+
 ### 10-quinquies. Guía de cierre: el flujo completo
 
 **`docs/guia-cierre-pendientes.md`** es el documento operativo que reordena todos los pendientes (`N1`–`N5` y los
