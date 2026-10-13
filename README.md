@@ -318,7 +318,7 @@ preprint manual). El `.env` del autor va en `/home/arbues/.env` (no en el repo);
 | **Release `v1.0.0`** | ✅ **publicado** (13-oct-2026) | commit `39a6856` · https://github.com/Arbues/tesis1-jev-confidence/releases/tag/v1.0.0 |
 | Depósito automático en Zenodo | ✅ **PUBLICADO** (13-oct-2026 UTC, 7 s después del Release) | **DOI de versión: `10.5281/zenodo.23328989`** · tipo *Software* · Apache-2.0 · autor con ORCID y FC-UNI · ZIP 16,9 MB · relación `isSupplementTo` el tag de GitHub. **No hubo que pulsar nada**: el Release lo publica solo (en un depósito de GitHub no existe botón *Publicar*) |
 | **Software Heritage** | ✅ **archivado** (visita completa) | SWHID de la revisión: `swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0` · snapshot `swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd` · ya en `CITATION.cff` |
-| Preprint con DOI | ⏳ pendiente del autor | metadatos listos en `notes/zenodo-deposito-borradores.md` §B |
+| **Preprint con DOI** | ✅ **PUBLICADO** (13-oct-2026) | **`10.5281/zenodo.23329431`** (concepto `…23329430`) · tipo *Publication → Preprint* · CC-BY-4.0 · español · autor con ORCID y afiliación · PDF `main (1).pdf`, 489.093 B, **byte-idéntico** al `paper/ieee/main.pdf` compilado (md5 `c9d7d9bb…`) · concepto: `10.5281/zenodo.23329430`. **Auditado**: faltan solo palabras clave y enlaces a los otros dos registros (Edit → Publish, sin cambiar DOI) |
 | ORCID | ⏳ pendiente del autor | importar los DOI como *works* |
 
 ### 10-septies. Brazo pagado: adaptador listo y probado contra la API real (12-oct-2026)

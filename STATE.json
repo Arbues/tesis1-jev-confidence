@@ -378,7 +378,19 @@
     "registro": "tipo Software, version v1.0.0, licencia apache2.0, titulo 'Metrologia y transferencia del campo confidence en modelos de decision de pesos abiertos tipo Jev', autor 'Perez Villegas, Arbaes Enrique' con ORCID 0009-0004-7605-6569 y afiliacion FC-UNI, keywords completas, archivo Arbues/tesis1-jev-confidence-v1.0.0.zip (16.9 MB), relacion isSupplementTo https://github.com/Arbues/tesis1-jev-confidence/tree/v1.0.0",
     "por_que_el_autor_no_lo_encontraba": "La interfaz de Zenodo cambio: la pestana 'Uploads' se retiro en octubre de 2023 (ahora 'My dashboard' -> 'My uploads', https://zenodo.org/uploads); NO hay boton 'Upload' sino el icono '+' (Quick actions) -> 'New upload'; la integracion con GitHub vive en el MENU DE PERFIL (avatar arriba a la derecha) -> GitHub, https://zenodo.org/account/settings/github/; y en los depositos que vienen de un Release de GitHub NO existe boton 'Publicar' porque el Release ya publica. La frase antigua 'Zenodo -> Upload -> GitHub' describe una interfaz retirada.",
     "pendiente_de_metadatos": "El PRE-REGISTRO 10.5281/zenodo.23266795 NO tiene afiliacion (el registro de software si la tiene). Se arregla con Editar -> Publicar en ese registro, sin cambiar el DOI.",
-    "guia_detallada": "notes/zenodo-publicar-guia-literal.md (guia literal clic a clic + diagnostico + tabla sintomas/causa/solucion, con 20 fuentes fechadas)"
+    "guia_detallada": "notes/zenodo-publicar-guia-literal.md (guia literal clic a clic + diagnostico + tabla sintomas/causa/solucion, con 20 fuentes fechadas)",
+    "preprint_2026_10_12": {
+      "doi": "10.5281/zenodo.23329431 (concepto 10.5281/zenodo.23329430, los dos RESUELVEN)",
+      "auditoria_agente": "Publicado el 13-oct-2026 (deposito real 12-oct 21:18 Lima). Tipo Publication->Preprint, version 1.0, licencia cc-by-4.0, idioma spa, un solo creador con ORCID y afiliacion, descripcion real (el Resumen del paper, no un placeholder). El PDF depositado es BYTE-IDENTICO al local: md5 c9d7d9bb2a65e4addabb5da0663dc5a7, 489093 bytes, 11 paginas, y ya contiene los titulos canonicos de arXiv corregidos. DOI resuelve (200).",
+      "arreglos_pendientes_edit_publish": [
+        "PALABRAS CLAVE: el campo quedo vacio. Pegar: Jev, confidence, calibracion, transferencia de umbrales, modelos de decision, pesos abiertos, RLCD, metrologia",
+        "RELACIONES: el registro no enlaza con los otros dos. Anadir 10.5281/zenodo.23266795 (Publication/Preprint, relacion References) y 10.5281/zenodo.23328989 (Software, Is supplemented by); opcional el repo de GitHub (Software, Is supplemented by)",
+        "AFILIACION: quedo como 'National University of Engineering'; unificar a 'Facultad de Ciencias, Universidad Nacional de Ingenieria (FC-UNI), Lima, Peru' para casar con el registro de software y con el propio PDF",
+        "OPCIONAL: fecha de publicacion 2026-10-12 (fecha local del deposito) y version v1.0.0 para casar con el software"
+      ],
+      "no_hace_falta": "Renombrar el archivo (obligaria a crear una NUEVA VERSION del registro) y recompilar el PDF para citar el DOI del software: cosmetico, se puede dejar asi. El concept DOI propio del preprint (23329430) separado de los otros dos es esperado en depositos independientes.",
+      "otro_pendiente": "El PRE-REGISTRO 10.5281/zenodo.23266795 sigue sin afiliacion (los otros dos si la tienen): Edit -> Publish, sin cambiar el DOI."
+    }
   },
 
   "archivos": {
