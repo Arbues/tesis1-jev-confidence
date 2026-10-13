@@ -33,7 +33,7 @@ identifiers:
     description: "DOI de concepto del instrumento: apunta siempre a la última versión publicada."
   - type: doi
     value: 10.5281/zenodo.23328989
-    description: "Primera versión publicada (v1.0.0), conservada como histórica.
+    description: "Primera versión publicada (v1.0.0), conservada como histórica."
   - type: swh
     value: "swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0"
     description: >-
