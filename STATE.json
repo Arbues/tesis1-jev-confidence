@@ -343,6 +343,14 @@
     "no_hacer": "No tocar paper/04_pre_registro.md (texto depositado); no crear el Release antes de conectar Zenodo (ya conectado, no revertir); no anadir definiciones al nivel raw sellado (solo extension declarada); nunca la clave en el repo, logs ni filas; no decir 'output_tokens = 0' del brazo pagado (medido: no lo es); no usar jev-latest para medir (fijar jev-1.13.0 y registrar response.model); Jev != JEPA."
   },
 
+  "fase1_en_ejecucion_2026_10_12": {
+    "release": "PUBLICADO v1.0.0 el 13-oct-2026 (commit 39a6856, que era el HEAD de main): https://github.com/Arbues/tesis1-jev-confidence/releases/tag/v1.0.0. Las notas del Release salen de docs/release-v1.0.0.md. Zenodo esta conectado, asi que el depósito se crea solo: FALTA QUE EL AUTOR LO PUBLIQUE (Zenodo -> Upload -> GitHub -> revisar metadatos -> Publicar) para que emita DOI de version y de concepto.",
+    "software_heritage": "ARCHIVADO. Save Code Now pedido el 12-oct-2026 (peticion 2554709, visit_type git, sin body: con body da TypeError). Visita COMPLETA; snapshot swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd; SWHID de la revision v1.0.0 = swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0 (el sha1_git de una revision de git coincide con el sha del commit). Ya anadido a CITATION.cff (type: swh) y validado contra el esquema oficial (0 errores).",
+    "preprint": "PENDIENTE DEL AUTOR: registro Zenodo publication/preprint en espanol con paper/ieee/main.pdf y los metadatos de notes/zenodo-deposito-borradores.md seccion B.",
+    "orcid": "PENDIENTE DEL AUTOR: importar los DOI como works en 0009-0004-7605-6569.",
+    "referencias": "EN CURSO (subagente): verificacion de las 9 referencias pendientes en paper/02_referencias.bib + paper/ieee/referencias.bib (copias identicas, 41 entradas) contra fuentes autoritativas; compila despues con latexmk."
+  },
+
   "archivos": {
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (PUBLICO desde el 10-oct-2026; Apache-2.0 el codigo, CC-BY-4.0 el paper y los docs; CITATION.cff en la raiz) · se clona en el Acer Nitro para el desarrollo; el paper se trabaja en el thinkpad-t440",
     "regla_de_orden": "La RAIZ es solo para archivos de entrada (README, STATE.json, .hermes.md, AGENTS.md, .gitignore, LICENSE, LICENSE-docs, CITATION.cff) y carpetas. Codigo -> src/; resultados -> results/ (raw/, matrix/); texto del paper -> paper/ (figures/, tables/); ideas sueltas -> notes/; datasets/pesos -> data/ o models/ (no se versionan). No dejar artefactos sueltos en la raiz.",

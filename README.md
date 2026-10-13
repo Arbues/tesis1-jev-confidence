@@ -311,6 +311,16 @@ más frecuentes que en los brazos de pesos abiertos, que llegan con precisión c
 `notes/zenodo-deposito-borradores.md` (metadatos de los dos depósitos Zenodo: el automático del release y el
 preprint manual). El `.env` del autor va en `/home/arbues/.env` (no en el repo); `.gitignore` ahora lo cubre.
 
+### 10-sexies. Fase 1 en ejecución — Release y archivo (12/13-oct-2026)
+
+| Paso | Estado | Dato |
+|---|---|---|
+| **Release `v1.0.0`** | ✅ **publicado** (13-oct-2026) | commit `39a6856` · https://github.com/Arbues/tesis1-jev-confidence/releases/tag/v1.0.0 |
+| Depósito automático en Zenodo | ⏳ **lo publica el autor** | Zenodo → *Upload → GitHub*: revisar y pulsar Publicar → salen los DOI de versión y de concepto |
+| **Software Heritage** | ✅ **archivado** (visita completa) | SWHID de la revisión: `swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0` · snapshot `swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd` · ya en `CITATION.cff` |
+| Preprint con DOI | ⏳ pendiente del autor | metadatos listos en `notes/zenodo-deposito-borradores.md` §B |
+| ORCID | ⏳ pendiente del autor | importar los DOI como *works* |
+
 ### 10-quinquies. Guía de cierre: el flujo completo
 
 **`docs/guia-cierre-pendientes.md`** es el documento operativo que reordena todos los pendientes (`N1`–`N5` y los

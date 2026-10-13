@@ -22,6 +22,11 @@ license: Apache-2.0
 license-url: "https://github.com/Arbues/tesis1-jev-confidence/blob/main/LICENSE"
 repository-code: "https://github.com/Arbues/tesis1-jev-confidence"
 identifiers:
+  - type: swh
+    value: "swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0"
+    description: >-
+      Revision v1.0.0 archivada en Software Heritage (visita completa del 13-oct-2026; snapshot
+      swh:1:snp:4f02cd86f6605de0255e99ee61bfd92be96a89fd).
   - type: doi
     value: 10.5281/zenodo.23266795
     description: >-
