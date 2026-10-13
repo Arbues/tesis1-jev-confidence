@@ -321,6 +321,21 @@ preprint manual). El `.env` del autor va en `/home/arbues/.env` (no en el repo);
 | Preprint con DOI | ⏳ pendiente del autor | metadatos listos en `notes/zenodo-deposito-borradores.md` §B |
 | ORCID | ⏳ pendiente del autor | importar los DOI como *works* |
 
+### 10-septies. Brazo pagado: adaptador listo y probado contra la API real (12-oct-2026)
+
+`src/matriz/backend_typesafe.py` implementa el brazo de pago siguiendo el contrato verificado
+(`docs/adaptador-typesafe-contrato.md`): lee `TYPESAFE_API_KEY` de `~/.env`, fija `jev-1.13.0` (y **falla**
+si el servidor responde otro build, regla D4), traduce `criteria` (mapa en `choice`, array ordenado en
+`score`), reintenta `429/500/502/503/504/529` con backoff, y contabiliza `input_tokens`/`output_tokens` y
+**costo por 1.000 decisiones**. Tope de gasto declarable con `--presupuesto-usd`.
+
+- **15 tests nuevos sin red** (`tests/test_backend_typesafe.py`, transporte inyectado) → **52 tests en total**.
+- Uso: `python src/matriz/medir.py --model typesafe --dataset banking77 --limite 200 --presupuesto-usd 1`.
+- **Prueba de humo contra la API real** (1 ítem, 3 preguntas: `choice` n=4, `score` n=5, `noul`): filas
+  correctas, `correct` calculado, `output_tokens` registrado y **USD 0.018 por 1.000 decisiones**.
+- Detalle medido en esa prueba que confirma el titular en vivo: la **misma** distribución da
+  `conf_pmax` 0.8100 · `conf_jev` 0.7467 · `conf_ent` 0.6493 · `conf_margin` 0.6200.
+
 ### 10-quinquies. Guía de cierre: el flujo completo
 
 **`docs/guia-cierre-pendientes.md`** es el documento operativo que reordena todos los pendientes (`N1`–`N5` y los

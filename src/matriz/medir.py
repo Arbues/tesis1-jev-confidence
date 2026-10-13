@@ -42,7 +42,7 @@ from adaptadores import AdaptadorNoDisponible, cargar, listar  # noqa: E402
 # VRAM que necesita reservar ESTE proceso antes de cargar, en MiB.
 # `kev` va por HTTP contra su propio servidor: el modelo ya está residente allí, así que este
 # proceso no reserva nada (pedir 5 GB libres hacía que el guard abortara con el servidor vivo).
-VRAM_ESTIMADA = {"laya": 1600, "kev": 0, "raw": 2600, "hf": 2600}
+VRAM_ESTIMADA = {"laya": 1600, "kev": 0, "raw": 2600, "hf": 2600, "typesafe": 0}
 
 
 def _backend(args):
@@ -59,6 +59,7 @@ def _backend(args):
     a.revision = args.revision
     a.device = args.device
     a.base_url = args.base_url
+    a.presupuesto_usd = getattr(args, "presupuesto_usd", None)
     return build_backend(a)
 
 
@@ -176,7 +177,7 @@ def medir(backend, backend_key, dataset, limite, out_dir, info, sufijo=""):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Mide un modelo sobre un dataset (matriz de transferencia)")
-    ap.add_argument("--model", choices=["laya", "kev", "raw", "hf"], help="backend")
+    ap.add_argument("--model", choices=["laya", "kev", "raw", "hf", "typesafe"], help="backend")
     ap.add_argument("--model-id", default=None, help="id HF (para --model raw/hf)")
     ap.add_argument("--subfolder", default="none", help="checkpoint de Laya")
     ap.add_argument("--revision", default=None, help="revisión/sha del Hub (se registra, D4)")
@@ -184,6 +185,8 @@ def main(argv=None):
     ap.add_argument("--base-url", default="http://127.0.0.1:8008", help="servidor de Kev")
     ap.add_argument("--dataset", default=None, help="adaptador de dataset")
     ap.add_argument("--limite", type=int, default=400, help="nº máximo de casos")
+    ap.add_argument("--presupuesto-usd", type=float, default=None,
+                    help="tope de gasto con el backend typesafe (abraza la corrida al superarlo)")
     ap.add_argument("--out", default=os.path.join(RAIZ, "results", "crudos"))
     ap.add_argument("--listar", action="store_true", help="lista los adaptadores y sale")
     ap.add_argument("--inspeccionar", action="store_true", help="carga 3 casos y los imprime")

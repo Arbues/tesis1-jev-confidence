@@ -763,12 +763,24 @@ def build_backend(args):
     if args.model == "raw":
         return HFLogitBackend(model_id=args.model_id or "Qwen/Qwen3.5-0.8B-Base",
                               revision=args.revision, device=device), "raw"
+    if args.model == "typesafe":
+        # El brazo PAGADO: el modelo vive en TypeSafe, este proceso solo habla HTTPS (sin GPU).
+        # Se importa desde `src/matriz/` solo cuando se usa (el pipeline no lo necesita para medir
+        # los brazos de pesos abiertos).
+        import sys as _sys
+        _sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "matriz"))
+        from backend_typesafe import TypesafeBackend
+
+        return TypesafeBackend(model=args.model_id or "jev-1.13.0",
+                               timeout=getattr(args, "timeout", 120),
+                               presupuesto_usd=getattr(args, "presupuesto_usd", None)), "typesafe"
     raise SystemExit(f"backend desconocido: {args.model}")
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Paso 0 go/no-go — Tesis 1 Ruta 1")
-    ap.add_argument("--model", choices=list(BACKENDS), help="backend a correr (laya | kev | raw)")
+    ap.add_argument("--model", choices=list(BACKENDS) + ["typesafe"],
+                    help="backend a correr (laya | kev | raw | typesafe)")
     ap.add_argument("--model-id", default=None, help="override del id HF")
     ap.add_argument("--subfolder", default="typed-decisions",
                     help="checkpoint de Laya: typed-decisions | multilingual | none (english)")
@@ -782,6 +794,8 @@ def main(argv=None):
     ap.add_argument("--n", type=int, default=200, help="nº de casos (filas del dataset) por config")
     ap.add_argument("--out", default="results/raw", help="carpeta de salida de artefactos")
     ap.add_argument("--selftest", action="store_true", help="valida la matemática (stdlib; corre sin GPU)")
+    ap.add_argument("--presupuesto-usd", type=float, default=None,
+                    help="tope de gasto para el backend typesafe (abraza la corrida al superarlo)")
     ap.add_argument("--mock", action="store_true", help="genera artefactos con datos sintéticos (sin GPU)")
     ap.add_argument("--inspect", action="store_true", help="descubre la API real de Laya/Kev (red; sin GPU)")
     args = ap.parse_args(argv)
