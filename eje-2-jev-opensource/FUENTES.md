@@ -186,7 +186,7 @@ el experimento.
 
 Fuente del índice: [github.com/yibie/awesome-jev](https://github.com/yibie/awesome-jev) — ★**1.631**,
 **367 entradas en 14 categorías**, con criterios de inclusión explícitos y una advertencia honesta
-sobre envíos en bloque. Sus dos categorías relevantes están volcadas en `audit/jev-oss/`.
+sobre envíos en bloque. Sus dos categorías relevantes se volcaron en `audit/jev-oss/` (copias eliminadas del repo el 13-oct-2026).
 
 **Calibración y metrología:**
 
@@ -269,8 +269,8 @@ sobre envíos en bloque. Sus dos categorías relevantes están volcadas en `audi
 
 ## 11. El hueco de este eje (para referencia)
 
-Este eje **no es el elegido** (`eje-1-jepa` lo es), pero es la salida de emergencia más sólida.
-Si algún día se retoma:
+Este eje **ES el elegido** (Ruta 1, metrología del campo `confidence`). El material de JEPA/`eje-1-jepa` se
+descartó y se eliminó del repo el 13-oct-2026. Lo que sigue queda como registro de los huecos que se evaluaron:
 
 - **El "cuánto" está ocupado:** hay auditorías **pre-registradas** de calibración, en **español**,
   de sesgo de posición, de inversiones de ranking, OOD y médico. No repitas eso.

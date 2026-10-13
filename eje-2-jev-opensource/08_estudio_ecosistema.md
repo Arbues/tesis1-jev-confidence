@@ -343,7 +343,7 @@ es la salida de emergencia más sólida que tienes.
 
 **Verificado con API en esta sesión:** GitHub (`gh api`, 152 repos por 6 consultas + 10 repos
 individuales), Hugging Face (modelos, datasets, 4 organizaciones), PyPI (9 paquetes).
-Los README completos de 11 repos quedaron en `audit/jev-oss/`.
+Los README completos de 11 repos se recogieron en `audit/jev-oss/` (copias eliminadas del repo el 13-oct-2026: son públicas en sus repositorios).
 
 **Documentos clave del ecosistema:**
 - `archerhume.com/posts/jevs-architecture-unmasked` — 10.000 llamadas, 7 principios

@@ -270,7 +270,7 @@ En la RTX 4050 solo caben los pequeños con encoder congelado y features cachead
 - **No decir "`output_tokens = 0`" del brazo pagado**: está medido que no lo es.
 - **No mezclar el brazo pagado con los abiertos sin declarar la rejilla de 0.01.**
 - **No usar `jev-latest` para medir**: se mueve; fijar `jev-1.13.0` y registrar `response.model`.
-- **Jev ≠ JEPA.** `eje-1-jepa/` y `_descartado/` siguen fuera de alcance.
+- **Jev ≠ JEPA.** El material de `eje-1-jepa/` y `_descartado/` está fuera de alcance y se eliminó del repo (solo en el historial de git).
 
 ---
 
