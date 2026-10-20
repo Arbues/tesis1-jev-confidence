@@ -1,7 +1,7 @@
 {
   "proyecto": "Tesis 1 — Ciencia de la Computación (FC-UNI)",
   "autor": "Arbués Enrique Pérez V. · ORCID 0009-0004-7605-6569 · FC-UNI",
-  "ultima_actualizacion": "2026-10-13",
+  "ultima_actualizacion": "2026-10-20b",
   "como_usar": "Punto de reentrada. Leer: este STATE.json → README.md → docs/guia-cierre-pendientes.md. Cualquier cambio del repo se refleja aquí y en README.md en el mismo paso.",
   "estado_en_una_linea": "Tesis 1 CONSTRUIDA, MEDIDA Y RESERVADA (3 depósitos con DOI + Software Heritage + ORCID). No queda cómputo pendiente de la medición; lo que falta está en `pendientes`.",
   "tema": {
@@ -60,7 +60,7 @@
     "nota": "Sesión de cierre: se pasó de 'instrumento medido' a 'instrumento reservado y verificable'. Detalle en README §10-bis y en docs/.",
     "reserva": "Release v1.0.0 y v1.0.1 en GitHub → Zenodo archivó automáticamente (los DOIs se emiten y publican solos; en un depósito de GitHub NO hay botón Publicar). Software Heritage completo. Preprint depositado. 3 works en ORCID. CITATION.cff con los 6 identificadores (versión vigente, concepto, histórica, pre-registro, SWHID, ORCID) validado contra el esquema oficial (0 errores).",
     "referencias": "Las 9 verificaciones de trazabilidad (D4) RESUELTAS: paper/02_referencias_pendientes.md quedó vacía. Se corrigieron 3 títulos inventados y autores inventados ('Gao, X. and Wang, Y.' → Zhimin Gao, Pichao Wang; '{CMU}' → los cuatro autores reales), y la nota falsa de good1952 (Good 1952 es la regla LOGARÍTMICA, no la esférica). Los dos .bib quedan idénticos. Compilación verificada: 11 páginas, 34 bibitems, 0 citas sin resolver.",
-    "brazo_pagado": "src/matriz/backend_typesafe.py (backend `typesafe` del pipeline): clave desde TYPESAFE_API_KEY o ~/.env, model fijo jev-1.13.0 con fallo si el servidor responde otro build, criteria traducido (mapa en choice, array ordenado en score), reintentos con backoff, costo por 1.000 decisiones y tope con --presupuesto-usd. 15 tests sin red → 52 tests en total. Prueba de humo real: USD 0.018 por 1.000 decisiones (gasto total de todas las verificaciones < USD 0.001).",
+    "brazo_pagado": "src/matriz/backend_typesafe.py (backend `typesafe` del pipeline): clave desde TYPESAFE_API_KEY o ~/.env, model fijo jev-1.13.0 con fallo si el servidor responde otro build, criteria traducido (mapa en choice, array ordenado en score), reintentos con backoff, costo por 1.000 decisiones y tope con --presupuesto-usd. 15 tests sin red → 52 tests en total (63 desde el 19-oct con los 11 de conf_score). Prueba de humo real: USD 0.018 por 1.000 decisiones (gasto total de todas las verificaciones < USD 0.001).",
     "contrato_de_la_api": "Verificado en vivo (docs/adaptador-typesafe-contrato.md): solo POST /v1/systemone y GET /v1/models (sin lote, 1 ítem = 1 request); el campo de opciones es `criteria`; la respuesta trae model y usage; noul sin confidence; choice = fórmula de Jev; score = MAD_unif.",
     "erratas": "E1–E3 previas; E4 (output_tokens: mecanismo ≠ contador, aplicada en markdown y LaTeX), E5 (score y choice no comparten fórmula), E6 (fecha del pre-registro: 09-oct según el registro; el archivo no se toca).",
     "documentos_nuevos": [
@@ -83,14 +83,14 @@
     {
       "n": 2,
       "quien": "autor",
-      "que": "Dos juicios de referencias: (a) la regla ESFÉRICA quedó sin autoría propia (el texto cita good1952+epstein1969, que son la logarítmica y el RPS): ¿perseguir y añadir Roby (1964) o dejarla amparada en gneiting2007? (b) ¿mantener los títulos canónicos de arXiv en las 3 entradas corregidas?",
-      "estado": "pendiente"
+      "que": "Dos juicios de referencias: (a) la regla ESFÉRICA quedó sin autoría propia; (b) títulos canónicos de arXiv.",
+      "estado": "CERRADO 19-oct-2026: se añadieron roby1965 (Behavioral Science 10(3):255-270, DOI 10.1002/bs.3830100304) y jose2009 (Theory and Decision 66(3):263-281, DOI 10.1007/s11238-007-9067-x), ambos verificados en Crossref; el texto cita good1952+roby1965+epstein1969 y la caracterización axiomática. Estándar global de citas fijado para TODAS las entradas (arXiv como misc con eprint+archivePrefix+url, título canónico entre llaves; toda entrada con DOI o URL). Excepción declarada: lakoreai2026 se cita por repositorio. PDF recompilado: 11 páginas, 36 ítems, 0 citas sin resolver."
     },
     {
       "n": 3,
       "quien": "autor",
       "que": "Decidir si la definición que el API real devuelve en `score` (MAD_unif) entra en la librería y en la matriz como EXTENSIÓN DECLARADA (posterior al pre-registro).",
-      "estado": "pendiente"
+      "estado": "DECIDIDO por el autor (19-oct-2026): ENTRA como extensión declarada. Implementado: conf_score + score_mad_unif + CONFIDENCES_EXT en definiciones.py (CONFIDENCES sigue con las 4 selladas), 11 tests nuevos, src/matriz/extension_conf_score.py -> results/matrix/EXTENSION_CONF_SCORE.md (+ .csv). Cifras: sst5, 5.505 decisiones, 5 grupos; brecha mediana 0.272 (4 defs) -> 0.290 (5 defs); ECE global score 0.241. Verificado en vivo contra la API: probs=[0.43,0.57,0,0,0] -> confidence 0.64 = fórmula."
     },
     {
       "n": 4,
@@ -108,7 +108,7 @@
       "n": 6,
       "quien": "agente",
       "que": "Corrida real del brazo pagado sobre los datasets etiquetados (~USD 0.33 la suite completa, sin GPU), declarando la rejilla de 0.01 y con columna de costo por 1.000 decisiones. Depende de la decisión n=3.",
-      "estado": "pendiente, bloqueada por n=3"
+      "estado": "CERRADO 20-oct-2026 en el t440 (sin GPU, HTTP). 14.277 decisiones en los 5 datasets (banking77 3.076 acc 0.796 · clinc150 3.100 acc 0.901 · sst5 1.101 acc 0.541 · typed-decisions 2.000 acc 0.733 · wanli 5.000 acc 0.754), jev-1.13.0 real, rejilla 0.01, output_tokens != 0. Crudos en results/pagado/ (aparte de los sellados). Gasto ~USD 0.79 (tope autorizado 5). Dos datasets fallaron primero por tope de presupuesto: la tarifa real es USD 0.105/1.000 en banking77 y 0.071 en clinc150 (cardinalidad alta), 4x la estimación previa."
     },
     {
       "n": 7,
@@ -123,9 +123,19 @@
       "estado": "otro alcance"
     }
   ],
+  "brazo_pagado_2026_10_20": {
+    "nota": "Corrida real del API de TypeSafe (jev-1.13.0) sobre los 5 datasets etiquetados. Extensión declarada posterior al pre-registro. Crudos en results/pagado/, jamas mezclados con results/crudos/.",
+    "n": 14277,
+    "gasto_usd": 0.79,
+    "rejilla": "0.01 (probabilities y confidence redondeadas) — declarada; los empates de umbral no son comparables con los pesos abiertos",
+    "matriz_combinada": "results/matrix_pagado/ (2.880 celdas, 6 modelos = 5 locales + typesafe-ai/jev, niveles raw y L1). L0 omitido: el prior cuesta ~44 min por grupo y prior_vectorizado no es bit-identico.",
+    "hallazgo": "Jev por API tiene el |delta| directo MAS BAJO de todos (0.1307 vs 0.2233-0.2499 de los locales, 0.3635 del control crudo) pero el |delta| con mapa 6-9x PEOR (0.0130 vs 0.0014-0.0028): la rejilla de 0.01 multiplica los empates de umbral y degrada el mapa. Factor directo/mapa: 10x en Jev frente a 79x-165x en los pesos abiertos.",
+    "verificacion_E5_en_vivo": "En las filas type=score el confianza reportada por el API coincide con conf_score (max 0.0050, 100% de 800 filas); en type=choice coincide conf_jev (max 0.0050, 600 filas). Cada primitiva usa una formula distinta, medido contra el servicio.",
+    "scripts": "src/matriz/correr_pagado.sh (reanudable, salta lo ya medido) · correr_matriz_pagado.sh (serie) · correr_matriz_paralela.sh (--jobs N; validado identico tras recalcular el FDR global con fusionar_matriz_paralela.py)"
+  },
   "artefactos": {
     "punto_de_reentrada": "STATE.json → README.md → .hermes.md (auto-cargado) → docs/guia-cierre-pendientes.md",
-    "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (52) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
+    "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (63) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
     "pipeline": "src/matriz/ (medir.py, matriz.py, informe_matriz.py, figura.py, adaptadores.py, backend_typesafe.py, correr_*.sh) · src/figuras_paper.py · src/paso0_go_no_go.py · src/paso0_informe.py",
     "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps) · results/raw/ y results/paso0_informe.md (paso 0)",
     "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib, 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + secciones/ + compilar.sh + main.pdf), figures/ (8 figuras)",
@@ -134,7 +144,7 @@
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR."
   },
   "como_verificar": {
-    "tests": ".venv/bin/python -m pytest   # 52 tests, corren en el t440 sin GPU",
+    "tests": ".venv/bin/python -m pytest   # 67 tests, corren en el t440 sin GPU",
     "matriz_regenerable": ".venv/bin/python src/matriz/informe_matriz.py && git diff --stat   # debe salir VACÍO",
     "figuras": ".venv/bin/python src/figuras_paper.py   # 8 figuras",
     "paper": "cd paper/ieee && ./compilar.sh   # main.pdf, 11 páginas (usa latexmk -gg)",

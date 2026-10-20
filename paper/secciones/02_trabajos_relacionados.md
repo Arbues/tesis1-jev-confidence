@@ -19,7 +19,8 @@ aciertos por confianza, medida con AUROC) es una propiedad distinta de la calibr
 **Reglas de puntuación propias.** \cite{gneiting2007} caracterizan las reglas **estrictamente propias**, cuyo
 óptimo se alcanza declarando la distribución verdadera. Es la base teórica de RLCD: la recompensa de Jev
 combina la regla logarítmica con la esférica, y el RPS para salidas ordinales
-\cite{good1952,epstein1969}. La teoría predice que reportar honestamente es la única estrategia óptima; la
+\cite{good1952,roby1965,epstein1969}; la esférica tiene caracterización axiomática propia
+\cite{jose2009}. La teoría predice que reportar honestamente es la única estrategia óptima; la
 práctica del ecosistema la contradice, como se ve en el cierre de esta sección.
 
 **Predicción selectiva.** \cite{chow1970} derivó la política óptima de rechazo: actuar cuando

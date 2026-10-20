@@ -149,6 +149,24 @@ que la de `choice` daría 0.25 a las dos.
 
 **Resolución.** Se documenta como una **quinta definición** del campo (dispersión ordinal) y se anota que
 la `score_confidence` de Kev pertenece a esa misma familia — lo que confirma que Kev espeja el adaptador
-de referencia de TypeSafe. Que entre o no en la librería y en la matriz **después** del pre-registro es
-decisión del autor (afecta artefactos sellados). Detalle del contrato: `docs/adaptador-typesafe-contrato.md`.
+de referencia de TypeSafe.
+
+### E5-bis — decisión del autor (19-oct-2026): entra como EXTENSIÓN DECLARADA
+
+El autor decidió que `conf_score` **sí entra**, porque comparar la definición de Jev con las de los modelos
+locales es parte del objetivo del paper. Se implementó sin tocar nada sellado:
+
+| Qué | Dónde | Nota |
+|---|---|---|
+| Función y constante | `src/jev_conf_metrics/definiciones.py` → `conf_score`, `score_mad_unif`, `CONFIDENCES_EXT` | `CONFIDENCES` sigue con las cuatro del pre-registro; `all_confidences(p)` no cambia de salida |
+| Tests | `tests/test_conf_score.py` (11) | ejemplo oficial de TypeSafe + no-invariancia a permutación + suelo en 0 |
+| Medición | `src/matriz/extension_conf_score.py` → `results/matrix/EXTENSION_CONF_SCORE.md` y `.csv` | 5.505 decisiones de `sst5`, 5 configuraciones |
+| Alcance | solo `sst5` (5 niveles ordinales) | `wanli`, `banking77`, `clinc150`, `typed-decisions` son nominales: no se inventa la escala |
+| Verificación en vivo | la API real devuelve exactamente `conf_score`: `probs=[0.43,0.57,0,0,0]` → `confidence_reportada = 0.64`, fórmula = 0.6417 | 20-oct-2026, brazo pagado |
+
+**Cifras (19-oct-2026):** brecha mediana entre la definición más alta y la más baja de la misma
+distribución: **0.272** con cuatro definiciones → **0.290** con cinco. ECE global de la corrida:
+`score` 0.241 · `margin` 0.237 · `pmax` 0.204 · `ent` 0.199 · `jev` 0.184.
+La quinta definición **cambia de signo según el modelo**: en el control crudo Qwen es la más pesimista en
+el 70.3 % de las filas; en Laya-multilingual, la más optimista en el 92.6 %.
 

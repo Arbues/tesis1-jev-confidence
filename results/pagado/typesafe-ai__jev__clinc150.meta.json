@@ -1,0 +1,25 @@
+{
+  "modelo": "typesafe-ai/jev",
+  "backend": "typesafe",
+  "dataset": "clinc150",
+  "n_filas": 3100,
+  "n_saltadas": 0,
+  "n_casos": 3100,
+  "backend_info": {
+    "backend": "typesafe-api",
+    "base_url": "https://api.typesafe.ai",
+    "model": "jev-1.13.0",
+    "model_id": "typesafe-ai/jev",
+    "revision": "jev-1.13.0",
+    "rejilla_probabilidades": 0.01,
+    "precio_entrada_usd_mtok": 0.042,
+    "precio_salida_usd_mtok": 0.0,
+    "presupuesto_usd": 0.55
+  },
+  "cardinalidades": [
+    151
+  ],
+  "accuracy": 0.9006451612903226,
+  "output_tokens_total": 4034486,
+  "ruta": "results/pagado/typesafe-ai__jev__clinc150.jsonl"
+}

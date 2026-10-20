@@ -35,7 +35,7 @@ MODEL_ID = "typesafe-ai/jev"
 PRECIO_ENTRADA_USD_MTOK = 0.042
 PRECIO_SALIDA_USD_MTOK = 0.0
 #: Códigos que merece la pena reintentar (429 y 529 están documentados; 5xx por cortesía).
-REINTENTABLES = {429, 500, 502, 503, 504, 529}
+REINTENTABLES = {429, 500, 502, 503, 504, 529, 599}
 
 
 class TypesafeError(RuntimeError):
@@ -167,6 +167,11 @@ class TypesafeBackend:
                 return r.status, r.read().decode()
         except urllib.error.HTTPError as e:
             return e.code, e.read().decode(errors="replace")
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+            # Corte de red / reset del par (visto en corridas largas: Errno 104 a los ~800 ítems).
+            # Se devuelve un estado sintético reintentable para que el bucle de reintentos lo absorba
+            # en vez de tumbar una corrida de 3.000 ítems.
+            return 599, f"transporte: {type(e).__name__}: {e}"
 
     # ---------------------------------------------------------------- predicción
     def predict(self, state, questions):

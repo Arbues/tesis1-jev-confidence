@@ -48,10 +48,18 @@ all_confidences(p)
 | `conf_ent(p)` | `1 − H(p)/log n` | Laya para `choice`/`score` |
 | `conf_margin(p)` | `p_(1) − p_(2)` | margen top-2 |
 | `conf_noul(px)` | `max(px, 1 − px)` | primitivo `noul` (binario) |
-| `all_confidences(p)` | las cuatro anteriores a la vez | — |
+| `conf_score(p)` | `max(0, 1 − Σᵢ pᵢ·\|i − m\| / MAD_unif)` | primitivo `score` de TypeSafe — **extensión declarada** (posterior al pre-registro) |
+| `all_confidences(p)` | las cuatro del pre-registro a la vez | — |
+| `all_confidences(p, extensiones=True)` | las cinco | — |
+| `score_mad_unif(n)` | `(1/n)·Σᵢ \|i − (n−1)/2\|` | constante de normalización de `conf_score` |
 
-`CONFIDENCES` es el diccionario `nombre -> función` que usa la matriz; añadir una definición
-nueva es añadir una entrada aquí (ver «Extender» abajo).
+`CONFIDENCES` es el diccionario `nombre -> función` que usa la matriz **sellada** y contiene solo las
+cuatro definiciones del pre-registro. `CONFIDENCES_EXT` contiene las posteriores (`score`). La separación
+es deliberada: `matriz_transferencia.csv` y las filas crudas se regeneran byte a byte idénticos.
+
+> `conf_score` exige **orden** en los niveles (`i` es la posición ordinal). Solo se define sobre datasets
+> ordinales (`sst5`). Sobre etiquetas nominales habría que inventar la escala. Resultados:
+> `results/matrix/EXTENSION_CONF_SCORE.md`.
 
 ### Relaciones formales
 

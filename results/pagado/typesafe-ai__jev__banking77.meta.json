@@ -1,0 +1,25 @@
+{
+  "modelo": "typesafe-ai/jev",
+  "backend": "typesafe",
+  "dataset": "banking77",
+  "n_filas": 3076,
+  "n_saltadas": 0,
+  "n_casos": 3076,
+  "backend_info": {
+    "backend": "typesafe-api",
+    "base_url": "https://api.typesafe.ai",
+    "model": "jev-1.13.0",
+    "model_id": "typesafe-ai/jev",
+    "revision": "jev-1.13.0",
+    "rejilla_probabilidades": 0.01,
+    "precio_entrada_usd_mtok": 0.042,
+    "precio_salida_usd_mtok": 0.0,
+    "presupuesto_usd": 0.55
+  },
+  "cardinalidades": [
+    77
+  ],
+  "accuracy": 0.7961638491547465,
+  "output_tokens_total": 2547728,
+  "ruta": "results/pagado/typesafe-ai__jev__banking77.jsonl"
+}

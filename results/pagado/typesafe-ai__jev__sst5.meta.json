@@ -1,0 +1,25 @@
+{
+  "modelo": "typesafe-ai/jev",
+  "backend": "typesafe",
+  "dataset": "sst5",
+  "n_filas": 1101,
+  "n_saltadas": 0,
+  "n_casos": 1101,
+  "backend_info": {
+    "backend": "typesafe-api",
+    "base_url": "https://api.typesafe.ai",
+    "model": "jev-1.13.0",
+    "model_id": "typesafe-ai/jev",
+    "revision": "jev-1.13.0",
+    "rejilla_probabilidades": 0.01,
+    "precio_entrada_usd_mtok": 0.042,
+    "precio_salida_usd_mtok": 0.0,
+    "presupuesto_usd": 0.06
+  },
+  "cardinalidades": [
+    5
+  ],
+  "accuracy": 0.5413260672116258,
+  "output_tokens_total": 19818,
+  "ruta": "results/pagado/typesafe-ai__jev__sst5.jsonl"
+}

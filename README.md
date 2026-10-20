@@ -76,7 +76,7 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | **`results/`** | **ARTEFACTOS de medición**: `raw/` (paso 0), `crudos/` (65.185 mediciones confirmatorias, con `row_hash`), `matrix/` (la matriz, CSV + figuras + `RESUMEN_MATRIZ.md`) y `paso0_informe.md` | **vigente** |
 | `contexto/` | Investigación previa (veredicto de Jev/TypeSafe y costos); su §3.1 lo corrige `notes/pago-jev-api-costos-2026-10-12.md` | contexto |
 | `src/figuras_paper.py` | Genera las 8 figuras del paper desde los artefactos medidos | vigente |
-| `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 37 tests en cada `push` | vigente |
+| `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 67 tests en cada `push` | vigente |
 | `eje-1-jepa/`, `_descartado/` | **Eliminados del repo el 13-oct-2026** (eje descartado, fuera de alcance). Solo viven en el historial de git | eliminado |
 
 ### 3-bis. Estructura de trabajo y regla de orden
@@ -90,7 +90,7 @@ results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz 
 data/       Datasets descargados (los pesados NO se versionan)
 notes/      Apuntes, borradores y lluvia de ideas (aquí sí, suelto está bien)
 docs/       Guías (libreria.md, validacion-productos.md, erratas, contrato de la API, guía de cierre, releases)
-.github/    CI: los 37 tests en cada push/PR
+.github/    CI: los 67 tests en cada push/PR
 ```
 
 **Regla de orden (para que nada quede suelto en la raíz):** la **raíz** es solo para los archivos de
@@ -248,14 +248,83 @@ contrato de la API de TypeSafe verificado en vivo.
 
 | ✋ Autor | 🤖 Agente |
 |---|---|
-| Leer §1–§7 y decidir si el PDF IEEE lo representa (es lo último que cierra la Tesis 1) | Repo nuevo `decision-calibration-bench` (paquete + CLI `jevconf` + proveedor simulado + docs + release con DOI) |
-| Dos juicios de referencias: la regla **esférica** quedó sin autoría propia · mantener los títulos canónicos | Corrida del **brazo pagado** (~USD 0.33, sin GPU), tras la decisión de `conf_score` |
-| Decidir si `conf_score` (la fórmula que el API real devuelve en `score`) entra como **extensión declarada** | Visibilidad (N3) y paper en inglés (N5) |
-| arXiv: hace falta **endosso personal** (0 papers en arXiv) | |
-| (Opcional, cosmético) cerrar el grafo de relaciones en Zenodo | |
+| Leer §1–§7 y decidir si el PDF IEEE lo representa (es lo último que cierra la Tesis 1) — **en curso** | Repo nuevo `decision-calibration-bench` **en revisión**: la recomendación es NO crear otro repo y distribuir este como paquete (ver §10-ter) |
+| arXiv: hace falta **endosso personal** (0 papers en arXiv) | Corrida del **brazo pagado** (~USD 0.37, sin GPU) **en ejecución** en el t440 → `results/pagado/` |
+| (Opcional, cosmético) cerrar el grafo de relaciones en Zenodo | Visibilidad (N3) y paper en inglés (N5) — el inglés queda **bloqueado hasta que apruebes §1–§7** |
+
+**Cerrado el 19–20-oct-2026:** las **dos** decisiones de referencias (se añadieron `roby1965` y `jose2009`, con DOI
+verificado en Crossref, y se fijó un **estándar único de citas** para todo el `.bib`) · la definición
+**`conf_score` (MAD_unif)** entró como **extensión declarada** (11 tests nuevos, `results/matrix/EXTENSION_CONF_SCORE.md`)
+· los conteos de tests corregidos de 37 a **63** en la documentación viva · smoke test del brazo pagado verificado
+contra la API real.
 
 Guías: `docs/guia-cierre-pendientes.md` (flujo por fases) · `notes/zenodo-publicar-guia-literal.md` (la interfaz
 real de Zenodo, con etiquetas literales) · `docs/release-v1.0.1.md` (qué cambia y por qué).
+
+### 10-ter. Dónde vive el framework — propuesta (19-oct-2026, pendiente de tu OK)
+
+**Pregunta que planteó el autor:** ¿el framework de comparación va a un repo nuevo (`decision-calibration-bench`)
+y aquí queda el paper, o al revés? ¿O no hace falta?
+
+**Hecho que manda:** el DOI del instrumento (`10.5281/zenodo.23330647`, concepto `…23328988`) es un snapshot de
+**este** repo. Zenodo publica solo desde Releases de GitHub: la versión nueva del framework sale **aquí**, como
+`v1.1.0`, y hereda el **mismo DOI de concepto**. Mover el código a otro repo obliga a emitir un DOI nuevo y a que
+el paper cite dos artefactos.
+
+**Recomendación: no crear un repo nuevo.** Lo que falta no es separar, es **distribuir**:
+
+| Bloqueador real | Solución en ESTE repo | Coste |
+|---|---|---|
+| No hay CLI | `cli.py` + `[project.scripts] jevconf` (`list-brazos · medir · matriz · informe · figuras`) | 1 sesión |
+| `medir` exige GPU/red | backend simulado determinista por semilla (`--mock`) | incluido |
+| El pipeline no está empaquetado | mover `medir/matriz/informe` dentro del paquete | incluido |
+| `datasets` no declarado | extra opcional `[datasets]` + fixtures locales para los tests | incluido |
+| Nadie lo encuentra | publicar en **PyPI** (`pip install jev-conf-metrics`) + README en inglés + topics | 30 min |
+| Sin versión citable nueva | `v1.1.0` → DOI nuevo bajo el MISMO concepto, sin tocar el v1.0.1 | 5 min |
+
+**Por qué no una librería conocida:** no existe un proyecto upstream equivalente (no hay «scikit-learn» de
+metrología de `confidence` en modelos de decisión). El canal de distribución correcto es **PyPI + el DOI**, no
+fusionarse en otro repo.
+
+**Si algún día el repo estorba:** se separa `paper/` + `docs/` a `tesis1-paper` y el código se queda aquí. Al revés
+es peor: rompe el DOI, los enlaces del preprint y las rutas de `README`/`STATE`.
+
+### 10-quater. Brazo pagado — medido (20-oct-2026, t440 sin GPU)
+
+El API real de TypeSafe (`jev-1.13.0`) sobre los 5 datasets: **14.277 decisiones**, ~**USD 0.79**.
+Crudos en `results/pagado/` (nunca mezclados con `results/crudos/`), matriz combinada en `results/matrix_pagado/`.
+
+| dataset | n | accuracy |
+|---|---|---|
+| clinc150 | 3.100 | 0.901 |
+| banking77 | 3.076 | 0.796 |
+| wanli | 5.000 | 0.754 |
+| typed-decisions | 2.000 | 0.733 |
+| sst5 | 1.101 | 0.541 |
+
+**El titular nuevo** (nivel `raw`, 2.880 celdas, 6 modelos = 5 locales + Jev):
+
+| modelo | \|Δ\| directo | \|Δ\| con mapa | factor |
+|---|---|---|---|
+| **typesafe-ai/jev** | **0.1307** | 0.0130 | **10×** |
+| laya | 0.2233 | 0.0028 | 79× |
+| laya/multilingual | 0.1316 | 0.0018 | 75× |
+| laya/typed-decisions | 0.2381 | 0.0014 | 165× |
+| kev-0.8b | 0.2499 | 0.0022 | 114× |
+| Qwen3.5 crudo (control) | 0.3635 | 0.0517 | 7× |
+
+Jev tiene el error **directo** más bajo de todos pero el error **con mapa** 6–9× peor que los pesos
+abiertos: la **rejilla de 0.01** multiplica los empates de umbral y degrada el mapa. La rejilla se declara
+siempre; no se mezcla con los brazos de pesos abiertos.
+
+**Verificación de E5 en vivo:** en filas `score` la confianza del API coincide con `conf_score` (máx 0.0050,
+100 % de 800 filas); en `choice`, con `conf_jev` (600 filas). Cada primitiva usa una fórmula distinta, medido
+contra el servicio.
+
+**Rendimiento (medido, no estimado):** el costo de la matriz lo domina el prior del debiasing `L0`
+(~44 min por grupo con 77 clases). Por eso la matriz combinada corre en `raw`+`L1`. La paralelización por
+grupos existe (`correr_matriz_paralela.sh`) pero rinde **1.11×** en el t440 (2 núcleos físicos): se deja
+documentada, no como camino por defecto.
 
 ---
 

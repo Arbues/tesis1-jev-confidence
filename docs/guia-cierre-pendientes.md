@@ -12,7 +12,7 @@ Regla de mantenimiento: si algo de aquí cambia, se actualiza `README.md` y `STA
 
 | Hecho | Evidencia |
 |---|---|
-| Tema, ruta, especificación, librería, matriz y paper redactados | `README.md` §7 · `paper/03_especificacion_confidence.md` · `src/jev_conf_metrics/` (37 tests) |
+| Tema, ruta, especificación, librería, matriz y paper redactados | `README.md` §7 · `paper/03_especificacion_confidence.md` · `src/jev_conf_metrics/` (67 tests) |
 | Corrida confirmatoria medida | `results/crudos/` (65.185 decisiones) · `results/matrix/matriz_transferencia.csv` (3.564 celdas) |
 | Pre-registro publicado | DOI **10.5281/zenodo.23266795** |
 | Las 3 decisiones de alcance tomadas | `README.md` §10-ter (repo nuevo · pago vía TypeSafe · arXiv con endosso + preprint) |
@@ -197,7 +197,7 @@ pre-registro, por eso es decisión del autor.
 ## FASE 4 — El repositorio del framework (`N1`)
 
 Objetivo: que un tercero pueda **comparar modelos tipo Jev sin leer el paper**. La auditoría del 12-oct dice que esto
-no es "limpiar": es construir. Núcleo a importar: `src/jev_conf_metrics/` (stdlib puro, autocontenido) + los 37 tests.
+no es "limpiar": es construir. Núcleo a importar: `src/jev_conf_metrics/` (stdlib puro, autocontenido) + los 67 tests.
 
 | Bloqueador (auditoría) | Qué exige |
 |---|---|

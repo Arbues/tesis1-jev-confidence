@@ -43,3 +43,7 @@ Thumbs.db
 *.fdb_latexmk
 *.synctex.gz
 
+
+# --- Escenarios y parciales de la matriz (se regeneran con los .sh) ---
+results/_stage_pagado/
+results/matrix_pagado/partes/

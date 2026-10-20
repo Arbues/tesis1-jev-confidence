@@ -108,6 +108,38 @@ def test_agotar_reintentos_es_error():
         b.predict("s", {"i": {"type": "choice", "criteria": ["a"]}})
 
 
+def test_corte_de_red_se_reintenta_y_no_tumba_la_corrida(monkeypatch):
+    """Un Errno 104 (reset del par) debe absorberse como reintento, no abortar la corrida."""
+    import urllib.error
+    import urllib.request
+
+    llamadas = []
+
+    class _Fake:
+        status = 200
+
+        def read(self):
+            return json.dumps(RESPUESTA).encode()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def urlopen_falso(req, timeout=None):
+        llamadas.append(1)
+        if len(llamadas) < 3:
+            raise urllib.error.URLError(ConnectionResetError(104, "Connection reset by peer"))
+        return _Fake()
+
+    monkeypatch.setattr(urllib.request, "urlopen", urlopen_falso)
+    b = TypesafeBackend(api_key="x", dormir=lambda s: None)
+    out = b.predict("s", {"i": {"type": "choice", "criteria": ["a"]}})
+    assert len(llamadas) == 3
+    assert "intent" in out["answers"]
+
+
 def test_http_no_reintentable_es_error_con_cuerpo():
     b = TypesafeBackend(api_key="x", transport=lambda c: (422, "cuerpo inválido"),
                         dormir=lambda s: None)
