@@ -115,7 +115,7 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 3. **Congelado** (04-oct-2026): definiciones, datasets y cobertura objetivo → `paper/00_plan_del_paper.md` §10.
 4. **Especificación formal**: ✅ `paper/03_especificacion_confidence.md` (DEF-1..DEF-8, Proposiciones 1–3).
    Tres erratas corregidas y documentadas en `docs/erratas_especificacion.md` (E3, menor).
-5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (37 tests, `--selftest` OK).
+5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (67 tests, `--selftest` OK).
 6. **Matriz de transferencia**: ✅ **MEDIDA** en su corrida confirmatoria (la que declara el pre-registro).
    23 grupos (5 configuraciones de modelo × 5 datasets), 65.185 decisiones, 3.564 celdas.
    Informe: `results/matrix/RESUMEN_MATRIZ.md`; figuras y CSV en `results/matrix/`. Resultado central:
@@ -124,14 +124,28 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
    nivel principal `raw` (0.2337 vs 0.0021, sin celdas dominadas por empates). **El promedio engaña**
    (distribución bimodal): el titular es la tabla **por par** del informe §3b.
 
+### Estado al 20-oct-2026 (extensiones declaradas, posteriores al pre-registro)
+
+| Extensión | Dónde | Números |
+|---|---|---|
+| **`conf_score` (MAD_unif)**, 5.ª definición | `definiciones.py` → `CONFIDENCES_EXT` (**no** en `CONFIDENCES`); `results/matrix/EXTENSION_CONF_SCORE.md` | sst5, 5.505 decisiones · brecha 0.272 → **0.290** · ECE `score` 0.241 |
+| **Brazo pagado** (API TypeSafe `jev-1.13.0`) | `results/pagado/` (14.277 filas) · `results/matrix_pagado/` (2.880 celdas, 6 modelos) | ~USD 0.79 · rejilla 0.01 · Jev \|Δ\| directo **0.1307** y con mapa **0.0130** (6–9× peor que los locales) |
+
+Ninguna de las dos toca el núcleo sellado: `results/crudos/` y `results/matrix/` se regeneran idénticos.
+**Todavía no están dentro del paper** (§1–§7): integrarlas es la parte B pendiente.
+
 ### Pendiente, en orden
 
 | # | Qué falta | Quién | Nota |
 |---|---|---|---|
 | 1 | ~~DOI del pre-registro~~ | autor | ✅ **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026) |
 | 2 | ~~Corrida confirmatoria~~ | agente | ✅ hecha: 23 grupos, 65.185 filas, 3.564 celdas |
-| 3 | ~~Redacción §4–§7~~ | agente (t440) | ✅ escrita (09-oct-2026). **Pendiente: revisión del autor + formato APA/IEEE** |
-| 4 | Extensión al **Mac Mini**: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev | agente (Mac) | no caben en 6 GB de VRAM |
+| 3 | ~~Redacción §4–§7~~ | agente (t440) | ✅ escrita (09-oct-2026). **Pendiente: revisión del autor + formato IEEE** |
+| 4 | ~~Brazo pagado~~ | agente | ✅ 14.277 decisiones, USD 0.79 (20-oct-2026) |
+| 5 | ~~Referencias + estándar de citas~~ | agente | ✅ `roby1965` + `jose2009` con DOI; PDF 11 págs, 36 ítems, 0 citas sin resolver |
+| 6 | **Integrar las extensiones al paper** (parte B) | agente | §5 subsección declarada + conteo de tests en §1/§7 |
+| 7 | **Leer §1–§7** y decidir si el PDF lo representa | autor | es lo único que cierra la Tesis 1 |
+| 8 | Extensión al **Mac Mini**: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev | agente (Mac) | no caben en 6 GB de VRAM |
 
 **Los resultados del paso 0 no son el resultado de la tesis**: lo es la matriz, que ya existe y está medida
 sobre el conjunto completo. Si el t440 ya escribió §4–§7, **revisar las 4 cifras que cambiaron con la
