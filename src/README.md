@@ -70,6 +70,11 @@ from jev_conf_metrics import all_confidences, celda, umbral_para_cobertura, exig
 | `python src/matriz/matriz.py` | **CPU puro**: la matriz desde los crudos (K=5, q, bootstrap, FDR) |
 | `python src/matriz/figura.py` | los *heatmaps* (escala de color compartida) |
 | `python src/matriz/informe_matriz.py` | `results/matrix/RESUMEN_MATRIZ.md` |
+| `python src/matriz/medir.py --model typesafe --dataset sst5 --limite 1200 --presupuesto-usd 0.06 --out results/pagado` | **brazo pagado**: 1 request por ítem contra `api.typesafe.ai` (sin GPU, sin VRAM). Tope de gasto obligatorio |
+| `bash src/matriz/correr_pagado.sh` | los 5 datasets del brazo pagado, reanudable (salta lo ya medido) |
+| `python src/matriz/extension_conf_score.py` | la 5.ª definición (`conf_score`) sobre `sst5` → `results/matrix/EXTENSION_CONF_SCORE.md` |
+| `bash src/matriz/correr_matriz_pagado.sh` | matriz combinada (5 modelos locales + Jev) → `results/matrix_pagado/` |
+| `bash src/matriz/correr_matriz_paralela.sh 2` | idem partiendo los grupos por proceso (validado idéntico; rinde 1.11× en el t440) |
 
 Regla de recursos: un modelo a la vez, `exigir_recursos` antes de cargar, `liberar` después. Si la RAM
 disponible baja de **1 GB**, se para todo.
@@ -92,4 +97,5 @@ disponible baja de **1 GB**, se para todo.
 - Las métricas se reportan **con la convención declarada**: `ece_*_laya` replica el binning de Laya
   (`laya.common.ece_score`); `brier_teacher` y `soft_accuracy_teacher` replican las suyas
   (contra la distribución completa del profesor).
-- Corre esto en el **Nitro** o el **Mac Mini**, nunca en el `thinkpad-t440` (sin GPU).
+- Corre la **medición con pesos** en el **Nitro** o el **Mac Mini** (necesitan GPU). La matriz, el brazo pagado
+  (API por HTTP) y todas las extensiones corren en el **thinkpad-t440**: no necesitan GPU.

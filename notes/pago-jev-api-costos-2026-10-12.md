@@ -1,5 +1,20 @@
 # Camino de pago mínimo para medir Jev por API — economía de la corrida mínima
 
+> ## ⚠️ CORRECCIÓN MEDIDA (20-oct-2026) — la estimación de este documento se quedó corta
+>
+> La corrida real del brazo pagado dio **14.277 decisiones por ~USD 0.79**, no 0,33. La causa: el precio es por
+> **tokens de entrada** y con cardinalidad alta el prompt lleva las 77 (banking77) o 150 (clinc150) opciones.
+>
+> | dataset | USD por 1.000 decisiones | medido |
+> |---|---|---|
+> | banking77 (n=77) | **0.105** | 952 llamadas → 0.10005 USD |
+> | clinc150 (n=151) | **0.071** | 1.411 llamadas → 0.100043 USD |
+> | sst5 / typed-decisions / wanli (2–5 opciones) | ~0.018–0.026 | coincide con la estimación original |
+>
+> Consecuencias prácticas: (1) el tope de presupuesto debe fijarse **por dataset**, no global; (2) `medir.py` **no
+> reanuda**, así que una corrida que se corta se paga entera otra vez; (3) el resto del documento (rutas de pago,
+> mínimos de compra, planes) sigue vigente.
+
 **Fecha de verificación:** 12-oct-2026 · **Autor:** agente (subagente de investigación) · **Idioma:** español
 **Documento que revisa:** `contexto/00_veredicto_jev_typesafe.md` §3.1, §3.2, §6, §7 (no modificado).
 **Fuentes primarias hoy:** catálogo vivo `GET https://ai-gateway.vercel.sh/v1/models` (HTTP 200, **458 modelos**),

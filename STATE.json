@@ -137,11 +137,13 @@
     "punto_de_reentrada": "STATE.json → README.md → .hermes.md (auto-cargado) → docs/guia-cierre-pendientes.md",
     "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (63) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
     "pipeline": "src/matriz/ (medir.py, matriz.py, informe_matriz.py, figura.py, adaptadores.py, backend_typesafe.py, correr_*.sh) · src/figuras_paper.py · src/paso0_go_no_go.py · src/paso0_informe.py",
-    "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps) · results/raw/ y results/paso0_informe.md (paso 0)",
-    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib, 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + secciones/ + compilar.sh + main.pdf), figures/ (8 figuras)",
-    "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1–E6), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, handoff-t440.md, release-v1.0.0.md, release-v1.0.1.md",
+    "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps, EXTENSION_CONF_SCORE.md) · results/raw/ y results/paso0_informe.md (paso 0)",
+    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib (36 ítems), 02_referencias_pendientes.md (estándar de citas), 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + main.pdf 11 págs + compilar.sh), figures/ (8)",
+    "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1-E6 + E5-bis), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, handoff-t440.md, plan-visibilidad.md, release-v1.0.0.md, release-v1.0.1.md",
     "fuera_de_alcance": "eje-1-jepa/ y _descartado/ se ELIMINARON del repo el 13-oct-2026 (fuera de alcance; solo viven en el historial de git): no proponer subrutas de ahí. Exploración viva: audit/ (3 informes de saturación), contexto/, notes/, eje-2-jev-opensource/.",
-    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR."
+    "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR.",
+    "brazo_pagado": "results/pagado/ (5 .jsonl + metas, 14.277 filas, API real jev-1.13.0) · results/matrix_pagado/ (2.880 celdas, 6 modelos, RESUMEN_MATRIZ_PAGADO.md)",
+    "scripts_extensiones": "src/matriz/extension_conf_score.py · correr_pagado.sh · correr_matriz_pagado.sh · correr_matriz_paralela.sh · fusionar_matriz_paralela.py · vigilar_pagado.sh"
   },
   "como_verificar": {
     "tests": ".venv/bin/python -m pytest   # 67 tests, corren en el t440 sin GPU",
@@ -189,5 +191,14 @@
     "por_que_es_seguro": "Todo queda en el historial de git (recuperable con git show/checkout del commit anterior). Ningún archivo borrado sostiene una cifra del paper ni es necesario para regenerar un artefacto.",
     "actualizado_en_el_mismo_paso": "README.md (§3 índice, §3-bis árbol, §6, §7 y el registro histórico), .hermes.md (regla Jev≠JEPA y mapa), AGENTS.md (árbol y regla), docs/guia-cierre-pendientes.md (punteros al depósito ya hecho) y eje-2-jev-opensource/08_estudio_ecosistema.md (nota sobre las copias borradas).",
     "que_quedo": "Raíz: README.md, STATE.json, .hermes.md, AGENTS.md, CITATION.cff, LICENSE, LICENSE-docs, .gitignore + carpetas. paper/, src/, tests/, results/ (artefactos), docs/ (9 guías), notes/ (2 notas vivas), eje-2-jev-opensource/ (4 docs), contexto/ (2), audit/saturacion/ (3 informes), data/ (.gitkeep)."
+  },
+  "hecho_20_oct_2026": {
+    "brazo_pagado": "14.277 decisiones en 5 datasets, ~USD 0.79, ver bloque brazo_pagado_2026_10_20",
+    "extension_conf_score": "entra como extensión declarada (11 tests + informe)",
+    "referencias": "roby1965 + jose2009 con DOI verificado + estándar único de citas; PDF 11 págs, 36 ítems, 0 citas sin resolver",
+    "backend": "reintento en corte de red (599); prior_vectorizado (41x) opt-in, la referencia pura sigue siendo la única sellada",
+    "matriz_paralela": "validada idéntica a la serie tras recalcular el FDR global; 1.11x medido en el t440",
+    "docs": "README, .hermes.md, STATE, guia-cierre, handoff, validacion-productos, src/README, release-v1.0.0 (nota) y notes/pago-jev (corrección de costo) actualizados; skill jev-confidence-metrology v1.1.0",
+    "pendiente_inmediato": "parte B: integrar las dos extensiones al paper (§5 subsección declarada + conteo de tests en §1/§7) y recompilar"
   }
 }

@@ -69,7 +69,7 @@ con una proposición y evidencia**, que era el riesgo principal (ver §7).
 | # | Artefacto | Dónde vive | Estado |
 |---|---|---|---|
 | 1 | `spec` de las definiciones | `paper/03_especificacion_confidence.md` | **hecho** (+ erratas en `docs/erratas_especificacion.md`) |
-| 2 | Librería `jev-conf-metrics` + tests | `src/jev_conf_metrics/` | **hecho** (37 tests) |
+| 2 | Librería `jev-conf-metrics` + tests | `src/jev_conf_metrics/` | **hecho** (67 tests) |
 | 3 | Matriz de transferencia | `results/matrix/matriz_transferencia.csv` | **medida** (3.564 celdas, corrida confirmatoria) |
 | 4 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | **medido** (65.185 filas, con `row_hash`) |
 | 5 | Script regenerador | `src/matriz/{medir,matriz,figura,informe_matriz}.py` + `correr_*.sh` | **hecho** |
@@ -141,7 +141,7 @@ lo describen `README.md` §5 y `.hermes.md` §5. Las figuras (`heatmap_*.png/pdf
   métricas publicadas de Laya reproducidas con |Δ| ≤ 0.003** (ECE 0.213→0.2157, accuracy 0.766→0.7685,
   Brier 0.062→0.0615, soft acc 0.471→0.4707, score MAE 0.242→0.2424).
 - **Hecho además (08–09-oct-2026):** la **corrida confirmatoria** (23 grupos, 65.185 decisiones, 3.564
-  celdas), la **librería** `src/jev_conf_metrics/` (37 tests) y **§1–§7 del paper** redactados en
+  celdas), la **librería** `src/jev_conf_metrics/` (67 tests) y **§1–§7 del paper** redactados en
   `paper/secciones/`. El **alcance está congelado** (§10) y el pre-registro, publicado.
 - **Pendiente (solo del autor):** verificar el DOI del pre-registro en su cuenta, revisar el borrador §1–§7
   y hacer el formateo final **IEEE**. El repositorio ya es público (10-oct-2026). No queda cómputo pendiente.

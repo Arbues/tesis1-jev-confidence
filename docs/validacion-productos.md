@@ -122,15 +122,37 @@ mediana 0.288, factores 20.5 / 109.2 / 112.8 / 95.8, ECE 0.216 → 0.577.
 
 ---
 
+## 5-bis. Las dos extensiones declaradas (20-oct-2026)
+
+Son **posteriores** al pre-registro: no modifican la matriz sellada ni las filas de `results/crudos/`.
+
+```bash
+.venv/bin/python src/matriz/extension_conf_score.py     # 5.ª definición sobre sst5
+bash src/matriz/correr_matriz_pagado.sh                 # matriz combinada (5 locales + Jev por API)
+```
+
+**Esperado:**
+
+| Comprobación | Valor |
+|---|---|
+| `extension_conf_score.py` | `n = 5505` · 5 grupos · brecha mediana `0.272` (4 defs) → `0.290` (5 defs) · ECE global `score` 0.241 |
+| `results/matrix_pagado/matriz_transferencia.csv` | 2.880 filas, 21 columnas, 6 modelos, niveles `raw` y `L1` |
+| tiposafe-ai/jev, nivel `raw` | \|Δ\| directo **0.1307** · con mapa **0.0130** (10×) |
+| Crudos del brazo pagado | `results/pagado/` con **14.277** filas en 5 datasets |
+
+La corrida paralela (`correr_matriz_paralela.sh 2`) debe producir **el mismo CSV** que la serie:
+el FDR se recalcula global con `fusionar_matriz_paralela.py` (si no, 293 filas cambian de `q_fdr`).
+
+---
+
 ## 6. El paper en formato IEEE (LaTeX)
 
 ```bash
 cd paper/ieee && ./compilar.sh
 ```
 
-**Esperado:** `main.pdf`. **Ojo:** en el `t440` TeX todavía **no está instalado**; hay dos
-rutas en `paper/ieee/README.md` (una con `sudo`, otra con TinyTeX local sin `sudo`). La
-compilación es el paso que queda pendiente de tu aprobación.
+**Esperado:** `main.pdf` de **11 páginas**, **36 ítems** de bibliografía y **0 citas sin resolver** (`[?]`).
+TeX Live ya está instalado en el `t440` (el `compilar.sh` usa `latexmk -gg`).
 
 **Si `\cite` sale como `[?]`:** falta correr `bibtex` (el script ya lo hace) o el `.bib` no
 está junto a `main.tex`.

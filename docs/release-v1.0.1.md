@@ -1,5 +1,8 @@
 # v1.0.1 — Corrección de referencias y brazo pagado
 
+> **Snapshot histórico.** Las cifras de esta nota (52 tests) son las del momento del release; el repo de hoy tiene
+> **67 tests** y dos extensiones declaradas (ver `README.md` §10-quater). Se conserva sin editar.
+
 Versión de corrección sobre `v1.0.0`. **El motivo del release es concreto:** el snapshot archivado en
 `v1.0.0` llevaba el paper y el `.bib` con **referencias incorrectas**, y cualquiera que descargue el ZIP
 obtendría esos datos. Se publica una versión nueva en lugar de reescribir la anterior (los tags publicados

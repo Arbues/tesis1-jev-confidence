@@ -73,7 +73,13 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | `eje-2-jev-opensource/FUENTES.md` | Inventario de las 49 fuentes del eje, verificadas con API | lectura obligatoria |
 | `eje-2-jev-opensource/08_estudio_ecosistema.md` | Estudio de campo: 20+ modelos con pesos, taxonomía por rigor, tabla de calibración, huecos | vigente |
 | `audit/saturacion/` | Los 3 informes de saturación (ZO, modelo-vs-harness, agent skills) | ver §7 |
-| **`results/`** | **ARTEFACTOS de medición**: `raw/` (paso 0), `crudos/` (65.185 mediciones confirmatorias, con `row_hash`), `matrix/` (la matriz, CSV + figuras + `RESUMEN_MATRIZ.md`) y `paso0_informe.md` | **vigente** |
+| **`results/`** | **ARTEFACTOS de medición**: `raw/` (paso 0), `crudos/` (65.185 mediciones confirmatorias, con `row_hash`), `matrix/` (la matriz sellada, CSV + figuras + `RESUMEN_MATRIZ.md`) y `paso0_informe.md` | **vigente** |
+| `results/pagado/` | **Brazo pagado**: 5 `.jsonl` + metas de la API real (14.277 decisiones). Nunca se mezclan con `crudos/` | **vigente** |
+| `results/matrix_pagado/` | Matriz **combinada** (5 modelos locales + Jev): 2.880 celdas + `RESUMEN_MATRIZ_PAGADO.md` | **vigente** |
+| `results/matrix/EXTENSION_CONF_SCORE.md` | La **5.ª definición** (`conf_score`, MAD_unif) medida sobre `sst5` + su CSV | **vigente** |
+| `src/matriz/extension_conf_score.py` · `correr_pagado.sh` · `correr_matriz_pagado.sh` · `correr_matriz_paralela.sh` · `fusionar_matriz_paralela.py` | Extensión declarada, corrida del brazo pagado y matriz combinada (serie y paralela) | **vigente** |
+| `docs/plan-visibilidad.md` | Plan de visibilidad: diagnóstico de las 5 puertas + 4 decisiones del autor | **vigente** |
+| `paper/02_referencias_pendientes.md` | Verificaciones D4 (cerradas) + **estándar único de citas** + nota de Roby | **vigente** |
 | `contexto/` | Investigación previa (veredicto de Jev/TypeSafe y costos); su §3.1 lo corrige `notes/pago-jev-api-costos-2026-10-12.md` | contexto |
 | `src/figuras_paper.py` | Genera las 8 figuras del paper desde los artefactos medidos | vigente |
 | `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 67 tests en cada `push` | vigente |

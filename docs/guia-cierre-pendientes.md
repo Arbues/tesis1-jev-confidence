@@ -21,8 +21,20 @@ Regla de mantenimiento: si algo de aquí cambia, se actualiza `README.md` y `STA
 | `CITATION.cff` válido | Validado contra el esquema oficial: 0 errores |
 | Zenodo ↔ GitHub conectado | Hecho por el autor |
 
-**Lo que queda abierto, en corto:** reservar con DOI (Fase 1), cerrar el paper (Fase 2), el brazo pagado (Fase 3),
-el repo del framework (Fase 4), visibilidad e inglés (Fase 5) y la extensión de Tesis 2 (Fase 6).
+**Lo que queda abierto, en corto (20-oct-2026):** la lectura del autor (§1–§7) y la integración de las dos
+extensiones al paper (parte B) · el repo del framework (Fase 4, con recomendación de NO crear otro repo) ·
+visibilidad e inglés (Fase 5) · Tesis 2 (Fase 6). Las fases 1 (reserva) y 3 (brazo pagado) están **cerradas**.
+
+### Estado por fase (20-oct-2026)
+
+| Fase | Estado |
+|---|---|
+| 1 · Reservar | ✅ cerrada: 3 DOI + SWHID + 3 works en ORCID |
+| 2 · Cerrar el paper | 🔶 referencias cerradas (incluye el estándar de citas); falta la lectura del autor y **integrar las extensiones** |
+| 3 · Brazo pagado | ✅ cerrada: 14.277 decisiones, USD 0.79, `results/pagado/` + `results/matrix_pagado/` |
+| 4 · Framework | 🔶 decisión pendiente: la recomendación es empaquetar aquí + PyPI + `v1.1.0`, no crear repo nuevo |
+| 5 · Visibilidad + inglés | 🔶 plan escrito (`docs/plan-visibilidad.md`); el inglés espera a la fase 2 |
+| 6 · Tesis 2 | ⬜ otro alcance |
 
 ---
 

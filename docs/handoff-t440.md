@@ -95,6 +95,25 @@ python src/matriz/informe_matriz.py
 python src/paso0_informe.py                      # regenera results/paso0_informe.md
 ```
 
+### 3-bis. Extensiones declaradas (20-oct-2026) — también sin GPU
+
+```bash
+# 5.ª definición del campo (conf_score / MAD_unif) sobre los crudos de sst5
+python src/matriz/extension_conf_score.py
+
+# brazo pagado: API real de TypeSafe, 1 request por ítem, necesita TYPESAFE_API_KEY en ~/.env
+uv pip install --python .venv/bin/python datasets
+bash src/matriz/correr_pagado.sh                 # 5 datasets -> results/pagado/ (reanudable)
+bash src/matriz/correr_matriz_pagado.sh          # matriz combinada -> results/matrix_pagado/
+
+# la misma matriz, partida por grupos (validada idéntica; rinde 1.11x en este t440)
+bash src/matriz/correr_matriz_paralela.sh 2
+```
+
+Reglas de estas corridas: el brazo pagado escribe **solo** en `results/pagado/` (nunca en `crudos/`), el tope de
+gasto se fija **por dataset** (banking77 y clinc150 cuestan 4× por la cardinalidad) y `medir.py` no reanuda: si
+se corta, ese dataset se paga de nuevo.
+
 `matriz.py` es **CPU puro**: lee los `.jsonl` y no toca ningún peso. Si el CSV regenerado no es
 idéntico al commiteado, hay un bug (o un cambio de versión): comparar con `sha256sum`.
 
