@@ -385,7 +385,7 @@ el índice no es el único canal y forzarlo cuesta credibilidad.
 
 ### 3.7 C6 — La nota divulgativa: 1 figura y la tabla por par
 
-El paper tiene 11 páginas; un lector de foro lee 40 segundos. Hace falta una pieza intermedia: **600–900 palabras,
+El paper tiene 12 páginas; un lector de foro lee 40 segundos. Hace falta una pieza intermedia: **600–900 palabras,
 una figura y una tabla**, en español y en inglés.
 
 | Elemento | Cuál exactamente | Por qué |

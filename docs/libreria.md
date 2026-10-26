@@ -117,7 +117,7 @@ La librería está segmentada para admitir cambios sin tocar el núcleo:
 ## Tests y regresión
 
 ```bash
-.venv/bin/python -m pytest -q       # 37 tests
+.venv/bin/python -m pytest -q       # 67 tests
 ```
 
 Los tests cubren: la matemática de las definiciones y las proposiciones, la regresión del

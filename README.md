@@ -1,7 +1,7 @@
 # README — Estado del proyecto de tesis (punto de entrada)
 
 > **Si eres un agente que acaba de abrir esta carpeta: lee este archivo completo antes de actuar.**
-> Contiene el contexto acumulado, las decisiones tomadas y sus razones. Última actualización: **09-oct-2026**.
+> Contiene el contexto acumulado, las decisiones tomadas y sus razones. Última actualización: **25-oct-2026**.
 >
 > **Sesión nueva:** `.hermes.md` es el contexto de proyecto que Hermes auto-carga al arrancar, y `STATE.json`
 > es el punto de reentrada. Los dos son de lectura obligatoria antes de proponer o cambiar nada.
@@ -239,7 +239,7 @@ reentrada: `STATE.json` → `README.md` → `docs/guia-cierre-pendientes.md` (fl
 |---|---|---|
 | Pre-registro del método | `10.5281/zenodo.23266795` (concepto `…23266794`) | Publicado el 09-oct-2026; el archivo depositado es la revisión previa (el método es idéntico) |
 | **Instrumento (software)** | **`10.5281/zenodo.23330647`** v1.0.1 (concepto `…23328988`; histórica v1.0.0 `…23328989`) | Se publica automáticamente desde el Release de GitHub. La v1.0.1 corrige las referencias que el snapshot v1.0.0 archivaba mal |
-| Preprint del paper | `10.5281/zenodo.23329431` (concepto `…23329430`) | PDF de 11 páginas, CC-BY-4.0, en español |
+| Preprint del paper | `10.5281/zenodo.23329431` (concepto `…23329430`) | PDF depositado de 11 páginas, CC-BY-4.0, en español; el PDF **vigente** del repo tiene 12 porque el 25-oct se le integró §5.8 (extensiones) |
 | Archivo independiente | SWHID `swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0` | Software Heritage |
 | ORCID | 3 works | verificado en la API pública de ORCID |
 
@@ -254,8 +254,8 @@ contrato de la API de TypeSafe verificado en vivo.
 
 | ✋ Autor | 🤖 Agente |
 |---|---|
-| Leer §1–§7 y decidir si el PDF IEEE lo representa (es lo último que cierra la Tesis 1) — **en curso** | Repo nuevo `decision-calibration-bench` **en revisión**: la recomendación es NO crear otro repo y distribuir este como paquete (ver §10-ter) |
-| arXiv: hace falta **endosso personal** (0 papers en arXiv) | Corrida del **brazo pagado** (~USD 0.37, sin GPU) **en ejecución** en el t440 → `results/pagado/` |
+| Leer §1–§7 y decidir si el PDF IEEE lo representa (es lo último que cierra la Tesis 1) — **en curso**; el PDF ya integra las extensiones, así que es la versión definitiva | **Nada de medición ni de redacción pendiente**: brazo pagado cerrado (14.277 decisiones, USD 0.79) y parte B hecha (§5.8). Queda la decisión del framework (ver §10-ter) y PyPI/CLI si la apruebas |
+| arXiv: hace falta **endosso personal** (0 papers en arXiv) | — |
 | (Opcional, cosmético) cerrar el grafo de relaciones en Zenodo | Visibilidad (N3) y paper en inglés (N5) — el inglés queda **bloqueado hasta que apruebes §1–§7** |
 
 **Cerrado el 19–20-oct-2026:** las **dos** decisiones de referencias (se añadieron `roby1965` y `jose2009`, con DOI
@@ -263,6 +263,14 @@ verificado en Crossref, y se fijó un **estándar único de citas** para todo el
 **`conf_score` (MAD_unif)** entró como **extensión declarada** (11 tests nuevos, `results/matrix/EXTENSION_CONF_SCORE.md`)
 · los conteos de tests corregidos de 37 a **63** en la documentación viva · smoke test del brazo pagado verificado
 contra la API real.
+
+**Cerrado el 25-oct-2026 (parte B):** las dos extensiones entraron al paper como **subsección declarada §5.8**
+(quinta definición `conf_score` y brazo pagado con la tabla por modelo y la causa medida de los empates de umbral),
+§1 y §7 dicen ya **67 tests**, §7 gana las filas 10 y 11 de artefactos, y el PDF recompiló a **12 páginas**
+(36 ítems, 0 citas sin resolver, 0 overfull). Además se corrigió un error de `STATE.json`: el brazo pagado no tiene
+el |Δ| directo más bajo (0.1735, segundo) — el más bajo es `laya/multilingual` (0.1315); el |Δ| con mapa de Jev
+(0.0130) sí es 4.6–9.3× el de los checkpoints abiertos, y la causa está medida (rejilla de 0.01 → 2.5 % de ítems
+empatados en el umbral frente a 0.1 % en los abiertos).
 
 Guías: `docs/guia-cierre-pendientes.md` (flujo por fases) · `notes/zenodo-publicar-guia-literal.md` (la interfaz
 real de Zenodo, con etiquetas literales) · `docs/release-v1.0.1.md` (qué cambia y por qué).

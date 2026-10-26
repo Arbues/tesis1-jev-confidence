@@ -30,7 +30,7 @@ premisa particular se cierre.
 | # | artefacto | dónde | estado |
 |---|---|---|---|
 | 1 | Especificación formal de las definiciones (DEF-1..DEF-8, Proposiciones 1 a 3) | `paper/03_especificacion_confidence.md` + erratas | hecho |
-| 2 | Librería `jev-conf-metrics` | `src/jev_conf_metrics/` | hecho (37 tests) |
+| 2 | Librería `jev-conf-metrics` | `src/jev_conf_metrics/` | hecho (67 tests) |
 | 3 | Arnés de conformidad (tests T1..T8) | `tests/` | hecho |
 | 4 | Matriz de transferencia de umbrales | `results/matrix/matriz_transferencia.csv` | medida (3.564 celdas) |
 | 5 | Dataset de mediciones crudas | `results/crudos/*.jsonl` | medido (65.185 filas, con `row_hash`) |
@@ -38,6 +38,8 @@ premisa particular se cierre.
 | 7 | Figuras (mapas de calor por dataset y cardinalidad) | `results/matrix/heatmap_*.png` / `.pdf` | hechas |
 | 8 | Pre-registro con DOI | `paper/04_pre_registro.md` → Zenodo | publicado (10.5281/zenodo.23266795) |
 | 9 | Repositorio | `github.com/Arbues/tesis1-jev-confidence` | **público** (Apache-2.0 / CC-BY-4.0) |
+| 10 | Extensión declarada: quinta definición del campo (`conf_score`, MAD_unif) | `results/matrix/EXTENSION_CONF_SCORE.md` | medida (5.505 decisiones, `sst5`) |
+| 11 | Extensión declarada: brazo pagado, API real `jev-1.13.0` | `results/pagado/` + `results/matrix_pagado/` | medido (14.277 decisiones, USD 0.79) |
 
 Todo el conjunto se regenera con `python -m pytest tests/ -q` seguido de los tres scripts de `src/matriz/`
 (§4.5). Ninguna cifra del paper se escribe a mano: todas provienen del informe regenerable.

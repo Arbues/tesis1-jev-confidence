@@ -151,7 +151,7 @@ el FDR se recalcula global con `fusionar_matriz_paralela.py` (si no, 293 filas c
 cd paper/ieee && ./compilar.sh
 ```
 
-**Esperado:** `main.pdf` de **11 páginas**, **36 ítems** de bibliografía y **0 citas sin resolver** (`[?]`).
+**Esperado:** `main.pdf` de **12 páginas**, **36 ítems** de bibliografía y **0 citas sin resolver** (`[?]`).
 TeX Live ya está instalado en el `t440` (el `compilar.sh` usa `latexmk -gg`).
 
 **Si `\cite` sale como `[?]`:** falta correr `bibtex` (el script ya lo hace) o el `.bib` no

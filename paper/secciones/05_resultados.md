@@ -201,3 +201,91 @@ Y sobre la misma corrida, el ECE cambia por completo según la definición: en `
 ![ECE por definición](../figures/fig6-ece-por-definicion.pdf)
 *El mismo modelo y los mismos datos (laya/typed-decisions, n = 2000): ECE 0.216 con `p_max` frente a 0.577
 con la entropía normalizada.*
+
+## 5.8. Extensiones declaradas (posteriores al pre-registro)
+
+Las cifras de §5.1–§5.7 están selladas por el pre-registro `10.5281/zenodo.23266795`: **23 grupos, 65.185
+decisiones, 3.564 celdas**. Las dos mediciones de esta subsección son **posteriores** a ese pre-registro y se
+declaran aparte para no moverlas: no recalculan la matriz sellada ni las filas crudas, se calculan como
+post-proceso sobre datos ya medidos o sobre un brazo nuevo, y llevan su fecha.
+
+### 5.8.1. Quinta definición del campo: `conf_score` (distancia al nivel modal)
+
+La documentación de TypeSafe define para la primitiva `score` una `confidence` que no estaba entre las cuatro
+definiciones selladas:
+
+```
+confidence = max(0, 1 − Σᵢ pᵢ·|i − m| / MAD_unif),   MAD_unif = (1/n)·Σᵢ |i − (n−1)/2|
+```
+
+No es una variante de `conf_jev`: `conf_jev` mide **concentración en el máximo**; `conf_score` mide
+**dispersión alrededor del nivel modal**. Dos distribuciones con el mismo `p_max` dan valores distintos. Y es
+**ordinal**: exige que los niveles tengan orden y distancia, así que solo se mide donde el orden existe.
+
+| | |
+|---|---|
+| Alcance | `sst5` (5 niveles ordinales), 5 configuraciones, **5.505 decisiones** |
+| Brecha (misma distribución) | mediana **0.272** con 4 definiciones → **0.290** con 5 (p90 0.411, máx 0.581) |
+| ECE global (misma corrida) | `p_max` 0.204 · `jev` 0.184 · `ent` 0.199 · `margin` 0.237 · **`score` 0.241** |
+| Verificación en vivo | el API real devuelve esta fórmula en las filas `score` (máx \|Δ\| 0.0050 en 800 filas) |
+
+**Por qué solo `sst5`.** En `banking77` (77), `clinc150` (151) y `typed-decisions` (2, 4, 5) las etiquetas son
+nominales: el índice `i` no significa nada y usarlo sería añadir un supuesto, no medir. En `wanli` (3) el orden
+es discutible. Se declara el límite en lugar de inventar la escala.
+
+**El hallazgo que añade.** La quinta definición **no tiene un sesgo estable**: es la más baja de las cinco en el
+**70.3 %** de las filas del control crudo Qwen y la más alta en el **92.6 %** de las de Laya-multilingual. El
+signo de la discrepancia depende del modelo, no de la definición — que es exactamente el objeto de la tesis,
+ahora con una definición más en la lista.
+
+### 5.8.2. Brazo pagado: el modelo detrás del campo
+
+Hasta aquí todo se midió sobre pesos abiertos. El servicio real de TypeSafe (`jev-1.13.0`, una petición por
+ítem) se midió sobre los mismos cinco datasets y se publica como brazo aparte: **14.277 decisiones**, gasto
+**USD 0.79**, con `probabilities` y `confidence` redondeadas a **0.01** por el servicio.
+
+| dataset | n | ítems | accuracy | tokens de salida |
+|---|---|---|---|---|
+| `banking77` | 77 | 3.076 | 0.796 | 2.547.728 |
+| `clinc150` | 151 | 3.100 | 0.901 | 4.034.486 |
+| `sst5` | 5 | 1.101 | 0.541 | 19.818 |
+| `typed-decisions` | 2, 4, 5 | 2.000 | 0.733 | 270.290 |
+| `wanli` | 3 | 5.000 | 0.754 | 220.650 |
+
+Dos observaciones de metrología del propio campo. (i) El contador `output_tokens` **no es cero** en el servicio
+(7.092.972 en total), a diferencia de los brazos de pesos abiertos: el campo `tokens de salida` no distingue por
+sí solo un modelo de decisión de uno generativo; esa lectura solo vale donde se controla la implementación.
+(ii) La confianza que el servicio **devuelve** coincide con la definición que la especificación le asigna a cada
+primitiva: `conf_score` en las filas `score` (máx |Δ| 0.0050 sobre 800 filas) y `conf_jev` en las de `choice`
+(600 filas). La especificación describe el servicio real, no una reconstrucción.
+
+Sumado a los brazos abiertos, el conjunto tiene **79.462 decisiones** y una brecha mediana de **0.273**
+(p90 0.435) — el mismo orden que la cifra sellada de 0.288, ahora con seis modelos.
+
+**El porte del umbral con la rejilla de 0.01.** Error absoluto medio del porte sobre las celdas con mapa cerrado
+(nivel `raw`, las tres `q`; 420 celdas):
+
+| modelo | celdas | \|Δ\| directo | \|Δ\| con mapa | factor | empate medio de τ |
+|---|---|---|---|---|---|
+| `typesafe-ai/jev` | 72 | 0.1735 | **0.0130** | 13.4× | 2.5 % |
+| `convaiinnovations/laya/multilingual` | 72 | **0.1315** | 0.0018 | 75.1× | 0.1 % |
+| `convaiinnovations/laya` | 66 | 0.2581 | 0.0028 | 91.7× | 0.1 % |
+| `convaiinnovations/laya/typed-decisions` | 72 | 0.2515 | 0.0014 | 174.4× | 0.1 % |
+| `jaredpalmer/kev-0.8b` | 66 | 0.2813 | 0.0022 | 128.5× | 0.1 % |
+| `Qwen/Qwen3.5-0.8B-Base` (control) | 72 | 0.3441 | 0.0517 | 6.7× | 5.0 % |
+| **global** | 420 | 0.2392 | 0.0124 | 19.3× | — |
+
+La lectura es en dos partes, y la segunda corrige la intuición. (i) El porte **directo** de Jev (0.1735) es de
+los mejores, pero **no el mejor**: el checkpoint `laya/multilingual` transfiere mejor (0.1315) sin ser el modelo
+de referencia del campo. Comparar |Δ| directo entre modelos mezcla dos causas —la definición y la calidad del
+modelo— y por eso el titular de esta tesis es el par de definiciones (§5.4), no el modelo. (ii) El porte **con
+mapa** de Jev es **4.6 a 9.3 veces** el de los checkpoints abiertos (0.0130 frente a 0.0014–0.0028) y su factor
+directo/mapa es **13.4×**, un orden de magnitud menor que el de ellos (75–174×). La causa está medida: la rejilla
+de 0.01 reasigna masa a valores empatados y **2.5 %** de los ítems de prueba de Jev comparten el umbral, frente a
+**0.1 %** en los abiertos (25×), con 4 de 72 celdas por encima del 5 % de empate frente a 0 en las abiertas. El
+mapa cerrado sigue siendo válido (Proposición 1); lo que la rejilla degrada es la **resolución del umbral**, no la
+equivalencia entre definiciones.
+
+*Fuentes: `results/matrix/EXTENSION_CONF_SCORE.md` (+ `.csv`) y `results/matrix_pagado/RESUMEN_MATRIZ_PAGADO.md`.
+Se regeneran con `src/matriz/extension_conf_score.py` y `src/matriz/correr_matriz_pagado.sh`. Ninguna de estas dos
+extensiones modifica el nivel `raw` sellado, ni las 3.564 celdas, ni las 65.185 filas crudas de §5.1.*

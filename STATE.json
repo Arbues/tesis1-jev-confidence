@@ -1,7 +1,7 @@
 {
   "proyecto": "Tesis 1 — Ciencia de la Computación (FC-UNI)",
   "autor": "Arbués Enrique Pérez V. · ORCID 0009-0004-7605-6569 · FC-UNI",
-  "ultima_actualizacion": "2026-10-20b",
+  "ultima_actualizacion": "2026-10-25",
   "como_usar": "Punto de reentrada. Leer: este STATE.json → README.md → docs/guia-cierre-pendientes.md. Cualquier cambio del repo se refleja aquí y en README.md en el mismo paso.",
   "estado_en_una_linea": "Tesis 1 CONSTRUIDA, MEDIDA Y RESERVADA (3 depósitos con DOI + Software Heritage + ORCID). No queda cómputo pendiente de la medición; lo que falta está en `pendientes`.",
   "tema": {
@@ -32,7 +32,7 @@
       "version_vigente": "10.5281/zenodo.23330647 (v1.0.1)",
       "historica": "10.5281/zenodo.23328989 (v1.0.0)",
       "concepto": "10.5281/zenodo.23328988",
-      "nota": "Se publica AUTOMÁTICAMENTE desde el Release de GitHub. La v1.0.1 existe porque el ZIP de v1.0.0 archivaba el paper y el .bib con las referencias ANTIGUAS (autores inventados); verificado que el ZIP de v1.0.1 trae los títulos canónicos y un main.pdf byte-idéntico al actual (md5 c9d7d9bb2a65e4addabb5da0663dc5a7)."
+      "nota": "Se publica AUTOMÁTICAMENTE desde el Release de GitHub. La v1.0.1 existe porque el ZIP de v1.0.0 archivaba el paper y el .bib con las referencias ANTIGUAS (autores inventados); verificado que el ZIP de v1.0.1 trae los títulos canónicos y un main.pdf byte-idéntico al actual (md5 c9d7d9bb2a65e4addabb5da0663dc5a7). ACTUALIZADO 25-oct-2026: el ZIP de v1.0.1 traia un main.pdf byte-identico al de entonces (md5 c9d7d9bb2a65e4addabb5da0663dc5a7); el main.pdf VIGENTE ya no lo es porque el 19-20-oct se recompilo al cerrar las referencias y el 25-oct al integrar las extensiones (§5.8, 12 paginas). Para reproducir el PDF depositado hay que usar el Release v1.0.1, no el working tree."
     },
     "preprint": {
       "doi": "10.5281/zenodo.23329431",
@@ -77,8 +77,8 @@
     {
       "n": 1,
       "quien": "autor",
-      "que": "Leer el borrador §1–§7 (paper/secciones/) o el PDF (paper/ieee/main.pdf, 11 páginas) y decidir si el IEEE lo representa. Da observaciones.",
-      "estado": "pendiente — es lo último que cierra la Tesis 1"
+      "que": "Leer el borrador §1–§7 (paper/secciones/) o el PDF (paper/ieee/main.pdf, 12 páginas, ya con §5.8) y decidir si el IEEE lo representa. Da observaciones.",
+      "estado": "pendiente — es lo último que cierra la Tesis 1. El PDF vigente ya integra las dos extensiones, así que lo que se lee es la versión definitiva."
     },
     {
       "n": 2,
@@ -101,7 +101,7 @@
     {
       "n": 5,
       "quien": "agente",
-      "que": "REPO NUEVO `decision-calibration-bench` (framework): importar el núcleo src/jev_conf_metrics/ (stdlib puro, autocontenido) + los 52 tests + orquestadores reempaquetados con CLI (`jevconf list-brazos|medir|matriz|informe|figuras`), proveedor SIMULADO para correr sin GPU/red, adaptadores de proveedor, docs, y su propio release con DOI. Este repo queda como archivo histórico de la tesis. Bloqueadores medidos: no existe CLI; el pipeline no está empaquetado (solo se empaqueta jev_conf_metrics); `medir` exige GPU o red; los adaptadores de dataset dependen de `datasets`+HF y `datasets` no está declarado.",
+      "que": "REPO NUEVO `decision-calibration-bench` (framework): importar el núcleo src/jev_conf_metrics/ (stdlib puro, autocontenido) + los 67 tests + orquestadores reempaquetados con CLI (`jevconf list-brazos|medir|matriz|informe|figuras`), proveedor SIMULADO para correr sin GPU/red, adaptadores de proveedor, docs, y su propio release con DOI. Este repo queda como archivo histórico de la tesis. Bloqueadores medidos: no existe CLI; el pipeline no está empaquetado (solo se empaqueta jev_conf_metrics); `medir` exige GPU o red; los adaptadores de dataset dependen de `datasets`+HF y `datasets` no está declarado.",
       "estado": "siguiente tarea del agente"
     },
     {
@@ -129,16 +129,16 @@
     "gasto_usd": 0.79,
     "rejilla": "0.01 (probabilities y confidence redondeadas) — declarada; los empates de umbral no son comparables con los pesos abiertos",
     "matriz_combinada": "results/matrix_pagado/ (2.880 celdas, 6 modelos = 5 locales + typesafe-ai/jev, niveles raw y L1). L0 omitido: el prior cuesta ~44 min por grupo y prior_vectorizado no es bit-identico.",
-    "hallazgo": "Jev por API tiene el |delta| directo MAS BAJO de todos (0.1307 vs 0.2233-0.2499 de los locales, 0.3635 del control crudo) pero el |delta| con mapa 6-9x PEOR (0.0130 vs 0.0014-0.0028): la rejilla de 0.01 multiplica los empates de umbral y degrada el mapa. Factor directo/mapa: 10x en Jev frente a 79x-165x en los pesos abiertos.",
+    "hallazgo": "Celdas con mapa cerrado del nivel `raw` y las tres q (420 celdas): Jev tiene |delta| directo 0.1735 — segundo mejor, no el mejor: `laya/multilingual` transfiere mejor (0.1315) — y |delta| con mapa 0.0130, que es 4.6-9.3x el de los checkpoints abiertos (0.0014-0.0028). Factor directo/mapa 13.4x en Jev frente a 75-174x en los abiertos. Causa medida: la rejilla de 0.01 del servicio hace que 2.5% de los items de prueba compartan el umbral, frente a 0.1% en los abiertos (25x), con 4/72 celdas por encima del 5% de empate frente a 0/72. El mapa cerrado sigue valido (Prop. 1): la rejilla degrada la resolucion del umbral, no la equivalencia entre definiciones. CORRECCION 25-oct-2026: la redaccion anterior decia 'Jev |delta| directo 0.1307 (el mas bajo) y con mapa 6-9x peor'; 0.1307 no se reproduce desde el CSV (0.1315 es laya/multilingual) y Jev no es el |delta| directo mas bajo. Cifras corregidas contra results/matrix_pagado/matriz_transferencia.csv.",
     "verificacion_E5_en_vivo": "En las filas type=score el confianza reportada por el API coincide con conf_score (max 0.0050, 100% de 800 filas); en type=choice coincide conf_jev (max 0.0050, 600 filas). Cada primitiva usa una formula distinta, medido contra el servicio.",
     "scripts": "src/matriz/correr_pagado.sh (reanudable, salta lo ya medido) · correr_matriz_pagado.sh (serie) · correr_matriz_paralela.sh (--jobs N; validado identico tras recalcular el FDR global con fusionar_matriz_paralela.py)"
   },
   "artefactos": {
     "punto_de_reentrada": "STATE.json → README.md → .hermes.md (auto-cargado) → docs/guia-cierre-pendientes.md",
-    "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (63) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
+    "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (67) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
     "pipeline": "src/matriz/ (medir.py, matriz.py, informe_matriz.py, figura.py, adaptadores.py, backend_typesafe.py, correr_*.sh) · src/figuras_paper.py · src/paso0_go_no_go.py · src/paso0_informe.py",
     "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps, EXTENSION_CONF_SCORE.md) · results/raw/ y results/paso0_informe.md (paso 0)",
-    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib (36 ítems), 02_referencias_pendientes.md (estándar de citas), 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + main.pdf 11 págs + compilar.sh), figures/ (8)",
+    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib (36 ítems), 02_referencias_pendientes.md (estándar de citas), 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + main.pdf 12 págs + compilar.sh), figures/ (8)",
     "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1-E6 + E5-bis), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, handoff-t440.md, plan-visibilidad.md, release-v1.0.0.md, release-v1.0.1.md",
     "fuera_de_alcance": "eje-1-jepa/ y _descartado/ se ELIMINARON del repo el 13-oct-2026 (fuera de alcance; solo viven en el historial de git): no proponer subrutas de ahí. Exploración viva: audit/ (3 informes de saturación), contexto/, notes/, eje-2-jev-opensource/.",
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR.",
@@ -149,7 +149,7 @@
     "tests": ".venv/bin/python -m pytest   # 67 tests, corren en el t440 sin GPU",
     "matriz_regenerable": ".venv/bin/python src/matriz/informe_matriz.py && git diff --stat   # debe salir VACÍO",
     "figuras": ".venv/bin/python src/figuras_paper.py   # 8 figuras",
-    "paper": "cd paper/ieee && ./compilar.sh   # main.pdf, 11 páginas (usa latexmk -gg)",
+    "paper": "cd paper/ieee && ./compilar.sh   # main.pdf, 12 páginas (usa latexmk -gg)",
     "entorno": "El .venv es de uv (sin pip): uv pip install --python .venv/bin/python -e \".[dev,figuras]\". TeX Live está instalado en el t440."
   },
   "trampas": [
@@ -199,6 +199,15 @@
     "backend": "reintento en corte de red (599); prior_vectorizado (41x) opt-in, la referencia pura sigue siendo la única sellada",
     "matriz_paralela": "validada idéntica a la serie tras recalcular el FDR global; 1.11x medido en el t440",
     "docs": "README, .hermes.md, STATE, guia-cierre, handoff, validacion-productos, src/README, release-v1.0.0 (nota) y notes/pago-jev (corrección de costo) actualizados; skill jev-confidence-metrology v1.1.0",
-    "pendiente_inmediato": "parte B: integrar las dos extensiones al paper (§5 subsección declarada + conteo de tests en §1/§7) y recompilar"
+    "pendiente_inmediato": "CERRADO 25-oct-2026 (parte B): ver bloque hecho_25_oct_2026"
+  },
+  "hecho_25_oct_2026": {
+    "parte_b": "Extensiones integradas al paper como subseccion declarada: §5.8 en paper/secciones/05_resultados.md y en paper/ieee/secciones/05_resultados.tex (5.8.1 quinta definicion conf_score; 5.8.2 brazo pagado con tabla por modelo y causa medida de los empates). El texto aclara que no mueve las cifras selladas (23 grupos, 65.185, 3.564 celdas).",
+    "tests_paper": "Conteo de tests corregido de 37 a 67 en §1 (md y tex) y §7 (md y tex); la tabla de artefactos de §7 gana las filas 10 y 11 (las dos extensiones).",
+    "pdf": "Recompilado: 12 paginas (antes 11), 36 items, 0 citas sin resolver, 0 errores, 0 overfull.",
+    "doc_viva": "docs/libreria.md (37->67 tests), docs/validacion-productos.md (12 paginas), docs/guia-cierre-pendientes.md (fase 2), docs/plan-visibilidad.md y .hermes.md al dia; STATE.json con el conteo de tests y la correccion del hallazgo del brazo pagado.",
+    "error_corregido": "El campo `brazo_pagado_2026_10_20.hallazgo` afirmaba que Jev tenia el |delta| directo mas bajo (0.1307). Recalculado desde el CSV: Jev 0.1735 (segundo) y `laya/multilingual` 0.1315 (el mas bajo). 0.1307 no se reproducia con ningun subconjunto declarado.",
+    "git": "Los 3 commits del 20-oct estaban sin subir (GitHub en 40b7f42 desde el 13-oct): empujados el 25-oct, mas el commit de esta sesion.",
+    "que_falta": "Solo la lectura del autor (§1–§7 / main.pdf) para cerrar la Tesis 1; despues arXiv (endosso), decision del framework, visibilidad e ingles."
   }
 }

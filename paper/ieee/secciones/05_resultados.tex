@@ -329,3 +329,143 @@ con la entropía normalizada, un factor 2.7$\times$. El ECE auto-reportado no es
 sino de la definición elegida.}
 \label{fig:ece}
 \end{figure}
+
+\subsection{Extensiones declaradas (posteriores al pre-registro)}
+
+Las cifras de las subsecciones anteriores están selladas por el pre-registro
+\texttt{10.5281/zenodo.23266795}: \textbf{23 grupos, 65\,185 decisiones, 3\,564 celdas}. Las dos mediciones de
+esta subsección son \textbf{posteriores} a ese pre-registro y se declaran aparte para no moverlas: no recalculan
+la matriz sellada ni las filas crudas, se calculan como post-proceso sobre datos ya medidos o sobre un brazo
+nuevo, y llevan su fecha.
+
+\subsubsection{Quinta definición del campo: \texttt{conf\_score} (distancia al nivel modal)}
+
+La documentación de TypeSafe define para la primitiva \texttt{score} una \texttt{confidence} que no estaba entre
+las cuatro definiciones selladas:
+\begin{equation}
+\begin{aligned}
+C_{\text{score}} &= \max\Bigl(0,\; 1 - \tfrac{1}{M}\,{\textstyle\sum_i}\, p_i\,\lvert i-m\rvert\Bigr),\\
+M &= \tfrac{1}{n}\,{\textstyle\sum_i}\, \bigl\lvert i-\tfrac{n-1}{2}\bigr\rvert ,
+\end{aligned}
+\end{equation}
+donde $M$ es la desviación absoluta media de la rejilla uniforme (\emph{MAD} uniforme) y $m$ el nivel modal.
+No es una variante de $C_{\text{jev}}$: $C_{\text{jev}}$ mide \textbf{concentración en el máximo};
+$C_{\text{score}}$ mide \textbf{dispersión alrededor del nivel modal}. Dos distribuciones con el mismo $p_{\max}$
+dan valores distintos. Y es \textbf{ordinal}: exige que los niveles tengan orden y distancia, así que solo se
+mide donde el orden existe.
+
+\begin{table}[t]
+\centering
+\caption{La quinta definición sobre \texttt{sst5} (5 niveles ordinales, 5 configuraciones, 5\,505 decisiones).
+La brecha es la diferencia entre la definición más alta y la más baja de la \emph{misma} distribución; el ECE se
+calcula sobre la misma corrida y la misma etiqueta de corrección que las otras cuatro.}
+\label{tab:extension-score}
+{\footnotesize
+\begin{tabular}{@{}lr@{}}
+\toprule
+Brecha, mediana con 4 definiciones & 0.272 \\
+Brecha, mediana con 5 definiciones & \textbf{0.290} (p90 0.411, máx 0.581) \\
+\midrule
+ECE global, $C_{\text{pmax}}$ & 0.204 \\
+ECE global, $C_{\text{jev}}$ & 0.184 \\
+ECE global, $C_{\text{ent}}$ & 0.199 \\
+ECE global, $C_{\text{mar}}$ & 0.237 \\
+ECE global, $C_{\text{score}}$ & \textbf{0.241} \\
+\midrule
+Verificación contra el servicio real & $\lvert\Delta\rvert \le 0.0050$ en 800 filas \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\textbf{Por qué solo \texttt{sst5}.} En \texttt{banking77} (77), \texttt{clinc150} (151) y
+\texttt{typed-decisions} (2, 4, 5) las etiquetas son nominales: el índice $i$ no significa nada y usarlo sería
+añadir un supuesto, no medir. En \texttt{wanli} (3) el orden es discutible. Se declara el límite en lugar de
+inventar la escala.
+
+\textbf{El hallazgo que añade.} La quinta definición \textbf{no tiene un sesgo estable}: es la más baja de las
+cinco en el \textbf{70.3\,\%} de las filas del control crudo Qwen y la más alta en el \textbf{92.6\,\%} de las de
+Laya-multilingual. El signo de la discrepancia depende del modelo, no de la definición --- que es exactamente el
+objeto de este trabajo, ahora con una definición más en la lista.
+
+\subsubsection{Brazo pagado: el modelo detrás del campo}
+
+Hasta aquí todo se midió sobre pesos abiertos. El servicio real de TypeSafe (\texttt{jev-1.13.0}, una petición
+por ítem) se midió sobre los mismos cinco datasets y se publica como brazo aparte: \textbf{14\,277 decisiones},
+gasto \textbf{USD 0.79}, con \texttt{probabilities} y \texttt{confidence} redondeadas a \textbf{0.01} por el
+servicio.
+
+\begin{table}[t]
+\centering
+\caption{Brazo pagado: el servicio real sobre los cinco datasets etiquetados. La última columna es el contador
+\texttt{output\_tokens} que reporta el servicio; en todos los brazos de pesos abiertos ese mismo contador vale
+cero.}
+\label{tab:brazo-pagado}
+{\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+dataset & $n$ & ítems & accuracy & tokens de salida \\
+\midrule
+\texttt{banking77} & 77 & 3\,076 & 0.796 & 2\,547\,728 \\
+\texttt{clinc150} & 151 & 3\,100 & 0.901 & 4\,034\,486 \\
+\texttt{sst5} & 5 & 1\,101 & 0.541 & 19\,818 \\
+\texttt{typed-decisions} & 2, 4, 5 & 2\,000 & 0.733 & 270\,290 \\
+\texttt{wanli} & 3 & 5\,000 & 0.754 & 220\,650 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Dos observaciones de metrología del propio campo. (i) El contador \texttt{output\_tokens} \textbf{no es cero} en
+el servicio (7\,092\,972 en total), a diferencia de los brazos de pesos abiertos: el campo \emph{tokens de
+salida} no distingue por sí solo un modelo de decisión de uno generativo; esa lectura solo vale donde se controla
+la implementación. (ii) La confianza que el servicio \textbf{devuelve} coincide con la definición que la
+especificación le asigna a cada primitiva: $C_{\text{score}}$ en las filas \texttt{score} ($\lvert\Delta\rvert
+\le 0.0050$ sobre 800 filas) y $C_{\text{jev}}$ en las de \texttt{choice} (600 filas). La especificación describe
+el servicio real, no una reconstrucción.
+
+Sumado a los brazos abiertos, el conjunto tiene \textbf{79\,462 decisiones} y una brecha mediana de
+\textbf{0.273} (p90 0.435) --- el mismo orden que la cifra sellada de 0.288, ahora con seis modelos.
+
+\textbf{El porte del umbral con la rejilla de 0.01.} Error absoluto medio del porte sobre las celdas con mapa
+cerrado (nivel \texttt{raw}, las tres $q$; 420 celdas):
+
+\begin{table}[t]
+\centering
+\caption{Porte del umbral en el conjunto combinado, por modelo. La última columna es la fracción media de ítems de
+prueba que comparten el umbral (empates inducidos por la rejilla de 0.01 del servicio).}
+\label{tab:porte-pagado}
+{\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+modelo & celdas & $\lvert\Delta\rvert$ directo & $\lvert\Delta\rvert$ con mapa & factor \\
+\midrule
+\texttt{typesafe-ai/jev} & 72 & 0.1735 & \textbf{0.0130} & 13.4$\times$ \\
+\texttt{laya/multilingual} & 72 & \textbf{0.1315} & 0.0018 & 75.1$\times$ \\
+\texttt{laya} & 66 & 0.2581 & 0.0028 & 91.7$\times$ \\
+\texttt{laya/typed-decisions} & 72 & 0.2515 & 0.0014 & 174.4$\times$ \\
+\texttt{kev-0.8b} & 66 & 0.2813 & 0.0022 & 128.5$\times$ \\
+\texttt{Qwen3.5-0.8B} (control) & 72 & 0.3441 & 0.0517 & 6.7$\times$ \\
+\midrule
+global & 420 & 0.2392 & 0.0124 & 19.3$\times$ \\
+\bottomrule
+\end{tabular}}}
+\end{table}
+
+La lectura es en dos partes, y la segunda corrige la intuición. (i) El porte \textbf{directo} de Jev (0.1735) es
+de los mejores, pero \textbf{no el mejor}: el checkpoint \texttt{laya/multilingual} transfiere mejor (0.1315) sin
+ser el modelo de referencia del campo. Comparar $\lvert\Delta\rvert$ directo entre modelos mezcla dos causas ---la
+definición y la calidad del modelo--- y por eso el titular de este trabajo es el par de definiciones, no el
+modelo. (ii) El porte \textbf{con mapa} de Jev es \textbf{4.6 a 9.3 veces} el de los checkpoints abiertos (0.0130
+frente a 0.0014--0.0028) y su factor directo/mapa es \textbf{13.4$\times$}, un orden de magnitud menor que el de
+ellos (75--174$\times$). La causa está medida: la rejilla de 0.01 reasigna masa a valores empatados y
+\textbf{2.5\,\%} de los ítems de prueba de Jev comparten el umbral, frente a \textbf{0.1\,\%} en los abiertos
+(25$\times$), con 4 de 72 celdas por encima del 5\,\% de empate frente a 0 en las abiertas. El mapa cerrado sigue
+siendo válido (Proposición~1); lo que la rejilla degrada es la \textbf{resolución del umbral}, no la equivalencia
+entre definiciones.
+
+\emph{Fuentes:} \path{results/matrix/EXTENSION_CONF_SCORE.md} y
+\path{results/matrix_pagado/RESUMEN_MATRIZ_PAGADO.md}; se regeneran con
+\path{src/matriz/extension_conf_score.py} y \path{src/matriz/correr_matriz_pagado.sh}. Ninguna de estas dos
+extensiones modifica el nivel \texttt{raw} sellado, ni las 3\,564 celdas, ni las 65\,185 filas crudas.
