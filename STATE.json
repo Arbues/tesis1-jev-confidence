@@ -211,6 +211,34 @@
     "que_falta": "Solo la lectura del autor (§1–§7 / main.pdf) para cerrar la Tesis 1; despues arXiv (endosso), decision del framework, visibilidad e ingles."
   },
   "hecho_28_oct_2026": {
+    "auditoria_integral": "docs/auditoria-integral-2026-10-28.md — cinco auditorías independientes (prosa .md/.tex, bibliografía, figuras, documentación de estado, código) + verificación del orquestador: 62 hallazgos (8 alta, 22 media, 32 baja). Todo se recalculó desde results/; ninguna cifra se tomó de este archivo ni del README. El núcleo sellado se reproduce al dígito: 65.185 · 23 · 3.564 · 0.2881/0.4344/0.8481 · 312 celdas 0.2337 vs 0.0021 = 109,2x.",
+    "corregido_del_bloque_A": [
+      "A1 precision(): devolvía la confianza media, no el acierto. Función corregida + 2 tests de regresión (69 en total); el informe recalcula la precisión desde los crudos y la publica con nota; matriz pagada regenerada (solo cambian precision_A/B); el CSV sellado no se toca (errata E8) y §4.5 declara la excepción.",
+      "A2 output_tokens: §4.1, nota de la tabla de §5.1, §5.7 y §5.8.2 distinguen el paso 0 de la corrida confirmatoria; el 869.310 es del paso 0. Errata E4 corregida.",
+      "A3 empates del brazo pagado: «checkpoints abiertos entrenados» + control crudo explícito (5,0 %, 36/72) en paper, este archivo, README y .hermes.md.",
+      "A4 §5.3: las filas L0/L1 quedan marcadas con daga y la nota da las cifras sin filtro (348 celdas; 0,2312/0,3145).",
+      "A5/A7 §6.1 con las cifras reales (0,076/0,257; mapa 0,0013/0,0049) y §6.2 restringe C_mar a n = 2.",
+      "A6 §4.3: noul no entra en la matriz (errata E3 corregida).",
+      "A8 Fig. 2 sin rótulo cortado; Fig. 5 con la leyenda completa; 8/8 figuras con fuentes CID TrueType (pdf.fonttype=42); \\spanishdecimal{.} para no mezclar comas y puntos.",
+      "M14 brazo pagado: 0.1307 -> 0.1735 (segundo; el más bajo es laya/multilingual, 0.1315) y tabla por modelo correcta en README, .hermes.md y validacion-productos. 67 -> 69 tests en todo lo vivo."
+    ],
+    "pendientes_futuros_auditoria": [
+      "M1 · tab:porte-pagado perdió la columna «empate medio de τ» y el pie sigue describiéndola: devolverla o reescribir el pie.",
+      "M3 · la tabla de §5.5 (efecto de la cardinalidad) no declara su filtro: es nivel `raw` y q = 0,80.",
+      "M4 · el mapa hacia `margin` a n = 2 arrastra 1 ulp (2t−1 vs p1−p2): 9 de 45 grupos dan delta_mapa distinto entre pares; infla 0,0123 -> ~0,0115 y 0,0218 -> ~0,0203. El titular de 312 celdas / 109,2x no cambia.",
+      "M5 · «la incompatibilidad es un fenómeno de n ≥ 3» (abstract, §1, Prop. 3) conviene precisarlo a «incompatibilidad de forma». A n = 2 la mediana de |Δ| directo es 0,2141 y hay celdas con Δ = 0,80.",
+      "M6 · §5, §6 y §7 no tienen una sola cita (recuento de \\cite: 13/22/7/0/0/0/0).",
+      "M7 · 7 entradas del .bib nunca citadas (efron1993, layamultilingual, typeddecisions, opendecisionai, awesomejev, waynechang, arXiv2609.26550); faltan Benjamini–Hochberg y la referencia de Qwen3.5-0.8B-Base.",
+      "M8 · 13 entradas sin DOI ni URL contra el estándar declarado (9 con DOI conocido).",
+      "M9 · lakoreai2026 con título inventado y autor con diacríticos que la fuente no usa (el título real es «Dissecting RLCD…»).",
+      "M10 · jev2026blog fechado 15-sep-2026 en la fuente; el .bib y §1 dicen 18-sep.",
+      "M11 · 20 `note` del .bib se imprimen en la bibliografía (no es IEEE; una es falsa: jevLite «sin licencia»).",
+      "M12 · platt1999 mal tipada (es capítulo de MIT Press) y angelopoulos2021 viola el estándar arXiv del propio archivo.",
+      "M13 · el abstract no tiene fuente en paper/secciones/ (vive solo en main.tex).",
+      "M19 · bh_fdr no filtra NaN (API pública; hoy lo tapan los dos llamadores).",
+      "Bloque B (cosméticos y robustez): notación log/ln y C_jev/C_Jev, DEF-1..DEF-8 en §7, `\\texttt` dentro de un .md, ref de la Fig. 4 mal situada, barras invisibles en Fig. 3, IQR truncado en Fig. 6, aritmética de negritas y «14 flotantes» en este archivo, fecha 08-oct del pre-registro en varios docs, plan del repo nuevo en pendientes[5], conf_score no re-exportado en __init__.py, ejemplo de la librería (0.2428/0.2148), guía de cierre con tareas ya cerradas, «12 páginas» en docs.",
+      "AGENTS.md: la escritura está bloqueada por el guard de archivos de instrucciones (la aprobación no llegó). Quedan sin aplicar: línea 118 (67 -> 69 tests), 132 (0.1307 -> 0.1735, 4.6–9.3x), 135 («todavía no están dentro del paper»), 139 («tres erratas» -> E1–E8), 143 (08-oct -> 09-oct), 145 (11 -> 13 págs) y 146 (pendiente 6 ya hecho)."
+    ],
     "auditorias": [
       "docs/auditoria-figuras-2026-10-28.md — las 8 figuras del PDF: contenido verificado contra los artefactos (31 números), legibilidad medida en el PDF (5.0-5.8 pt; heatmap 1.5-3.5 pt), redundancia con las tablas, 4 errores de pie de figura y 0 referencias cruzadas a figuras/tablas",
       "docs/auditoria-estilo-2026-10-28.md — marcas de escritura asistida: 187 negritas en prosa, 8 de 41 títulos con gancho, 22 de 66 cierres en máxima, 8 captions que repiten el cuerpo; y descarte de los falsos positivos (0 'no solo X sino Y', 0 'en otras palabras', 0 'es importante destacar', párrafos ya variados)",
