@@ -7,22 +7,22 @@
 ## 7.1. Conclusión
 
 El ecosistema abierto de modelos de decisión tipo Jev comparte un nombre de campo, `confidence`, y una
-promesa: que sirve para fijar un umbral de actuación. La medición sobre **23 grupos, 65.185 decisiones y 3.564
-celdas** muestra que esa promesa **no viaja entre implementaciones**. Sobre la **misma** distribución, la
-definición de `confidence` más alta y la más baja difieren con mediana **0.288** y máximo **0.848**. Portar el
-umbral tal cual (copiar la cifra) se equivoca del orden de **cien veces** más que portarlo con el mapa
+promesa: que sirve para fijar un umbral de actuación. La medición sobre 23 grupos, 65.185 decisiones y 3.564
+celdas muestra que esa promesa no viaja entre implementaciones. Sobre la misma distribución, la
+definición de `confidence` más alta y la más baja difieren con mediana 0.288 y máximo 0.848. Portar el
+umbral tal cual (copiar la cifra) se equivoca del orden de cien veces más que portarlo con el mapa
 matemático cuando este existe (0.2337 contra 0.0021, sobre las 312 celdas del nivel principal `raw` sin
 empates dominantes). Y en las
-celdas de peor caso, el porte directo pierde **toda** la cobertura: quien calibra al 80 % con una definición
+celdas de peor caso, el porte directo pierde toda la cobertura: quien calibra al 80 % con una definición
 puede terminar actuando en el 0 % con otra.
 
-El resultado tiene dos capas. La **escala** hace que el número no viaje aunque el orden se preserve; la
-**forma** hace que entre clases de definiciones distintas no exista ni número ni mapa. Dos pares que se creían
-distintos resultan ser la **misma** fórmula (la `choice_confidence` de Kev es la de Jev; con `n = 2`,
+El resultado tiene dos capas. La escala hace que el número no viaje aunque el orden se preserve; la
+forma hace que entre clases de definiciones distintas no exista ni número ni mapa. Dos pares que se creían
+distintos resultan ser la misma fórmula (la `choice_confidence` de Kev es la de Jev; con `n = 2`,
 `C_Jev` y el margen coinciden), lo que da transferencia exacta donde otros ven incompatibilidad.
 
 El aporte no es el hallazgo de que las implementaciones discrepan, que era de esperar. El aporte es el
-**instrumento** que permite cuantificar y corregir esa discrepancia, y que sigue valiendo aunque cada
+instrumento que permite cuantificar y corregir esa discrepancia, y que sigue valiendo aunque cada
 premisa particular se cierre.
 
 ## 7.2. Artefactos entregados
@@ -62,5 +62,5 @@ implementaciones (el instrumento está diseñado para eso, no para un conjunto f
 
 ## 7.4. Disponibilidad
 
-Repositorio **público** `github.com/Arbues/tesis1-jev-confidence` (Apache-2.0 el código, CC-BY-4.0 el paper
-y la documentación). El pre-registro con el diseño congelado tiene DOI **10.5281/zenodo.23266795**.
+Repositorio público `github.com/Arbues/tesis1-jev-confidence` (Apache-2.0 el código, CC-BY-4.0 el paper
+y la documentación). El pre-registro con el diseño congelado tiene DOI 10.5281/zenodo.23266795.

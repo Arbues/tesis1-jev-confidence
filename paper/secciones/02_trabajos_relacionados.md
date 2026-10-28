@@ -11,12 +11,12 @@ ecosistema de modelos de decisión tipo Jev.
 **Calibración de clasificadores.** Un predictor probabilístico está calibrado si, de las veces que anuncia
 confianza `c`, acierta con frecuencia `c`. \cite{niculescu2005} mostró que los clasificadores clásicos están
 sistemáticamente mal calibrados. \cite{guo2017} lo reabrió para las redes profundas modernas y popularizó el
-**Expected Calibration Error (ECE)** con su **temperature scaling**. El ECE, formalizado por
+Expected Calibration Error (ECE) con su temperature scaling. El ECE, formalizado por
 \cite{naeini2015}, depende críticamente del esquema de partición (bins de igual ancho frente a bins de igual
-masa), un detalle que el ecosistema Jev-OSS omite al reportar. La **discriminación** (capacidad de ordenar
+masa), un detalle que el ecosistema Jev-OSS omite al reportar. La discriminación (capacidad de ordenar
 aciertos por confianza, medida con AUROC) es una propiedad distinta de la calibración; ambas se reportan aquí.
 
-**Reglas de puntuación propias.** \cite{gneiting2007} caracterizan las reglas **estrictamente propias**, cuyo
+**Reglas de puntuación propias.** \cite{gneiting2007} caracterizan las reglas estrictamente propias, cuyo
 óptimo se alcanza declarando la distribución verdadera. Es la base teórica de RLCD: la recompensa de Jev
 combina la regla logarítmica con la esférica, y el RPS para salidas ordinales
 \cite{good1952,roby1965,epstein1969}; la esférica tiene caracterización axiomática propia
@@ -40,10 +40,10 @@ le siguen. Los cierres de septiembre de 2026 (por qué RLCD no calibra \cite{arX
 la coherencia de la negación \cite{arXiv2609.33209}, el sesgo nombre–definición \cite{arXiv2609.26758} y la
 cartografía del ecosistema \cite{arXiv2609.30216}) ocupan el «por qué» y el «qué hay». La reproducción
 pre-registrada de \cite{arXiv2609.33843} es el estado del arte más cercano: mide la calibración de Laya
-**dentro de una sola definición** (`q = p_max`) y encuentra que el umbral no transfiere **entre datasets**.
-Lo que ninguno hace es comparar **entre definiciones**.
+dentro de una sola definición (`q = p_max`) y encuentra que el umbral no transfiere entre datasets.
+Lo que ninguno hace es comparar entre definiciones.
 
 **El hueco.** La literatura mide la calibración de un modelo bajo una definición, o comprueba
-cualitativamente que un umbral no viaja. **No existe la matriz que cuantifica, par a par y definición a
-definición, cuánta cobertura y precisión se pierden al portar un umbral.** Esa es la contribución de este
+cualitativamente que un umbral no viaja. No existe la matriz que cuantifica, par a par y definición a
+definición, cuánta cobertura y precisión se pierden al portar un umbral. Esa es la contribución de este
 trabajo.
