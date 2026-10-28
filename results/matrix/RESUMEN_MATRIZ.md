@@ -57,7 +57,7 @@ Sobre **65185 distribuciones** medidas (una fila = una decisión), la diferencia
 | `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | ent → pmax | -0.5000 | 0.1288 |
 | `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | 0.5 | ent → jev | -0.4448 | 0.1288 |
 
-Todo lo de esta sección es sobre el **nivel principal `raw`** (el que congela el pre-registro). Los niveles `L0` y `L1` están en la matriz completa y se resumen en §5.
+Todo lo de esta sección es sobre el **nivel principal `raw`** (el que congela el pre-registro), salvo las dos filas marcadas con †. Los niveles `L0` y `L1` están en la matriz completa y se resumen en §5.
 
 Error absoluto medio del porte, por subconjunto de celdas:
 
@@ -68,8 +68,10 @@ Error absoluto medio del porte, por subconjunto de celdas:
 | solo modelos entrenados (sin el control crudo) | 276 | 0.2289 | 0.0020 | 112.8× |
 | solo n = 2 (Proposición 3) | 180 | 0.3006 | 0.0218 | 13.8× |
 | solo n ≥ 3 (Proposición 1) | 168 | 0.2015 | 0.0021 | 95.8× |
-| nivel `L0` (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37.1× |
-| nivel `L1` (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126.0× |
+| nivel `L0` † (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37.1× |
+| nivel `L1` † (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126.0× |
+
+† Las filas de nivel llevan **además** el filtro de empates de la segunda fila. Sin ese filtro, los tres niveles tienen 348 celdas con mapa cada uno y el |Δ| directo es 0.2528 (`raw`), 0.2312 (`L0`) y 0.3145 (`L1`); el |Δ| con mapa, 0.0123, 0.0096 y 0.0136. La diferencia entre filas es del filtro, no del nivel.
 
 **Cómo leer esto.** El porte con mapa tiene un suelo que no es culpa del mapa: si el umbral cae sobre un valor **empatado** (salidas saturadas), la cobertura salta y ni el mapa puede dar exactamente `q`. Por eso la comparación limpia es la del subconjunto sin empates dominantes, y por eso `delta_mapa` debe leerse **contra `delta` de la misma celda**, nunca como un cero absoluto. La columna `n_empates_tau` de la matriz dice, en cada celda, cuántos ítems comparten el umbral.
 
@@ -109,18 +111,20 @@ Dos coincidencias **por identidad matemática**, no por azar: (i) a `n = 2`, `C_
 
 | modelo | dataset | n | A → B | Δ | IC95 % | cobertura B | precisión A | precisión B |
 |---|---|---|---|---|---|---|---|---|
-| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | ent → margin | 0.8000 | [0.800, 0.800] | 0.000 | 0.339 | — |
-| `Qwen/Qwen3.5-0.8B-Base` | sst5 | 5 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.311 | — |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | pmax → jev | 0.8000 | [0.800, 0.800] | 0.000 | 0.592 | — |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.592 | — |
-| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | pmax → margin | 0.8000 | [0.800, 0.800] | 0.000 | 0.592 | — |
-| `convaiinnovations/laya/typed-decisions` | typed-decisions | 2 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.701 | — |
-| `jaredpalmer/kev-0.8b` | typed-decisions | 2 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.667 | — |
-| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | pmax → margin | 0.7997 | [0.799, 0.800] | 0.000 | 0.204 | 0.235 |
-| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | ent → jev | 0.7997 | [0.799, 0.800] | 0.000 | 0.339 | 0.340 |
-| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | jev → margin | 0.7993 | [0.798, 0.800] | 0.001 | 0.194 | 0.207 |
-| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | ent → pmax | 0.7990 | [0.798, 0.800] | 0.001 | 0.339 | 0.330 |
-| `Qwen/Qwen3.5-0.8B-Base` | sst5 | 5 | pmax → margin | 0.7974 | [0.794, 0.800] | 0.003 | 0.311 | 0.291 |
+| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | ent → margin | 0.8000 | [0.800, 0.800] | 0.000 | 0.018 | — |
+| `Qwen/Qwen3.5-0.8B-Base` | sst5 | 5 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.213 | — |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | pmax → jev | 0.8000 | [0.800, 0.800] | 0.000 | 0.646 | — |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.646 | — |
+| `Qwen/Qwen3.5-0.8B-Base` | typed-decisions | 2 | pmax → margin | 0.8000 | [0.800, 0.800] | 0.000 | 0.646 | — |
+| `convaiinnovations/laya/typed-decisions` | typed-decisions | 2 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.925 | — |
+| `jaredpalmer/kev-0.8b` | typed-decisions | 2 | pmax → ent | 0.8000 | [0.800, 0.800] | 0.000 | 0.534 | — |
+| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | pmax → margin | 0.7997 | [0.799, 0.800] | 0.000 | 0.018 | 0.000 |
+| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | ent → jev | 0.7997 | [0.799, 0.800] | 0.000 | 0.018 | 0.000 |
+| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | jev → margin | 0.7993 | [0.798, 0.800] | 0.001 | 0.018 | 0.000 |
+| `Qwen/Qwen3.5-0.8B-Base` | banking77 | 77 | ent → pmax | 0.7990 | [0.798, 0.800] | 0.001 | 0.018 | 0.000 |
+| `Qwen/Qwen3.5-0.8B-Base` | sst5 | 5 | pmax → margin | 0.7974 | [0.794, 0.800] | 0.003 | 0.213 | 0.667 |
+
+*Precisión = acierto entre los ítems seleccionados (especificación §5, paso 3), recalculada desde los crudos. Las columnas `precision_A`/`precision_B` del CSV de este directorio conservan el cálculo anterior —confianza media, no acierto— y se corrigen en la próxima regeneración completa del artefacto: ver errata E8 en `docs/erratas_especificacion.md`.*
 
 ## 5. Efecto de la cardinalidad n
 

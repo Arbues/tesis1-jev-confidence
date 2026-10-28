@@ -36,6 +36,10 @@ que se regeneran con los comandos de §4.5. La corrida confirmatoria está decla
 | `jaredpalmer/kev-0.8b` | typed-decisions | 2, 4, 5 | 2.000 | 0.4595 | 0 |
 | `jaredpalmer/kev-0.8b` | wanli | 3 | 5.000 | 0.5954 | 0 |
 
+*Nota sobre la última columna.* El adaptador de la corrida confirmatoria no propaga `output_tokens`: vale 0 en
+las 65.185 filas, también para Kev. El único recuento medido de ese campo en pesos abiertos es el del paso 0
+(Kev: 869.310 en las mismas 2.000 decisiones, §5.7).
+
 Un dato aparte que el ecosistema no reporta: en cardinalidad alta, Kev-0.8B obtiene 0.813 de accuracy en
 `banking77` (n = 77) frente a 0.377 del checkpoint base de Laya, un factor de 2.2. Las cinco configuraciones
 medidas cubren el rango completo: del 0.016 del control sin entrenamiento al 0.813 de Kev-0.8B.
@@ -75,8 +79,13 @@ contra el porte con mapa. El error absoluto medio:
 | solo modelos entrenados (sin control crudo) | 276 | 0.2289 | 0.0020 | 112.8× |
 | solo n = 2 (Proposición 3) | 180 | 0.3006 | 0.0218 | 13.8× |
 | solo n ≥ 3 (Proposición 1) | 168 | 0.2015 | 0.0021 | 95.8× |
-| nivel `L0` (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37.1× |
-| nivel `L1` (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126.0× |
+| nivel `L0` † (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37.1× |
+| nivel `L1` † (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126.0× |
+
+† Las dos filas de nivel llevan **además** el filtro de empates de la fila «sin empates dominantes», que las
+otras cinco no llevan. Sin ese filtro los tres niveles tienen 348 celdas con mapa cada uno, y el |Δ| directo es
+0.2528 (`raw`), 0.2312 (`L0`) y 0.3145 (`L1`) —el |Δ| con mapa, 0.0123, 0.0096 y 0.0136—: la diferencia entre
+filas es del filtro, no del nivel.
 
 El porte directo se equivoca del orden de cien veces más que el porte con mapa. El matiz de la tercera
 columna lo explica §5.4.
@@ -185,11 +194,12 @@ literatura del ecosistema y que son parte del instrumento:
 1. **La `choice_confidence` de Kev es la fórmula de Jev.** `(p_max − 1/K)/(1 − 1/K) ≡ (K·p_max − 1)/(K − 1)`,
    verificado numéricamente para `K ∈ {2,3,4,7,12}`. Estaban registradas como definiciones distintas; por la
    Proposición 1, ese par transfiere el umbral de forma exacta.
-2. **El campo `output_tokens` tiene tres significados.** En los brazos de pesos abiertos medidos aquí, Laya lo
-   reporta como 0 (no hay generación) y Kev como recuento de tokens de la respuesta serializada (869.310 en las
-   mismas 2.000 decisiones); es metrología del propio campo, no un fallo de Kev. El contador de la API de
-   TypeSafe no está medido: la documentación solo garantiza que la salida es gratuita y sus ejemplos muestran
-   valores mayores que cero, así que el valor se reporta solo cuando se mida con una llamada real.
+2. **El campo `output_tokens` tiene tres significados.** En el **paso 0** —la corrida de verificación, no la
+   confirmatoria— Laya lo reporta como 0 (no hay generación) y Kev como recuento de tokens de la respuesta
+   serializada (869.310 en las mismas 2.000 decisiones); es metrología del propio campo, no un fallo de Kev. La
+   corrida confirmatoria no propaga el campo: vale 0 en las 65.185 filas (nota de la tabla de §5.1). Y el
+   contador de la API de TypeSafe **sí está medido**, y tampoco es 0: 7.092.972 tokens en el brazo pagado
+   (§5.8.2). Ninguna lectura de ese campo, por sí sola, distingue un modelo de decisión de uno generativo.
 
 Y sobre la misma corrida, el ECE depende de la definición: en `laya-typed-decisions` va de 0.216 con `p_max`
 a 0.577 con la entropía normalizada, un factor 2.7 sobre el mismo dato. El patrón no es local: sobre los 23
@@ -251,8 +261,9 @@ USD 0.79, con `probabilities` y `confidence` redondeadas a 0.01 por el servicio.
 | `wanli` | 3 | 5.000 | 0.754 | 220.650 |
 
 Dos observaciones de metrología del propio campo. (i) El contador `output_tokens` no es cero en el servicio
-(7.092.972 en total), a diferencia de los brazos de pesos abiertos: el campo `tokens de salida` no distingue por
-sí solo un modelo de decisión de uno generativo; esa lectura solo vale donde se controla la implementación.
+(7.092.972 en total), a diferencia de la corrida confirmatoria de pesos abiertos, donde el adaptador no propaga
+el campo y vale 0 en las 65.185 filas (§5.7): el campo `tokens de salida` no distingue por sí solo un modelo de
+decisión de uno generativo; esa lectura solo vale donde se controla la implementación.
 (ii) La confianza que el servicio devuelve coincide con la definición que la especificación le asigna a cada
 primitiva: `conf_score` en las filas `score` (máx |Δ| 0.0050 sobre 800 filas) y `conf_jev` en las de `choice`
 (600 filas). La especificación describe el servicio real, no una reconstrucción.
@@ -280,9 +291,10 @@ modelo— y por eso la unidad de análisis de este trabajo es el par de definici
 mapa de Jev es 4.6 a 9.3 veces el de los checkpoints abiertos (0.0130 frente a 0.0014–0.0028) y su factor
 directo/mapa es 13.4×, un orden de magnitud menor que el de ellos (75–174×). La causa está medida: la rejilla
 de 0.01 reasigna masa a valores empatados y 2.5 % de los ítems de prueba de Jev comparten el umbral, frente a
-0.1 % en los abiertos (25×), con 4 de 72 celdas por encima del 5 % de empate frente a 0 en las abiertas. El
-mapa cerrado sigue siendo válido (Proposición 1); lo que la rejilla degrada es la resolución del umbral, no la
-equivalencia entre definiciones.
+0.1 % en los cuatro checkpoints abiertos **entrenados** (25×), con 4 de 72 celdas por encima del 5 % de empate
+frente a 0 en ellos; el control crudo se sale de esa comparación por su saturación (5.0 % de empate y 36 de 72
+celdas, el extremo opuesto al de los checkpoints entrenados). El mapa cerrado sigue siendo válido
+(Proposición 1); lo que la rejilla degrada es la resolución del umbral, no la equivalencia entre definiciones.
 
 *Fuentes: `results/matrix/EXTENSION_CONF_SCORE.md` (+ `.csv`) y `results/matrix_pagado/RESUMEN_MATRIZ_PAGADO.md`.
 Se regeneran con `src/matriz/extension_conf_score.py` y `src/matriz/correr_matriz_pagado.sh`. Ninguna de estas dos

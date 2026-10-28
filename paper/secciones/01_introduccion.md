@@ -50,7 +50,7 @@ instrumento que se regenera con un comando.
    definiciones que son *equivalentes en orden* (transferencia exacta de umbral) de las que no lo son, y que
    muestran que la incompatibilidad aparece solo a partir de `n = 3`.
 2. La librería `jev-conf-metrics`, que implementa todas las definiciones y las métricas de calibración y
-   discriminación, con 67 tests de conformidad contra salidas publicadas.
+   discriminación, con 69 tests de conformidad contra salidas publicadas.
 3. La matriz de transferencia de umbrales (definición origen × definición destino × modelo × dataset), el
    dataset de 65.185 mediciones crudas con versión y hash por fila, las figuras y los scripts
    regeneradores que la reproducen sin GPU.

@@ -64,16 +64,25 @@ plt.rcParams.update({
     "axes.grid": True, "grid.alpha": 0.25, "grid.linewidth": 0.4,
     "axes.spines.top": False, "axes.spines.right": False,
     "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6,
+    # Fuentes Type 1/TrueType en el PDF, no Type 3: IEEE PDF eXpress rechaza las Type 3 que
+    # matplotlib emite por defecto (verificado el 28-oct-2026 con `pdffonts`).
+    "pdf.fonttype": 42, "ps.fonttype": 42,
 })
 
 
-def _guardar(fig, out, nombre):
+def _guardar(fig, out, nombre, rect=None):
     """Escribe PNG y PDF vectorial, y cierra. Sin títulos internos (R2).
 
     Sin `bbox_inches="tight"`: la página del PDF debe medir exactamente `figsize`, para que
     `\\includegraphics[width=\\columnwidth]` la imprima a escala ~1:1 (regla R1).
+
+    `rect` reserva una franja para una leyenda que va fuera de los ejes (p. ej. la de la Fig. 5);
+    sin él, `tight_layout` no la ve y LaTeX recorta la última entrada.
     """
-    fig.tight_layout()
+    if rect is None:
+        fig.tight_layout()
+    else:
+        fig.tight_layout(rect=rect)
     for ext in ("png", "pdf"):
         fig.savefig(os.path.join(out, f"{nombre}.{ext}"))
     plt.close(fig)
@@ -187,7 +196,7 @@ def fig2_brecha(brechas, out):
                 xy=(0.01, tope * 0.55), xytext=(0.17, tope * 0.66),
                 fontsize=6, color="0.25",
                 arrowprops=dict(arrowstyle="->", lw=0.6, color="0.35"))
-    ax.set_xlabel("separación entre la definición más alta y la más baja de la MISMA distribución")
+    ax.set_xlabel("separación entre la definición más alta\ny la más baja de la MISMA distribución")
     ax.set_ylabel("nº de decisiones")
     ax.set_xlim(0, 1)
     _guardar(fig, out, "fig2-brecha")
@@ -295,19 +304,18 @@ def fig5_por_par(filas, out):
     ax.plot(media, yy, "o", color="0.15", ms=2.6, label="|Δ| media")
     ax.set_yticks(yy, etq)
     ax.invert_yaxis()
-    ax.set_xlabel("error del porte directo |Δ| (nivel raw, todas las q)")
+    ax.set_xlabel("error del porte directo |Δ|")
     ax.set_xlim(0, max(max(media), max(med)) * 1.10)
     manejos = [
-        Patch(facecolor="0.6", label="$|\\Delta|$ mediana (color según corte)"),
-        Line2D([], [], marker="o", ls="", color="0.15", ms=3, label="$|\\Delta|$ media"),
-        Patch(facecolor=VERDE, label="$\\leq 0.05$"),
-        Patch(facecolor=NARANJA, label="$0.05$--$0.30$"),
-        Patch(facecolor=ROJO, label="$> 0.30$"),
+        Patch(facecolor=VERDE, label="≤ 0.05"),
+        Patch(facecolor=NARANJA, label="0.05–0.30"),
+        Patch(facecolor=ROJO, label="> 0.30"),
+        Line2D([], [], marker="o", ls="", color="0.15", ms=3, label="|Δ| media"),
     ]
-    ax.legend(handles=manejos, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=3,
+    ax.legend(handles=manejos, loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2,
               handlelength=1.1, columnspacing=0.9, fontsize=6)
     ax.grid(axis="y", visible=False)
-    _guardar(fig, out, "fig5-por-par")
+    _guardar(fig, out, "fig5-por-par", rect=(0, 0.16, 1, 1))
     return {f"{a}->{b}": round(statistics.median(v), 4) for (a, b), v in orden}
 
 

@@ -43,6 +43,10 @@ modelo & dataset & $n$ & ítems & accuracy & tokens \\
 \texttt{jaredpalmer/\allowbreak kev-0.8b} & \texttt{wanli} & 3 & 5\,000 & 0.5954 & 0 \\
 \bottomrule
 \end{tabular}}}
+\par\vspace{2pt}
+{\footnotesize\emph{Nota sobre la última columna.} El adaptador de la corrida confirmatoria no propaga
+\texttt{output\_tokens}: vale 0 en las 65 185 filas, también para Kev. El único recuento medido de ese campo en
+pesos abiertos es el del paso 0 (Kev: 869\,310 en las mismas 2\,000 decisiones, §5.7).}
 \end{table}
 
 Un dato aparte, que el ecosistema no reporta: en cardinalidad alta, Kev-0.8B obtiene 0.813 de accuracy en
@@ -105,7 +109,8 @@ contra el porte con mapa. El error absoluto medio está en la Tabla~\ref{tab:err
 \begin{table}[t]
 \centering
 \caption{Error absoluto medio del porte directo frente al porte con mapa, por subconjunto de celdas (nivel
-\texttt{raw}). El porte directo se equivoca hasta dos órdenes de magnitud más que el porte con mapa.}
+\texttt{raw}, salvo las dos filas de nivel, marcadas con $\dagger$). El porte directo se equivoca hasta dos
+órdenes de magnitud más que el porte con mapa.}
 \label{tab:error-transferencia}
 {\footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -118,10 +123,16 @@ todas las celdas con mapa & 348 & 0.2528 & 0.0123 & 20.5$\times$ \\
 solo modelos entrenados (sin control crudo) & 276 & 0.2289 & 0.0020 & 112.8$\times$ \\
 solo $n = 2$ (Proposición 3) & 180 & 0.3006 & 0.0218 & 13.8$\times$ \\
 solo $n \ge 3$ (Proposición 1) & 168 & 0.2015 & 0.0021 & 95.8$\times$ \\
-nivel \texttt{L0} (debiasing sin etiquetas) & 324 & 0.2190 & 0.0059 & 37.1$\times$ \\
-nivel \texttt{L1} (temperatura con etiquetas) & 312 & 0.3022 & 0.0024 & 126.0$\times$ \\
+nivel \texttt{L0}$\dagger$ (debiasing sin etiquetas) & 324 & 0.2190 & 0.0059 & 37.1$\times$ \\
+nivel \texttt{L1}$\dagger$ (temperatura con etiquetas) & 312 & 0.3022 & 0.0024 & 126.0$\times$ \\
 \bottomrule
 \end{tabular}}
+\par\vspace{2pt}
+{\footnotesize$\dagger$ Las dos filas de nivel llevan \textbf{además} el filtro de empates de la fila «sin
+empates dominantes», que las otras cinco no llevan. Sin ese filtro los tres niveles tienen 348 celdas con mapa
+cada uno, y el $\lvert\Delta\rvert$ directo es 0.2528 (\texttt{raw}), 0.2312 (\texttt{L0}) y 0.3145
+(\texttt{L1}) ---el $\lvert\Delta\rvert$ con mapa, 0.0123, 0.0096 y 0.0136---: la diferencia entre filas es del
+filtro, no del nivel.}
 \end{table}
 
 El porte directo se equivoca 109 veces más que el porte con mapa en el subconjunto sin empates dominantes
@@ -325,9 +336,13 @@ literatura del ecosistema y que son parte del instrumento:
    $(p_{\max} - 1/K)/(1 - 1/K) \equiv (K\cdot p_{\max} - 1)/(K - 1)$, verificado numéricamente para
    $K \in \{2,3,4,7,12\}$. Estaban registradas como definiciones distintas; por la Proposición 1, ese par
    transfiere el umbral de forma exacta.
-\item El campo \texttt{output\_tokens} tiene tres significados. Jev y Laya lo reportan como 0 (no
-   hay generación); Kev lo usa como recuento de tokens de la respuesta serializada (869\,310 en las mismas
-   2\,000 decisiones). Es metrología del propio campo, no un fallo de Kev.
+\item El campo \texttt{output\_tokens} tiene tres significados. En el \textbf{paso 0} ---la corrida de
+   verificación, no la confirmatoria--- Laya lo reporta como 0 (no hay generación) y Kev lo usa como recuento de
+   tokens de la respuesta serializada (869\,310 en las mismas 2\,000 decisiones); es metrología del propio
+   campo, no un fallo de Kev. La corrida confirmatoria no propaga el campo: vale 0 en las 65\,185 filas (nota de
+   la Tabla~\ref{tab:grupos}). Y el contador de la API de TypeSafe \textbf{sí está medido}, y tampoco es 0:
+   7\,092\,972 tokens en el brazo pagado (§5.8.2). Ninguna lectura de ese campo, por sí sola, distingue un
+   modelo de decisión de uno generativo.
 \end{enumerate}
 
 Y sobre la misma corrida, el ECE depende de la definición: en \texttt{laya-typed-decisions} va de 0.216 con
@@ -433,7 +448,8 @@ dataset & $n$ & ítems & accuracy & tokens de salida \\
 \end{table}
 
 Dos observaciones de metrología del propio campo. (i) El contador \texttt{output\_tokens} no es cero en
-el servicio (7\,092\,972 en total), a diferencia de los brazos de pesos abiertos: el campo \emph{tokens de
+el servicio (7\,092\,972 en total), a diferencia de la corrida confirmatoria de pesos abiertos, donde el
+adaptador no propaga el campo y vale 0 en las 65\,185 filas (§5.7): el campo \emph{tokens de
 salida} no distingue por sí solo un modelo de decisión de uno generativo; esa lectura solo vale donde se controla
 la implementación. (ii) La confianza que el servicio devuelve coincide con la definición que la
 especificación le asigna a cada primitiva: $C_{\text{score}}$ en las filas \texttt{score} ($\lvert\Delta\rvert
@@ -477,8 +493,11 @@ definición y la calidad del modelo--- y por eso la unidad de análisis de este 
 definiciones, no el modelo. (ii) El porte con mapa de Jev es 4.6 a 9.3 veces el de los checkpoints abiertos (0.0130
 frente a 0.0014--0.0028) y su factor directo/mapa es 13.4$\times$, un orden de magnitud menor que el de
 ellos (75--174$\times$). La causa está medida: la rejilla de 0.01 reasigna masa a valores empatados y
-2.5\,\% de los ítems de prueba de Jev comparten el umbral, frente a 0.1\,\% en los abiertos
-(25$\times$), con 4 de 72 celdas por encima del 5\,\% de empate frente a 0 en las abiertas. El mapa cerrado sigue
+2.5\,\% de los ítems de prueba de Jev comparten el umbral, frente a 0.1\,\% en los cuatro checkpoints abiertos
+\textbf{entrenados}
+(25$\times$), con 4 de 72 celdas por encima del 5\,\% de empate frente a 0 en ellos; el control crudo se sale de
+esa comparación por su saturación (5.0\,\% de empate y 36 de 72 celdas, el extremo opuesto al de los checkpoints
+entrenados). El mapa cerrado sigue
 siendo válido (Proposición~1); lo que la rejilla degrada es la resolución del umbral, no la equivalencia
 entre definiciones.
 

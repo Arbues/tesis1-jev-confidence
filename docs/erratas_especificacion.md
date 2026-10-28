@@ -77,9 +77,14 @@ marco teórico del paper (§3) como parte del enunciado de la Proposición 1.
 `paper/03_especificacion_confidence.md` §4.5 lista `C_noul` dentro de las clases de equivalencia,
 pero `conf_noul` opera sobre un escalar `π` (primitiva binaria), no sobre una distribución, así que
 no puede entrar en el diccionario `CONFIDENCES` de la librería. **Resolución:** `conf_noul` se expone
-como función propia y entra en la matriz solo en el bloque `n = 2`, comparada contra `p_max` (con
-quien es idéntica: `max(π, 1−π) = p_max`). Ya estaba así en la práctica; se documenta para que no
-parezca un olvido.
+como función propia, separada de las cuatro analíticas.
+
+**Corrección (28-oct-2026).** La versión original de esta errata añadía «y entra en la matriz solo en el
+bloque `n = 2`, comparada contra `p_max`». **Eso no ocurre:** la matriz tiene exactamente cuatro
+definiciones (`DEFS = [pmax, jev, ent, margin]` en `src/matriz/matriz.py`, 12 pares) y `noul` no aparece en
+ninguna celda ni en ninguna fila cruda. No hace falta medirla: a `n = 2` es idéntica a `p_max`
+(`max(π, 1−π) = p_max`), así que el bloque de `n = 2` ya la representa. El paper lo decía mal en §4.3
+(`.md` y `.tex`) y se corrigió en el mismo paso.
 
 ---
 
@@ -107,6 +112,15 @@ razón, a los pesos abiertos.
 **no es 0**: `output_tokens` = **71** (3 preguntas), **58** (1 pregunta, n=5) y **31** (1 pregunta, n=2);
 `input_tokens` 308–406 por ítem. La decisión de separar mecanismo y contador queda **confirmada por
 medición**, no por prudencia. Añadido en `docs/adaptador-typesafe-contrato.md` §11.
+
+**Corrección (28-oct-2026).** La frase de la sección «Por qué estaba mal» —«`output_tokens = 0` en las
+65.185 filas de `results/crudos/` **y en `results/raw/`**»— es **falsa en su segunda mitad**: en
+`results/raw/` el paso 0 midió para Kev `output_tokens_total = 869.310`
+(`results/raw/paso0_summary_kev_kev-latest.json`). Lo que vale 0 es `results/crudos/` (la corrida
+confirmatoria), porque **su adaptador no propaga el campo** (`medir.py` lee `usage.output_tokens` y los
+backends de pesos abiertos no lo rellenan): ese 0 **no es una medición del contador**. El paper se ajustó
+en el mismo paso: §4.1 ya no afirma «todas con `output_tokens = 0` verificado», la tabla de §5.1 lleva una
+nota sobre la columna y §5.7 atribuye el 869.310 al **paso 0**, no a la corrida confirmatoria.
 
 
 ---
@@ -170,3 +184,30 @@ distribución: **0.272** con cuatro definiciones → **0.290** con cinco. ECE gl
 La quinta definición **cambia de signo según el modelo**: en el control crudo Qwen es la más pesimista en
 el 70.3 % de las filas; en Laya-multilingual, la más optimista en el 92.6 %.
 
+
+---
+
+## E8 — `precision()` devolvía la confianza media, no el acierto
+
+**Qué se encontró (28-oct-2026).** `precision(confs, correct, tau)` en
+`src/jev_conf_metrics/transferencia.py` devolvía `sum(confianzas seleccionadas) / nº seleccionados`, es
+decir, la **confianza media** de los ítems con `C ≥ τ`, en lugar del **acierto** entre esos ítems que define
+la especificación (§5, paso 3: `precisión_B = Σ 𝟙[C_B ≥ τ]·a_i / #{C_B ≥ τ}`). El argumento `correct`
+llegaba a la función y no se usaba.
+
+**Efecto.** `precision_A` y `precision_B` de las **3.564 celdas** de `results/matrix/matriz_transferencia.csv`
+(7.128 valores) y de la tabla §4 de `RESUMEN_MATRIZ.md` son confianza media, no precisión: en
+`Qwen/banking77` la tabla publicaba **0.204** donde la accuracy del modelo es **0.0156**. El PDF del paper
+no imprime esas columnas (sus tablas dan `Δ`, cobertura e IC), pero §3.5 promete medir «la cobertura y la
+precisión», y el CSV es un artefacto publicado.
+
+**Resolución (aplicada el 28-oct-2026).**
+1. Función corregida (`sel = [a for c, a in …]`) y **dos tests de regresión** en `tests/test_transferencia.py`
+   (el caso mínimo `precision([.9,.8,.7,.2],[1,0,1,0],.7) = 0.667` y la coherencia con `celda`).
+2. `informe_matriz.py` **recalcula la precisión desde los crudos** para la tabla que publica
+   (`precisiones_raw`, nivel `raw`, `q = 0.80`) y la imprime con una nota que remite a esta errata.
+3. El **CSV sellado no se reescribe**: recalcular esas dos columnas exige volver a correr la matriz completa
+   y el nivel `L0` cuesta ~44 min por grupo con 77 clases (~19 h en total). Se corrigen en la próxima
+   regeneración completa del artefacto. `Δ`, `τ`, IC y `p` **no dependen** de `precision`, así que el resto
+   del CSV se regenera byte a byte idéntico y **ninguna cifra del paper cambia**.
+4. §4.5 del paper declara la excepción donde antes prometía que cualquier diferencia es un bug.

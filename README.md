@@ -86,7 +86,7 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | `paper/02_referencias_pendientes.md` | Verificaciones D4 (cerradas) + **estándar único de citas** + nota de Roby | **vigente** |
 | `contexto/` | Investigación previa (veredicto de Jev/TypeSafe y costos); su §3.1 lo corrige `notes/pago-jev-api-costos-2026-10-12.md` | contexto |
 | `src/figuras_paper.py` | Genera las 8 figuras del paper desde los artefactos medidos | vigente |
-| `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 67 tests en cada `push` | vigente |
+| `pyproject.toml`, `.github/workflows/tests.yml` | Empaquetado de la librería (`pip install -e .`) y CI: 69 tests en cada `push` | vigente |
 | `eje-1-jepa/`, `_descartado/` | **Eliminados del repo el 13-oct-2026** (eje descartado, fuera de alcance). Solo viven en el historial de git | eliminado |
 
 ### 3-bis. Estructura de trabajo y regla de orden
@@ -100,7 +100,7 @@ results/    ARTEFACTOS de medición (raw/ = mediciones crudas, matrix/ = matriz 
 data/       Datasets descargados (los pesados NO se versionan)
 notes/      Apuntes, borradores y lluvia de ideas (aquí sí, suelto está bien)
 docs/       Guías (libreria.md, validacion-productos.md, erratas, contrato de la API, guía de cierre, releases)
-.github/    CI: los 67 tests en cada push/PR
+.github/    CI: los 69 tests en cada push/PR
 ```
 
 **Regla de orden (para que nada quede suelto en la raíz):** la **raíz** es solo para los archivos de
@@ -243,7 +243,7 @@ reentrada: `STATE.json` → `README.md` → `docs/guia-cierre-pendientes.md` (fl
 |---|---|---|
 | Pre-registro del método | `10.5281/zenodo.23266795` (concepto `…23266794`) | Publicado el 09-oct-2026; el archivo depositado es la revisión previa (el método es idéntico) |
 | **Instrumento (software)** | **`10.5281/zenodo.23330647`** v1.0.1 (concepto `…23328988`; histórica v1.0.0 `…23328989`) | Se publica automáticamente desde el Release de GitHub. La v1.0.1 corrige las referencias que el snapshot v1.0.0 archivaba mal |
-| Preprint del paper | `10.5281/zenodo.23329431` (concepto `…23329430`) | PDF depositado de 11 páginas, CC-BY-4.0, en español; el PDF **vigente** del repo tiene 12 porque el 25-oct se le integró §5.8 (extensiones) |
+| Preprint del paper | `10.5281/zenodo.23329431` (concepto `…23329430`) | PDF depositado de 11 páginas, CC-BY-4.0, en español; el PDF **vigente** del repo tiene 13 (12 tras integrar §5.8 el 25-oct y 13 desde el 28-oct, al pasar las Figs. 7 y 8 a dos columnas) |
 | Archivo independiente | SWHID `swh:1:rev:39a685679905b7445b1a455d812b416f1acb9ef0` | Software Heritage |
 | ORCID | 3 works | verificado en la API pública de ORCID |
 
@@ -275,15 +275,16 @@ contra la API real.
 En el texto se quitaron **187 negritas de prosa**, 5 títulos-eslogan pasaron a descriptivos, los 14
 flotantes se citan con `\ref` (antes **ninguno**), 11 captions dejaron de argumentar y se corrigieron
 cuatro errores factuales (entre ellos «triplica» cuando es 2.2×). El PDF recompiló a **13 páginas**,
-67 tests siguen pasando.
+69 tests siguen pasando.
 
 **Cerrado el 25-oct-2026 (parte B):** las dos extensiones entraron al paper como **subsección declarada §5.8**
 (quinta definición `conf_score` y brazo pagado con la tabla por modelo y la causa medida de los empates de umbral),
-§1 y §7 dicen ya **67 tests**, §7 gana las filas 10 y 11 de artefactos, y el PDF recompiló a **12 páginas**
+§1 y §7 dicen ya **69 tests**, §7 gana las filas 10 y 11 de artefactos, y el PDF recompiló a **13 páginas**
 (36 ítems, 0 citas sin resolver, 0 overfull). Además se corrigió un error de `STATE.json`: el brazo pagado no tiene
 el |Δ| directo más bajo (0.1735, segundo) — el más bajo es `laya/multilingual` (0.1315); el |Δ| con mapa de Jev
 (0.0130) sí es 4.6–9.3× el de los checkpoints abiertos, y la causa está medida (rejilla de 0.01 → 2.5 % de ítems
-empatados en el umbral frente a 0.1 % en los abiertos).
+empatados en el umbral frente a 0.1 % en los cuatro checkpoints abiertos **entrenados**; el control crudo se sale
+de la comparación con 5.0 % y 36 de 72 celdas).
 
 Guías: `docs/guia-cierre-pendientes.md` (flujo por fases) · `notes/zenodo-publicar-guia-literal.md` (la interfaz
 real de Zenodo, con etiquetas literales) · `docs/release-v1.0.1.md` (qué cambia y por qué).
@@ -333,16 +334,25 @@ Crudos en `results/pagado/` (nunca mezclados con `results/crudos/`), matriz comb
 
 | modelo | \|Δ\| directo | \|Δ\| con mapa | factor |
 |---|---|---|---|
-| **typesafe-ai/jev** | **0.1307** | 0.0130 | **10×** |
-| laya | 0.2233 | 0.0028 | 79× |
-| laya/multilingual | 0.1316 | 0.0018 | 75× |
-| laya/typed-decisions | 0.2381 | 0.0014 | 165× |
-| kev-0.8b | 0.2499 | 0.0022 | 114× |
-| Qwen3.5 crudo (control) | 0.3635 | 0.0517 | 7× |
+| `typesafe-ai/jev` | 0.1735 | **0.0130** | 13.4× |
+| `laya/multilingual` | **0.1315** | 0.0018 | 75.1× |
+| `laya` | 0.2581 | 0.0028 | 91.7× |
+| `laya/typed-decisions` | 0.2515 | 0.0014 | 174.4× |
+| `kev-0.8b` | 0.2813 | 0.0022 | 128.5× |
+| `Qwen3.5` crudo (control) | 0.3441 | 0.0517 | 6.7× |
+| **global** | 0.2392 | 0.0124 | 19.3× |
 
-Jev tiene el error **directo** más bajo de todos pero el error **con mapa** 6–9× peor que los pesos
-abiertos: la **rejilla de 0.01** multiplica los empates de umbral y degrada el mapa. La rejilla se declara
-siempre; no se mezcla con los brazos de pesos abiertos.
+(420 celdas con mapa cerrado del nivel `raw` con las tres `q`. Cifras de
+`results/matrix_pagado/matriz_transferencia.csv`; la tabla anterior de este bloque —0.1307·10× para Jev y
+0.2233/0.2381/0.2499/0.3635 para los demás— **no se reproduce** desde el CSV: ver `STATE.json` → corrección
+del 25-oct-2026.)
+
+Jev es el **segundo** |Δ| directo más bajo, no el más bajo: el checkpoint `laya/multilingual` (0.1315)
+transfiere mejor sin ser el modelo de referencia del campo. Su |Δ| con mapa sí es 4.6–9.3× peor que el de
+los pesos abiertos (0.0130 frente a 0.0014–0.0028): la **rejilla de 0.01** multiplica los empates de umbral
+(2.5 % de ítems de prueba frente a 0.1 % en los checkpoints entrenados; el control crudo tiene 5.0 %) y
+degrada la resolución del umbral, no la equivalencia entre definiciones. La rejilla se declara siempre; no se
+mezcla con los brazos de pesos abiertos.
 
 **Verificación de E5 en vivo:** en filas `score` la confianza del API coincide con `conf_score` (máx 0.0050,
 100 % de 800 filas); en `choice`, con `conf_jev` (600 filas). Cada primitiva usa una fórmula distinta, medido
@@ -459,8 +469,12 @@ absoluto medio del porte de umbral:
 | solo modelos entrenados | 276 | 0.2289 | 0.0020 | 113× |
 | solo `n = 2` (Prop. 3) | 180 | 0.3006 | 0.0218 | 14× |
 | solo `n ≥ 3` (Prop. 1) | 168 | 0.2015 | 0.0021 | 96× |
-| nivel `L0` (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37× |
-| nivel `L1` (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126× |
+| nivel `L0` † (debiasing sin etiquetas) | 324 | 0.2190 | 0.0059 | 37× |
+| nivel `L1` † (temperatura con etiquetas) | 312 | 0.3022 | 0.0024 | 126× |
+
+† Las dos filas de nivel llevan **además** el filtro de empates de la fila «sin empates dominantes». Sin ese
+filtro los tres niveles tienen 348 celdas con mapa cada uno: |Δ| directo 0.2528 (`raw`), 0.2312 (`L0`) y
+0.3145 (`L1`); |Δ| con mapa 0.0123, 0.0096 y 0.0136. La diferencia entre filas es del filtro, no del nivel.
 
 **El promedio no es el resumen:** la distribución de `Δ` es **bimodal** (hay pares que coinciden por
 identidad matemática y pares que fallan en grande), así que el titular es la tabla **por par (A→B)** de

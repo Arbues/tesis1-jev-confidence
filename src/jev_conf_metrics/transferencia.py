@@ -33,8 +33,13 @@ def cobertura(confs, tau):
 
 
 def precision(confs, correct, tau):
-    """Acierto medio entre los ítems seleccionados (`C ≥ τ`)."""
-    sel = [c for c, a in zip(confs, correct) if c >= tau]
+    """Acierto medio entre los ítems seleccionados (`C ≥ τ`).
+
+    Es la `precisión_B` de la especificación (§5, paso 3): `Σ 𝟙[C ≥ τ]·a_i / #{C ≥ τ}`,
+    es decir, el acierto **entre los seleccionados**, no la confianza media de esos ítems.
+    Devuelve `nan` si el umbral no selecciona a nadie.
+    """
+    sel = [a for c, a in zip(confs, correct) if c >= tau]
     return (sum(sel) / len(sel)) if sel else float("nan")
 
 

@@ -6,7 +6,7 @@
 El resultado principal es que un umbral de \texttt{confidence} no transfiere entre implementaciones y que el
 promedio no describe el fenómeno. Al mirar celda a celda aparecen dos capas distintas, y confundirlas lleva a conclusiones opuestas (documentado en \texttt{docs/erratas\_especificacion.md}, E2).
 
-\textbf{Capa 1, la escala.} Dos definiciones pueden ordenar las decisiones igual y aun así estar en escalas distintas. $C_{\max}=p$ y $C_{\mathrm{Jev}}=(n\cdot p-1)/(n-1)$ inducen el mismo umbral en orden, de modo que existe un mapa cerrado $\psi=\phi^{-1}$ entre ellas. El número no viaja ($|\Delta|$ mediano de 0.20 a 0.31 en el par \texttt{pmax} $\leftrightarrow$ \texttt{jev}), pero el mapa sí transfiere (0.0025): la escala se corrige, la cifra no sirve tal cual.
+\textbf{Capa 1, la escala.} Dos definiciones pueden ordenar las decisiones igual y aun así estar en escalas distintas. $C_{\max}=p$ y $C_{\mathrm{Jev}}=(n\cdot p-1)/(n-1)$ inducen el mismo umbral en orden, de modo que existe un mapa cerrado $\psi=\phi^{-1}$ entre ellas. El número no viaja ($|\Delta|$ mediano de 0.076 en un sentido del par \texttt{pmax} $\leftrightarrow$ \texttt{jev} y 0.257 en el otro, nivel \texttt{raw}), pero el mapa sí transfiere (0.0013 de mediana, 0.0049 de media): la escala se corrige, la cifra no sirve tal cual.
 
 \textbf{Capa 2, la forma.} Entre definiciones de clases distintas ($p_{\max}$, entropía, margen) no existe ni número ni mapa. \texttt{pmax} $\to$ \texttt{ent} tiene mediana de 0.77: es el caso en que la confianza «alta» de una definición y la de la otra ordenan las decisiones de forma diferente, no solo con otra escala. Aquí no hay nada que traducir y el porte directo es lisa y llanamente una extrapolación inválida.
 
@@ -14,7 +14,7 @@ La coexistencia de las dos capas es la razón de que el resultado no se pueda re
 
 \subsection{Por qué el orden se preserva y el número no}
 
-Sea $f$ una transformación creciente de $p_{\max}$. Un umbral $\tau$ sobre $f(p_{\max})$ selecciona el mismo conjunto de decisiones que el umbral $f^{-1}(\tau)$ sobre $p_{\max}$, porque $f$ monótona no cambia el orden. Por eso $C_{\mathrm{Jev}}$, $C_{\max}$ y $C_{\mathrm{mar}}$ (fijado $n$) seleccionan lo mismo con el umbral traducido. Pero el valor de $f$ depende de $n$ y de la definición, así que la misma cifra $0.7$ significa coberturas distintas. Y cuando $f$ deja de ser una función de $p_{\max}$ (la entropía usa toda la distribución, no solo el máximo), ni siquiera existe el mapa.
+Sea $f$ una transformación creciente de $p_{\max}$. Un umbral $\tau$ sobre $f(p_{\max})$ selecciona el mismo conjunto de decisiones que el umbral $f^{-1}(\tau)$ sobre $p_{\max}$, porque $f$ monótona no cambia el orden. Por eso $C_{\mathrm{Jev}}$ y $C_{\max}$ (fijado $n$) seleccionan lo mismo con el umbral traducido; $C_{\mathrm{mar}}$ también, pero \textbf{solo a $n = 2$}, donde vale $2\cdot p_{\max}-1$: a $n \ge 3$ el margen depende de las dos probabilidades mayores y no es función de $p_{\max}$. Pero el valor de $f$ depende de $n$ y de la definición, así que la misma cifra $0.7$ significa coberturas distintas. Y cuando $f$ deja de ser una función de $p_{\max}$ (la entropía usa toda la distribución, no solo el máximo), ni siquiera existe el mapa.
 
 Esto es exactamente lo que predice la Proposición 1 y lo que mide el factor 109$\times$: el costo de confundir «mismo orden» con «mismo número».
 

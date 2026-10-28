@@ -23,6 +23,11 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(os.path.dirname(AQUI))
 DEFS = ["pmax", "jev", "ent", "margin"]
 
+# Fuentes Type 1/TrueType en el PDF, no Type 3 (las que matplotlib emite por defecto y que
+# IEEE PDF eXpress rechaza). Se fija aquí también porque este módulo se ejecuta solo.
+plt.rcParams["pdf.fonttype"] = 42
+plt.rcParams["ps.fonttype"] = 42
+
 
 def leer(ruta):
     with open(ruta, encoding="utf-8") as f:

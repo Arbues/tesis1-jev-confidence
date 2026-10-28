@@ -17,9 +17,10 @@ de ver los resultados.*
 
 ## 4.1. Modelos bajo medición
 
-Se midieron cinco configuraciones de pesos abiertos, todas con `output_tokens = 0` verificado (no generan
-texto). La revisión exacta de cada una (sha del Hub) quedó registrada por grupo en `results/crudos/*.meta.json`
-y en `results/raw/paso0_versions.json` (regla D4).
+Se midieron cinco configuraciones de pesos abiertos, ninguna de las cuales genera texto: la inferencia termina
+en un *readout* de logits. El contador `output_tokens` no se usa como evidencia de eso (§5.7: el adaptador de
+esta corrida no propaga el campo). La revisión exacta de cada configuración (sha del Hub) quedó registrada por
+grupo en `results/crudos/*.meta.json` y en `results/raw/paso0_versions.json` (regla D4).
 
 | configuración | familia | parámetros | papel |
 |---|---|---|---|
@@ -55,7 +56,9 @@ Sobre la distribución `p` que cada modelo devuelve para cada ítem se calcularo
 dato, las cuatro definiciones analíticas de la especificación (`paper/03_especificacion_confidence.md`):
 
 `C_max = p_max` (DEF-4) · `C_Jev = (n·p_max − 1)/(n − 1)` (DEF-1) · `C_ent = 1 − H(p)/ln n` (DEF-2) ·
-`C_mar = p_(1) − p_(2)` (DEF-5). La quinta, `C_noul = max(π, 1−π)` (DEF-3), entra en el bloque de `n = 2`.
+`C_mar = p_(1) − p_(2)` (DEF-5). La quinta, `C_noul = max(π, 1−π)` (DEF-3), está implementada como función
+propia sobre el escalar binario y **no entra en la matriz** de esta corrida: con `n = 2` es idéntica a `p_max`,
+así que el bloque de `n = 2` ya la representa (ver errata E3).
 
 Las dos definiciones opacas (`act_probability` de Laya y `open-decision-ai`) quedaron fuera de la matriz
 por decisión de alcance: no son funciones de `p` y no tienen clase de equivalencia en orden. Las
@@ -103,7 +106,9 @@ python src/matriz/informe_matriz.py
 ```
 
 `matriz.py` es CPU pura: lee los `.jsonl` de mediciones y no toca ningún peso. Si el CSV regenerado no es
-idéntico al publicado, hay un bug o un cambio de versión.
+idéntico al publicado, hay un bug o un cambio de versión; la única excepción declarada son las columnas
+`precision_A`/`precision_B`, cuyo cálculo se corrigió el 28-oct-2026 (errata E8) y que se actualizan en la
+próxima regeneración completa del artefacto —`Δ`, `τ` e intervalos no dependen de ellas.
 
 ## 4.6. Trazabilidad (regla D4)
 

@@ -88,7 +88,7 @@ corrección del `L0` está declarada como desviación en `RESUMEN_MATRIZ.md` §7
 # en el t440, con el repo clonado y un venv con numpy + matplotlib
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python numpy matplotlib pytest
 
-python -m pytest tests/ -q                       # 67 tests: la matemática y la regresión del paso 0
+python -m pytest tests/ -q                       # 69 tests: la matemática y la regresión del paso 0
 python src/matriz/matriz.py --crudos results/crudos --out results/matrix
 python src/matriz/figura.py
 python src/matriz/informe_matriz.py

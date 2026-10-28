@@ -1,7 +1,7 @@
 # v1.0.0 — Instrumento de metrología del campo `confidence` (archivo de la Tesis 1)
 
 > **Snapshot histórico.** Las cifras de esta nota (37 tests, 3.564 celdas) son las del momento del release y
-> **no** describen el repo de hoy (**67 tests**: ver `README.md`). Se conserva sin editar como registro del
+> **no** describen el repo de hoy (**69 tests** hoy: ver `README.md`). Se conserva sin editar como registro del
 > depósito; lo posterior va en `docs/release-v1.0.1.md` y en `docs/erratas_especificacion.md` (E5-bis).
 
 Primer estado congelado del instrumento completo, tal como se mide y se publica. Este tag es el que

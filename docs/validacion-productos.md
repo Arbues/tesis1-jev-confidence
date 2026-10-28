@@ -39,7 +39,7 @@ producto, va abajo.
 .venv/bin/python -m pytest -q
 ```
 
-**Esperado:** `37 passed`. Cubren la matemática de las definiciones y las proposiciones, la
+**Esperado:** `69 passed`. Cubren la matemática de las definiciones y las proposiciones, la
 regresión del paso 0 y la del bug `L0`.
 
 **Si falla:** algo cambió en la librería y rompió la reproducción. No sigas: primero hay que
@@ -137,7 +137,7 @@ bash src/matriz/correr_matriz_pagado.sh                 # matriz combinada (5 lo
 |---|---|
 | `extension_conf_score.py` | `n = 5505` · 5 grupos · brecha mediana `0.272` (4 defs) → `0.290` (5 defs) · ECE global `score` 0.241 |
 | `results/matrix_pagado/matriz_transferencia.csv` | 2.880 filas, 21 columnas, 6 modelos, niveles `raw` y `L1` |
-| tiposafe-ai/jev, nivel `raw` | \|Δ\| directo **0.1307** · con mapa **0.0130** (10×) |
+| `typesafe-ai/jev`, nivel `raw` | \|Δ\| directo **0.1735** (segundo; el más bajo es `laya/multilingual`, 0.1315) · con mapa **0.0130** (13.4×) |
 | Crudos del brazo pagado | `results/pagado/` con **14.277** filas en 5 datasets |
 
 La corrida paralela (`correr_matriz_paralela.sh 2`) debe producir **el mismo CSV** que la serie:
@@ -196,7 +196,7 @@ desde el DOI lo publica en tu historial).
 
 | producto | comando / dónde | esperado |
 |---|---|---|
-| Tests | `pytest -q` | 37 passed |
+| Tests | `pytest -q` | 69 passed |
 | Librería | `import jev_conf_metrics` | cuatro definiciones sobre el mismo dato |
 | Dataset | conteo de filas | 65185 |
 | Matriz/informe | `informe_matriz.py` + `git diff` | diff vacío; 0.288 y 109.2× |

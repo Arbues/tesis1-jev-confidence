@@ -6,7 +6,7 @@ from src.jev_conf_metrics.definiciones import (
     aplicar_l0, aplicar_l1, conf_ent, conf_jev, conf_pmax, phi_inv,
 )
 from src.jev_conf_metrics.transferencia import (
-    bh_fdr, bootstrap_delta, celda, cobertura, fold_de, umbral_para_cobertura,
+    bh_fdr, bootstrap_delta, celda, cobertura, fold_de, precision, umbral_para_cobertura,
 )
 
 
@@ -101,3 +101,41 @@ def test_transformaciones_anyjev():
     assert caliente[2] < p[2], "T>1 debe suavizar"
     l0 = aplicar_l0(p, [0.2, 0.2, 0.2])
     assert abs(sum(l0) - 1.0) < 1e-12 and all(x >= 0 for x in l0)
+
+
+# ======================================================================
+#  Precisión: acierto entre los seleccionados (regresión del bug del 28-oct-2026)
+# ======================================================================
+
+def test_precision_es_acierto_y_no_confianza_media():
+    """`precision` debe devolver el acierto entre los seleccionados, no la confianza media.
+
+    Regresión: la versión anterior hacía `sum(confianzas seleccionadas) / nº`, de modo que
+    `precision([.9,.8,.7,.2], [1,0,1,0], .7)` daba 0.80 (media de .9/.8/.7) en vez del
+    acierto real (2 de 3 = 0.667), y contaminaba `precision_A/B` de las 3.564 celdas.
+    """
+    confs = [0.9, 0.8, 0.7, 0.2]
+    correct = [1, 0, 1, 0]
+    assert abs(precision(confs, correct, 0.7) - 2 / 3) < 1e-12
+    # dos seleccionados, uno acierta
+    assert abs(precision([0.9, 0.85, 0.1], [1, 0, 1], 0.8) - 0.5) < 1e-12
+    # nadie seleccionado -> nan (y no 0.0, que se leería como "precisión cero")
+    assert precision(confs, correct, 0.95) != precision(confs, correct, 0.95)
+
+
+def test_precision_de_la_celda_coincide_con_el_acierto_de_los_seleccionados():
+    """La celda expone `precision_B` = acierto de los ítems con `C_B ≥ τ_A` (definición
+    operativa de §5 de la especificación), y NO la confianza media de esos ítems."""
+    probs = _probs(600)
+    rng = random.Random(11)
+    a = [conf_pmax(p) for p in probs]
+    b = [conf_ent(p) for p in probs]
+    c = [rng.randrange(2) for _ in probs]
+    r = celda(a, b, a, b, c, 0.80)
+    tau = r["tau"]
+    sel = [(cb, y) for cb, y in zip(b, c) if cb >= tau]
+    esperado = sum(y for _, y in sel) / len(sel) if sel else float("nan")
+    assert abs(r["precision_B"] - esperado) < 1e-12, (r["precision_B"], esperado)
+    # y es acotada: es un acierto, no una confianza media
+    assert 0.0 <= r["precision_A"] <= 1.0
+    assert 0.0 <= r["precision_B"] <= 1.0

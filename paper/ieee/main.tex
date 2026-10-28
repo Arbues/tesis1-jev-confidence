@@ -11,6 +11,9 @@
 % en inglés y no se rompe la compilación.
 \IfFileExists{spanish.ldf}{%
   \usepackage[spanish,es-tabla]{babel}%
+  % babel(spanish) convierte a coma los decimales en modo matemático («0,288» junto a «0.288» en
+  % las tablas). El paper usa el punto en todo el texto y en las 16 tablas: se fija el punto.
+  \spanishdecimal{.}%
 }{%
   \usepackage[english]{babel}%
 }

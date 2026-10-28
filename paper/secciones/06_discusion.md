@@ -12,8 +12,9 @@ distintas, y confundirlas lleva a conclusiones opuestas (documentado en `docs/er
 
 **Capa 1, la escala.** Dos definiciones pueden ordenar las decisiones igual y aun así estar en escalas
 distintas. `C_max = p` y `C_Jev = (n·p − 1)/(n − 1)` inducen el mismo umbral en orden, de modo que existe un
-mapa cerrado `ψ = φ⁻¹` entre ellas. El número no viaja (`|Δ|` mediano de 0.20 a 0.31 en el par
-`pmax ↔ jev`), pero el mapa sí transfiere (0.0025). Es la diferencia entre copiar la cifra y traducirla.
+mapa cerrado `ψ = φ⁻¹` entre ellas. El número no viaja (`|Δ|` mediano de 0.076 en un sentido del par `pmax ↔ jev`
+y 0.257 en el otro, nivel `raw`), pero el mapa sí transfiere (0.0013 de mediana, 0.0049 de media). Es la
+diferencia entre copiar la cifra y traducirla.
 
 **Capa 2, la forma.** Entre definiciones de clases distintas (`p_max`, entropía, margen) no existe ni
 número ni mapa. `pmax → ent` tiene mediana de 0.77: es el caso en que la confianza "alta" de una definición y
@@ -27,8 +28,10 @@ tabla contiene identidades exactas (14 % de las celdas con `n = 2` transfieren b
 ## 6.2. Por qué el orden se preserva y el número no
 
 Sea `f` una transformación creciente de `p_max`. Un umbral `τ` sobre `f(p_max)` selecciona el mismo conjunto
-de decisiones que el umbral `f⁻¹(τ)` sobre `p_max`, porque `f` monótona no cambia el orden. Por eso
-`C_Jev`, `C_max` y `C_mar` (fijado `n`) seleccionan lo mismo con el umbral traducido. Pero el valor de `f`
+de decisiones que el umbral `f⁻¹(τ)` sobre `p_max`, porque `f` monótona no cambia el orden. Por eso `C_Jev` y
+`C_max` (fijado `n`) seleccionan lo mismo con el umbral traducido; `C_mar` también, pero **solo a `n = 2`**,
+donde vale `2·p_max − 1`: a `n ≥ 3` el margen depende de las dos probabilidades mayores y no es función de
+`p_max`. Pero el valor de `f`
 depende de `n` y de la definición, así que la misma cifra `0.7` significa coberturas distintas. Y cuando `f`
 deja de ser una función de `p_max` (la entropía usa toda la distribución, no solo el máximo), ni siquiera
 existe el mapa.

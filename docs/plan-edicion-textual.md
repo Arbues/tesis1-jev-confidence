@@ -164,7 +164,7 @@ inverso: perder credibilidad por parecer descuidado.
 
 **Sobre los detectores:** no son el objetivo ni son fiables (sobre texto técnico en español dan falsos positivos
 sistemáticos). El objetivo es que un revisor humano no piense "esto es un blog". Si alguien pregunta por la
-autoría, la respuesta no es el estilo: son los artefactos (DOI, repo, `row_hash` por fila, 67 tests, matriz que
+autoría, la respuesta no es el estilo: son los artefactos (DOI, repo, `row_hash` por fila, 69 tests, matriz que
 se regenera con un comando).
 
 ---

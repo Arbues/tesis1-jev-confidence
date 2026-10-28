@@ -12,14 +12,16 @@ confirmatoria.
 
 \subsection{Modelos bajo medición}
 
-Se midieron cinco configuraciones de pesos abiertos, todas con \texttt{output\_tokens} $= 0$ verificado (no
-generan texto). La revisión exacta de cada una (sha del Hub) quedó registrada por grupo en
-\texttt{results/crudos/*.meta.json} y en \texttt{results/raw/paso0\_versions.json} (regla D4; Tabla~\ref{tab:modelos}).
+Se midieron cinco configuraciones de pesos abiertos, ninguna de las cuales genera texto: la inferencia termina
+en un \emph{readout} de logits. El contador \texttt{output\_tokens} no se usa como evidencia de eso (§5.7: el
+adaptador de esta corrida no propaga el campo). La revisión exacta de cada una (sha del Hub) quedó registrada
+por grupo en \texttt{results/crudos/*.meta.json} y en \texttt{results/raw/paso0\_versions.json} (regla D4;
+Tabla~\ref{tab:modelos}).
 
 \begin{table}[t]
 \centering
-\caption{Las cinco configuraciones de pesos abiertos medidas. Todas verifican \texttt{output\_tokens} $= 0$
-(no generan texto); la última es un control crudo, no entrenado para emitir decisiones.}
+\caption{Las cinco configuraciones de pesos abiertos medidas. Ninguna genera texto: la inferencia termina en un
+\emph{readout} de logits. La última es un control crudo, no entrenado para emitir decisiones.}
 \label{tab:modelos}
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -79,7 +81,9 @@ dato, las cuatro definiciones analíticas de la especificación
 
 $C_{\max} = p_{\max}$ (DEF-4) $\cdot$ $C_{\text{Jev}} = (n\cdot p_{\max} - 1)/(n - 1)$ (DEF-1) $\cdot$
 $C_{\text{ent}} = 1 - H(p)/\ln n$ (DEF-2) $\cdot$ $C_{\text{mar}} = p_{(1)} - p_{(2)}$ (DEF-5). La quinta,
-$C_{\text{noul}} = \max(\pi, 1-\pi)$ (DEF-3), entra en el bloque de $n = 2$.
+$C_{\text{noul}} = \max(\pi, 1-\pi)$ (DEF-3), está implementada como función propia sobre el escalar binario y
+\textbf{no entra en la matriz} de esta corrida: con $n = 2$ es idéntica a $p_{\max}$, así que el bloque de
+$n = 2$ ya la representa (ver errata E3).
 
 Las dos definiciones opacas (\texttt{act\_probability} de Laya y \texttt{open-decision-ai})
 quedaron fuera de la matriz por decisión de alcance: no son funciones de $p$ y no tienen clase de
@@ -134,7 +138,10 @@ edición manual:
 \end{flushleft}}
 
 \texttt{matriz.py} es CPU pura: lee los \texttt{.jsonl} de mediciones y no toca ningún peso. Si el CSV
-regenerado no es idéntico al publicado, hay un bug o un cambio de versión.
+regenerado no es idéntico al publicado, hay un bug o un cambio de versión; la única excepción declarada son las
+columnas \texttt{precision\_A}/\texttt{precision\_B}, cuyo cálculo se corrigió el 28-oct-2026 (errata E8) y que
+se actualizan en la próxima regeneración completa del artefacto ---$\Delta$, $\tau$ e intervalos no dependen de
+ellas.
 
 \subsection{Trazabilidad (regla D4)}
 

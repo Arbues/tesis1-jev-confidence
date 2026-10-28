@@ -78,6 +78,66 @@ def _sin_empates(filas, umbral=0.05):
     return out
 
 
+def _media_sin_nan(xs):
+    xs = [x for x in xs if x is not None and not (isinstance(x, float) and x != x)]
+    return (sum(xs) / len(xs)) if xs else float("nan")
+
+
+def precisiones_raw(crudos_dir, q=0.80, k=5):
+    """Precisión por celda del nivel `raw`, **recalculada desde los crudos**.
+
+    `precisión = acierto entre los ítems seleccionados` (especificación §5, paso 3): folds
+    K=5 deterministas, `τ_A` ajustado en calibración y precisión medida en el fold de prueba.
+
+    Por qué se recalcula aquí y no se lee del CSV: las columnas `precision_A`/`precision_B`
+    del CSV sellado se calcularon con una versión de `precision()` que devolvía la **confianza
+    media** en vez del acierto (bug corregido el 28-oct-2026; ver errata E8 en
+    `docs/erratas_especificacion.md`). El CSV es un artefacto sellado y no se reescribe, así
+    que el informe recalcula lo que publica. `Δ`, `tau` e IC no dependen de esto.
+    """
+    sys.path.insert(0, os.path.dirname(AQUI))
+    from jev_conf_metrics.definiciones import CONFIDENCES  # noqa: E402
+    from jev_conf_metrics.transferencia import (  # noqa: E402
+        fold_de, precision, umbral_para_cobertura,
+    )
+
+    grupos = defaultdict(list)
+    for ruta in sorted(glob.glob(os.path.join(crudos_dir, "*.jsonl"))):
+        if os.path.basename(ruta).startswith("_"):
+            continue
+        with open(ruta, encoding="utf-8") as f:
+            for linea in f:
+                linea = linea.strip()
+                if linea:
+                    r = json.loads(linea)
+                    grupos[(r["model"], r["dataset"], r["n_options"])].append(r)
+
+    salida = {}
+    for (modelo, dataset, n), rows in grupos.items():
+        por_fold = defaultdict(list)
+        for r in rows:
+            por_fold[fold_de(r["id"])].append(r)
+        acum = defaultdict(lambda: ([], []))
+        for f in range(k):
+            te = por_fold.get(f) or []
+            cal = [r for f2 in range(k) if f2 != f for r in (por_fold.get(f2) or [])]
+            if not cal or not te:
+                continue
+            conf_cal = {d: [CONFIDENCES[d](r["probs"]) for r in cal] for d in DEFS}
+            conf_te = {d: [CONFIDENCES[d](r["probs"]) for r in te] for d in DEFS}
+            corr = [r["correct"] for r in te]
+            tau = {d: umbral_para_cobertura(conf_cal[d], q)[0] for d in DEFS}
+            for a in DEFS:
+                for b in DEFS:
+                    if a == b:
+                        continue
+                    acum[(a, b)][0].append(precision(conf_te[a], corr, tau[a]))
+                    acum[(a, b)][1].append(precision(conf_te[b], corr, tau[a]))
+        for (a, b), (pa, pb) in acum.items():
+            salida[(modelo, dataset, n, a, b)] = (_media_sin_nan(pa), _media_sin_nan(pb))
+    return salida
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Informe legible de la matriz")
     ap.add_argument("--matriz", default=os.path.join(RAIZ, "results", "matrix",
@@ -158,7 +218,8 @@ def main(argv=None):
                      f"{r['A']} → {r['B']} | {_f(r['delta'])} | {_f(r['delta_mapa'])} |")
         w.append("")
         w.append("Todo lo de esta sección es sobre el **nivel principal `raw`** (el que congela el "
-                 "pre-registro). Los niveles `L0` y `L1` están en la matriz completa y se resumen en §5.")
+                 "pre-registro), salvo las dos filas marcadas con †. Los niveles `L0` y `L1` están en la "
+                 "matriz completa y se resumen en §5.")
         w.append("")
         w.append("Error absoluto medio del porte, por subconjunto de celdas:")
         w.append("")
@@ -171,10 +232,10 @@ def main(argv=None):
              [r for r in con_mapa if not str(r["modelo"]).startswith("Qwen")]),
             ("solo n = 2 (Proposición 3)", [r for r in con_mapa if str(r["n"]) == "2"]),
             ("solo n ≥ 3 (Proposición 1)", [r for r in con_mapa if str(r["n"]) != "2"]),
-            ("nivel `L0` (debiasing sin etiquetas)",
+            ("nivel `L0` † (debiasing sin etiquetas)",
              [r for r in filas if r["nivel"] == "L0" and r["delta_mapa"] not in ("", None)
               and int(r["n_empates_tau"]) / max(1, int(r["n_items_te"])) < 0.05]),
-            ("nivel `L1` (temperatura con etiquetas)",
+            ("nivel `L1` † (temperatura con etiquetas)",
              [r for r in filas if r["nivel"] == "L1" and r["delta_mapa"] not in ("", None)
               and int(r["n_empates_tau"]) / max(1, int(r["n_items_te"])) < 0.05]),
         ]
@@ -185,6 +246,23 @@ def main(argv=None):
             m = sum(abs(float(r["delta_mapa"])) for r in sub) / len(sub)
             w.append(f"| {nombre} | {len(sub)} | {d:.4f} | {m:.4f} | "
                      f"{d / max(1e-9, m):.1f}× |")
+        w.append("")
+        # Las dos filas de nivel llevan un filtro que las otras cinco no: se declara, y se dan
+        # las cifras sin filtro para que la diferencia no se atribuya al nivel.
+        sin_filtro = {}
+        for nivel in ("raw", "L0", "L1"):
+            sub = [r for r in filas if r["nivel"] == nivel and r["delta_mapa"] not in ("", None)]
+            if sub:
+                d = sum(abs(float(r["delta"])) for r in sub) / len(sub)
+                m = sum(abs(float(r["delta_mapa"])) for r in sub) / len(sub)
+                sin_filtro[nivel] = (len(sub), d, m)
+        if "L0" in sin_filtro and "L1" in sin_filtro:
+            (n0, d0, m0), (n1, d1, m1) = sin_filtro["L0"], sin_filtro["L1"]
+            w.append(f"† Las filas de nivel llevan **además** el filtro de empates de la segunda fila. "
+                     f"Sin ese filtro, los tres niveles tienen {sin_filtro['raw'][0]} celdas con mapa "
+                     f"cada uno y el |Δ| directo es {sin_filtro['raw'][1]:.4f} (`raw`), {d0:.4f} (`L0`) "
+                     f"y {d1:.4f} (`L1`); el |Δ| con mapa, {sin_filtro['raw'][2]:.4f}, {m0:.4f} y "
+                     f"{m1:.4f}. La diferencia entre filas es del filtro, no del nivel.")
         w.append("")
         w.append("**Cómo leer esto.** El porte con mapa tiene un suelo que no es culpa del mapa: si el "
                  "umbral cae sobre un valor **empatado** (salidas saturadas), la cobertura salta y ni el "
@@ -232,14 +310,40 @@ def main(argv=None):
                    and r["rechaza"] == "True"]
     if principales:
         peores = sorted(principales, key=lambda r: -abs(float(r["delta"])))[:12]
+        prec = precisiones_raw(args.crudos, q=0.80)
+        # ¿Las columnas del CSV coinciden con lo recalculado? Si no, el CSV es anterior a la
+        # corrección de `precision()` (errata E8) y hay que decirlo.
+        desfasado = False
+        for r in peores:
+            pa, pb = prec.get((r["modelo"], r["dataset"], int(r["n"]), r["A"], r["B"]),
+                              (float("nan"), float("nan")))
+            for viejo, nuevo in ((r["precision_A"], pa), (r["precision_B"], pb)):
+                try:
+                    if abs(float(viejo) - float(nuevo)) > 5e-3:
+                        desfasado = True
+                except (TypeError, ValueError):
+                    pass
         w.append("## 4. Dónde el umbral NO viaja (nivel `raw`, q = 0.80, tras FDR)")
         w.append("")
         w.append("| modelo | dataset | n | A → B | Δ | IC95 % | cobertura B | precisión A | precisión B |")
         w.append("|---|---|---|---|---|---|---|---|---|")
         for r in peores:
+            pa, pb = prec.get((r["modelo"], r["dataset"], int(r["n"]), r["A"], r["B"]),
+                              (float("nan"), float("nan")))
             w.append(f"| `{r['modelo']}` | {r['dataset']} | {r['n']} | {r['A']} → {r['B']} | "
                      f"{_f(r['delta'])} | [{_f(r['ic95_lo'], 3)}, {_f(r['ic95_hi'], 3)}] | "
-                     f"{_f(r['cobertura_B'], 3)} | {_f(r['precision_A'], 3)} | {_f(r['precision_B'], 3)} |")
+                     f"{_f(r['cobertura_B'], 3)} | {_f(pa, 3)} | {_f(pb, 3)} |")
+        w.append("")
+        nota = ("*Precisión = acierto entre los ítems seleccionados (especificación §5, paso 3), "
+                "recalculada desde los crudos.")
+        if desfasado:
+            nota += (" Las columnas `precision_A`/`precision_B` del CSV de este directorio conservan "
+                     "el cálculo anterior —confianza media, no acierto— y se corrigen en la próxima "
+                     "regeneración completa del artefacto: ver errata E8 en "
+                     "`docs/erratas_especificacion.md`.")
+        else:
+            nota += " El CSV del directorio ya trae la misma corrección (errata E8)."
+        w.append(nota + "*")
         w.append("")
 
     # --- 5. efecto de la cardinalidad
