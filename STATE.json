@@ -1,7 +1,7 @@
 {
   "proyecto": "Tesis 1 — Ciencia de la Computación (FC-UNI)",
   "autor": "Arbués Enrique Pérez V. · ORCID 0009-0004-7605-6569 · FC-UNI",
-  "ultima_actualizacion": "2026-10-25",
+  "ultima_actualizacion": "2026-10-28",
   "como_usar": "Punto de reentrada. Leer: este STATE.json → README.md → docs/guia-cierre-pendientes.md. Cualquier cambio del repo se refleja aquí y en README.md en el mismo paso.",
   "estado_en_una_linea": "Tesis 1 CONSTRUIDA, MEDIDA Y RESERVADA (3 depósitos con DOI + Software Heritage + ORCID). No queda cómputo pendiente de la medición; lo que falta está en `pendientes`.",
   "tema": {
@@ -77,7 +77,7 @@
     {
       "n": 1,
       "quien": "autor",
-      "que": "Leer el borrador §1–§7 (paper/secciones/) o el PDF (paper/ieee/main.pdf, 12 páginas, ya con §5.8) y decidir si el IEEE lo representa. Da observaciones.",
+      "que": "Leer el borrador §1–§7 (paper/secciones/) o el PDF (paper/ieee/main.pdf, 13 páginas, ya con §5.8) y decidir si el IEEE lo representa. Da observaciones.",
       "estado": "pendiente — es lo último que cierra la Tesis 1. El PDF vigente ya integra las dos extensiones, así que lo que se lee es la versión definitiva."
     },
     {
@@ -138,7 +138,7 @@
     "libreria": "src/jev_conf_metrics/ (definiciones, métricas, transferencia, recursos; stdlib puro) + tests/ (67) + pyproject.toml + .github/workflows/tests.yml. API: docs/libreria.md",
     "pipeline": "src/matriz/ (medir.py, matriz.py, informe_matriz.py, figura.py, adaptadores.py, backend_typesafe.py, correr_*.sh) · src/figuras_paper.py · src/paso0_go_no_go.py · src/paso0_informe.py",
     "mediciones": "results/crudos/ (65.185 filas, 23 .jsonl + .meta.json) · results/matrix/ (matriz_transferencia.csv, RESUMEN_MATRIZ.md, resumen.json, heatmaps, EXTENSION_CONF_SCORE.md) · results/raw/ y results/paso0_informe.md (paso 0)",
-    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib (36 ítems), 02_referencias_pendientes.md (estándar de citas), 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + main.pdf 12 págs + compilar.sh), figures/ (8)",
+    "paper": "paper/00_plan_del_paper.md, 01_marco_teorico.md, 02_referencias.bib (36 ítems), 02_referencias_pendientes.md (estándar de citas), 03_especificacion_confidence.md, 04_pre_registro.md, secciones/ (§1–§7, fuente de verdad), ieee/ (main.tex + main.pdf 13 págs + compilar.sh), figures/ (8)",
     "docs": "docs/libreria.md, validacion-productos.md, erratas_especificacion.md (E1-E6 + E5-bis), adaptador-typesafe-contrato.md, informe-blindaje-prioridad-2026.md, guia-cierre-pendientes.md, handoff-t440.md, plan-visibilidad.md, release-v1.0.0.md, release-v1.0.1.md",
     "fuera_de_alcance": "eje-1-jepa/ y _descartado/ se ELIMINARON del repo el 13-oct-2026 (fuera de alcance; solo viven en el historial de git): no proponer subrutas de ahí. Exploración viva: audit/ (3 informes de saturación), contexto/, notes/, eje-2-jev-opensource/.",
     "repositorio": "https://github.com/Arbues/tesis1-jev-confidence (público). Regla: en ESTE repo todo va directo a main, sin ramas ni PR.",
@@ -149,7 +149,7 @@
     "tests": ".venv/bin/python -m pytest   # 67 tests, corren en el t440 sin GPU",
     "matriz_regenerable": ".venv/bin/python src/matriz/informe_matriz.py && git diff --stat   # debe salir VACÍO",
     "figuras": ".venv/bin/python src/figuras_paper.py   # 8 figuras",
-    "paper": "cd paper/ieee && ./compilar.sh   # main.pdf, 12 páginas (usa latexmk -gg)",
+    "paper": "cd paper/ieee && ./compilar.sh   # main.pdf, 13 páginas (usa latexmk -gg)",
     "entorno": "El .venv es de uv (sin pip): uv pip install --python .venv/bin/python -e \".[dev,figuras]\". TeX Live está instalado en el t440."
   },
   "trampas": [
@@ -209,5 +209,16 @@
     "error_corregido": "El campo `brazo_pagado_2026_10_20.hallazgo` afirmaba que Jev tenia el |delta| directo mas bajo (0.1307). Recalculado desde el CSV: Jev 0.1735 (segundo) y `laya/multilingual` 0.1315 (el mas bajo). 0.1307 no se reproducia con ningun subconjunto declarado.",
     "git": "Los 3 commits del 20-oct estaban sin subir (GitHub en 40b7f42 desde el 13-oct): empujados el 25-oct, mas el commit de esta sesion.",
     "que_falta": "Solo la lectura del autor (§1–§7 / main.pdf) para cerrar la Tesis 1; despues arXiv (endosso), decision del framework, visibilidad e ingles."
+  },
+  "hecho_28_oct_2026": {
+    "auditorias": [
+      "docs/auditoria-figuras-2026-10-28.md — las 8 figuras del PDF: contenido verificado contra los artefactos (31 números), legibilidad medida en el PDF (5.0-5.8 pt; heatmap 1.5-3.5 pt), redundancia con las tablas, 4 errores de pie de figura y 0 referencias cruzadas a figuras/tablas",
+      "docs/auditoria-estilo-2026-10-28.md — marcas de escritura asistida: 187 negritas en prosa, 8 de 41 títulos con gancho, 22 de 66 cierres en máxima, 8 captions que repiten el cuerpo; y descarte de los falsos positivos (0 'no solo X sino Y', 0 'en otras palabras', 0 'es importante destacar', párrafos ya variados)",
+      "docs/plan-edicion-textual.md — el plan aplicado (bloques A-E) con el criterio del autor: no se elimina ninguna figura, se rediseñan dos para que muestren tendencia"
+    ],
+    "figuras_regeneradas": "Las 8, a la medida final (3.45 in = 248 pt una columna, 7.10 in = 511 pt dos): fig1-accuracy-banking77 (5 configuraciones + azar 1/77), fig2-brecha (pico de 2 167 saturadas anotado), fig3-directo-vs-mapa, fig4-cdf-delta (CDF pareada, sustituye al scatter sobre la diagonal), fig5-por-par (leyenda con los cortes de color), fig6-por-cardinalidad (|Δ| mediana en escala log con IQR), fig7-heatmap-banking77 (figure*, rejilla 3+2, una sola colorbar) y fig8-ece-por-definicion (ECE × 4 definiciones × 23 grupos, figure*). Sin título dentro de la imagen. src/figuras_paper.py genera ahora las OCHO (antes 7 + copia manual del heatmap); heatmap_paper vive en src/matriz/figura.py",
+    "texto": "Negritas de prosa 187 -> 0 (quedan 50 en total: 26 de tablas, 8 de las Proposiciones y run-in heads de párrafo). 5 subtítulos descriptivos, 14 flotantes citados con \\ref (antes 0), 11 captions reescritos sin tesis, 9 cierres-máxima reformulados, «titular» periodístico fuera, «el promedio engaña» y «colapsa al suelo» fuera, abstract sin eslogan. Errores factuales corregidos: «triplica» -> 2.2x, «a n>=77 la mitad o más» -> 63 % y 44 %, «~100x» -> 109x sobre el subconjunto limpio",
+    "hallazgo_nuevo": "El ECE por definición sobre los 23 grupos: spread mediano 0.124 y máximo 0.361; la definición mejor calibrada cambia (pmax 7, margin 6, ent 6, jev 4) y la entropía normalizada es la peor en 13 de 23. Recalculado de results/crudos/ con docs/auditoria-ece-por-grupo.py",
+    "pdf": "13 páginas (antes 12), 0 citas sin resolver, 0 '??'; 67 tests pasan"
   }
 }

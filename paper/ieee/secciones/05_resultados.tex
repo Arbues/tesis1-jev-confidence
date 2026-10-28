@@ -3,7 +3,7 @@
 
 \subsection{Qué se midió}
 
-23 grupos, 65\,185 decisiones, 3\,564 celdas. El detalle por modelo y dataset:
+23 grupos, 65\,185 decisiones, 3\,564 celdas. El detalle por modelo y dataset (Tabla~\ref{tab:grupos}):
 
 \begin{table}[t]
 \centering
@@ -45,23 +45,24 @@ modelo & dataset & $n$ & ítems & accuracy & tokens \\
 \end{tabular}}}
 \end{table}
 
-Un dato aparte que el ecosistema no reporta: en cardinalidad alta, \textbf{Kev-0.8B saca 0.813 de accuracy
-en \texttt{banking77} ($n = 77$) frente a 0.377 del checkpoint base de Laya}. El ecosistema sí entrena para
-muchas opciones; no todos los modelos por igual.
+Un dato aparte, que el ecosistema no reporta: en cardinalidad alta, Kev-0.8B obtiene 0.813 de accuracy en
+\texttt{banking77} ($n = 77$) frente a 0.377 del checkpoint base de Laya, un factor de 2.2
+(Fig.~\ref{fig:accuracy-banking77}). Las cinco configuraciones medidas cubren el rango completo: del 0.016 del
+control sin entrenamiento al 0.813 de Kev-0.8B.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig7-accuracy-banking77}
-\caption{Accuracy en \texttt{banking77} ($n = 77$) por configuración: Kev-0.8B (0.813) duplica al mejor
-checkpoint de Laya (0.378) y triplica al checkpoint base (0.377). El ecosistema sí entrena para
-cardinalidad alta, pero no todos los modelos por igual.}
+\includegraphics[width=\columnwidth]{fig1-accuracy-banking77}
+\caption{Accuracy en \texttt{banking77} ($n = 77$) de las cinco configuraciones medidas. La línea punteada
+marca el azar ($1/77 = 0.013$); el control sin entrenamiento cae sobre ella.}
 \label{fig:accuracy-banking77}
 \end{figure}
 
-\subsection{El objeto de la tesis, en una cifra}
+\subsection{Brecha entre definiciones sobre las 65\,185 distribuciones}
 
-Sobre las \textbf{65\,185} distribuciones medidas (una fila por decisión), la diferencia entre la definición
-de \texttt{confidence} más alta y la más baja de la \textbf{misma} distribución tiene:
+Sobre las 65\,185 distribuciones medidas (una fila por decisión), la diferencia entre la definición de
+\texttt{confidence} más alta y la más baja de la misma distribución tiene los valores de la
+Tabla~\ref{tab:brecha}:
 
 \begin{table}[t]
 \centering
@@ -81,25 +82,25 @@ máximo & \textbf{0.848} \\
 \end{tabular}}
 \end{table}
 
-Es decir: en el caso típico, dos implementaciones del mismo campo discrepan en casi tres décimas sobre el
-mismo dato, y el peor caso llega a 0.85. Cualquier umbral fijado sobre una de las dos no significa lo mismo
-sobre la otra.
+En el caso típico, dos implementaciones del mismo campo discrepan en casi tres décimas sobre el mismo dato, y
+el peor caso llega a 0.85; cualquier umbral fijado sobre una de las dos no significa lo mismo sobre la otra
+(Fig.~\ref{fig:brecha}).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig1-brecha}
-\caption{La cifra central: sobre las 65\,185 decisiones medidas, la definición más alta y la más baja de
-\texttt{confidence} difieren con mediana 0.288 y alcance máximo 0.848. Un umbral fijado con una definición
-no significa lo mismo con la otra.}
+\includegraphics[width=\columnwidth]{fig2-brecha}
+\caption{Distribución de la brecha entre la definición más alta y la más baja de cada distribución, sobre las
+65\,185 decisiones medidas (mediana 0.288, p90 0.434, máximo 0.848). El pico en cero son las 2\,167 filas
+saturadas, en las que las cuatro definiciones valen 1.}
 \label{fig:brecha}
 \end{figure}
 
-\subsection{El número no viaja; el mapa sí}
+\subsection{Porte directo frente a porte con mapa cerrado}
 
-El titular es sobre el \textbf{nivel principal \texttt{raw}}, que es el que congela el pre-registro. En él,
-de las 3\,564 celdas, \textbf{348 tienen mapa cerrado} entre definiciones (misma clase de equivalencia y
-misma cardinalidad; 1\,044 si se cuentan los tres niveles), que son las únicas donde tiene sentido comparar
-el porte directo contra el porte con mapa. El error absoluto medio:
+El resultado principal corresponde al nivel \texttt{raw}, que es el que congela el pre-registro. En él, de las
+3\,564 celdas, 348 tienen mapa cerrado entre definiciones (misma clase de equivalencia y misma cardinalidad;
+1\,044 si se cuentan los tres niveles), que son las únicas donde tiene sentido comparar el porte directo
+contra el porte con mapa. El error absoluto medio está en la Tabla~\ref{tab:error-transferencia}:
 
 \begin{table}[t]
 \centering
@@ -123,41 +124,46 @@ nivel \texttt{L1} (temperatura con etiquetas) & 312 & 0.3022 & 0.0024 & 126.0$\t
 \end{tabular}}
 \end{table}
 
-El porte directo se equivoca \textbf{del orden de cien veces más} que el porte con mapa. El matiz de la
-tercera columna lo explica §5.4.
+El porte directo se equivoca 109 veces más que el porte con mapa en el subconjunto sin empates dominantes
+(0.2337 frente a 0.0021) y 20 veces más sobre todas las celdas (0.2528 frente a 0.0123). La causa de esa
+diferencia es el suelo que imponen los empates del umbral, que se detalla más abajo
+(Fig.~\ref{fig:directo-vs-mapa}).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig2-directo-vs-mapa}
-\caption{El titular: el porte directo del umbral (sin transformar) se equivoca del orden de cien veces más
-que el porte con el mapa cerrado cuando este existe (0.2337 frente a 0.0021 sin empates dominantes).}
+\includegraphics[width=\columnwidth]{fig3-directo-vs-mapa}
+\caption{$|\Delta|$ medio del porte directo ($\tau$ tal cual) y del porte con mapa cerrado, por subconjunto de
+celdas del nivel \texttt{raw} con las tres $q$. Entre paréntesis, la cantidad de celdas; sobre cada par, la
+razón entre ambas barras. Las celdas sin empates dominantes son la comparación limpia (0.2337 frente a
+0.0021, $109\times$).}
 \label{fig:directo-vs-mapa}
 \end{figure}
 
-\textbf{Cómo leer la tabla.} El porte con mapa tiene un suelo que no es culpa del mapa: si el umbral cae
-sobre un valor \textbf{empatado} en muchas salidas (modelos saturados), la cobertura salta y ni el mapa
+\textbf{El suelo de los empates.} El porte con mapa tiene un suelo que no es culpa del mapa: si el umbral cae
+sobre un valor empatado en muchas salidas (modelos saturados), la cobertura salta y ni el mapa
 puede dar $q$ exacto. Por eso la comparación limpia es la del subconjunto sin empates dominantes (masa por
-debajo del 5\,\%), y por eso \texttt{delta\_mapa} debe leerse contra \texttt{delta} de la \textbf{misma}
+debajo del 5\,\%), y por eso \texttt{delta\_mapa} debe leerse contra \texttt{delta} de la misma
 celda, nunca como un cero absoluto. La columna \texttt{n\_empates\_tau} de la matriz declara, en cada celda,
-cuántos ítems comparten el umbral.
+cuántos ítems comparten el umbral (Fig.~\ref{fig:delta-vs-mapa}).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig3-delta-vs-mapa}
-\caption{La Proposición 1 sobre los datos: celda a celda, la caída de cobertura del porte directo ($\lvert\Delta\rvert$ directo) contra la del porte con mapa. Con el mapa el error colapsa al suelo que imponen
-los empates del umbral, no el mapa.}
+\includegraphics[width=\columnwidth]{fig4-cdf-delta}
+\caption{Función de distribución empírica de $\lvert\Delta\rvert$ en las 116 celdas con mapa cerrado del nivel
+\texttt{raw} con $q = 0.80$. La línea vertical marca $\lvert\Delta\rvert = 0.01$: por debajo quedan el
+84\,\% de las celdas con porte con mapa y el 14\,\% con porte directo.}
 \label{fig:delta-vs-mapa}
 \end{figure}
 
-\subsection{El promedio no es el resumen: la estructura está en el par}
+\subsection{Caída de cobertura por par de definiciones}
 
-La distribución de $\Delta$ es \textbf{bimodal}: hay pares de definiciones que coinciden y pares que fallan
-en grande. El titular es el par, no la media global.
+La distribución de $\Delta$ es bimodal: hay pares de definiciones que coinciden y pares que fallan en grande
+(Tabla~\ref{tab:par}). Por eso la unidad de análisis es el par y no la media global.
 
 \begin{table}[t]
 \centering
-\caption{Caída de cobertura por par de definiciones (origen $A$ $\to$ destino $B$), ordenada por la mediana.
-La mediana del par manda sobre la media global: el promedio engaña.}
+\caption{Caída de cobertura por par de definiciones (origen $A$ $\to$ destino $B$), ordenada por la mediana. La
+columna de la media muestra por qué el promedio global no describe el fenómeno.}
 \label{tab:par}
 {\footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -181,27 +187,29 @@ $A \to B$ & celdas & $\lvert\Delta\rvert$ mediana & $\lvert\Delta\rvert$ media &
 \end{tabular}}
 \end{table}
 
-Dos de las coincidencias son \textbf{identidades matemáticas}, no azar: (i) a $n = 2$, $C_{\text{Jev}}$ y
-$C_{\text{mar}}$ son la \textbf{misma} función ($2\cdot p_{\max} - 1$), así que su porte directo ya da casi
+Dos de las coincidencias son identidades matemáticas, no azar: (i) a $n = 2$, $C_{\text{Jev}}$ y
+$C_{\text{mar}}$ son la misma función ($2\cdot p_{\max} - 1$), así que su porte directo ya da casi
 cero; (ii) a cardinalidad alta, $C_{\text{Jev}} = (n\cdot p - 1)/(n - 1) \to p$, así que \texttt{jev} y
 \texttt{pmax} convergen y sus umbrales casi coinciden. En el extremo opuesto,
-$\text{pmax} \to \text{ent}$ es el peor par: no cambia la escala, cambia la \textbf{forma} de la función.
+$\text{pmax} \to \text{ent}$ es el peor par: no cambia la escala, cambia la forma de la función (Fig.~\ref{fig:por-par}).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig4-por-par}
-\caption{El promedio engaña: la estructura está en el par. Hay pares de definiciones que coinciden por
-identidad matemática (medianas de 0.0023) y pares que fallan en grande (hasta 0.7667), y la media global
-borra esa bimodalidad.}
+\includegraphics[width=\columnwidth]{fig5-por-par}
+\caption{$|\Delta|$ mediana (barra) y media (punto) por par de definiciones del nivel \texttt{raw}, ordenadas por
+la mediana; entre paréntesis, la cantidad de celdas. El color separa los tres regímenes ($\leq 0.05$,
+$0.05$--$0.30$, $> 0.30$). Los extremos son \texttt{margin}$\leftrightarrow$\texttt{jev} (0.0023) y
+\texttt{pmax}$\to$\texttt{ent} (0.7667).}
 \label{fig:por-par}
 \end{figure}
 
-Fracción de celdas que transfieren bien ($\lvert\Delta\rvert < 0.01$), por cardinalidad (nivel \texttt{raw}):
+Fracción de celdas que transfieren bien ($\lvert\Delta\rvert < 0.01$), por cardinalidad y nivel
+\texttt{raw} (Tabla~\ref{tab:cardinalidad}):
 
 \begin{table}[t]
 \centering
-\caption{Fracción de celdas que transfieren bien ($\lvert\Delta\rvert < 0.01$) según la cardinalidad $n$. El
-umbral solo viaja a cardinalidad alta.}
+\caption{Fracción de celdas que transfieren bien ($\lvert\Delta\rvert < 0.01$) según la cardinalidad $n$. El umbral
+viaja en el 63\,\% de las celdas a $n = 77$ y en el 44\,\% a $n = 151$.}
 \label{tab:cardinalidad}
 {\footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -221,14 +229,17 @@ $n$ & celdas con mapa & $\lvert\Delta\rvert$ mediana & \% con $\lvert\Delta\rver
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig5-por-cardinalidad}
-\caption{Transferencia por cardinalidad $n$ (nivel \texttt{raw}): con $n \le 5$ casi ninguna celda
-transfiere bien ($\lvert\Delta\rvert < 0.01$ en el 14\,\% de los casos y menos), mientras que a $n \ge 77$ la
-mitad o más lo logra.}
+\includegraphics[width=\columnwidth]{fig6-por-cardinalidad}
+\caption{$|\Delta|$ mediana por cardinalidad en escala logarítmica, con el rango intercuartílico y la cantidad de
+celdas entre paréntesis (nivel \texttt{raw}, las tres $q$). El patrón no es monótono: 0.214, 0.178, 0.409 y
+0.200 para $n \leq 5$, y 0.006 y 0.013 para $n \geq 77$.}
 \label{fig:por-cardinalidad}
 \end{figure}
 
 \subsection{Efecto de la cardinalidad}
+
+La Tabla~\ref{tab:cardinalidad-fdr} desglosa la caída de cobertura y las celdas que sobreviven al control de
+FDR en cada cardinalidad, con el dataset de ejemplo correspondiente.
 
 \begin{table}[t]
 \centering
@@ -251,14 +262,14 @@ $n$ & celdas & $\lvert\Delta\rvert$ medio & celdas con FDR & dataset de ejemplo 
 \end{tabular}}
 \end{table}
 
-El porte falla en todas las cardinalidades, pero con dos matices ya visibles en §5.4: a $n$ bajo el daño es
-grande y sistemático, mientras que a cardinalidad alta ($n \ge 77$) las definiciones tipo $p_{\max}$
-convergen entre sí y una parte de las celdas transfiere bien. La Proposición 3 predice que con $n = 2$ todas
-las definiciones deberían ser equivalentes en orden; en los datos eso se cumple \textbf{dentro del par
-$\text{jev} \leftrightarrow \text{margin}$} (misma función) y no en el resto, porque el porte directo cruza
-escalas distintas aunque el orden sea el mismo. Es la distinción entre el número y el mapa.
+El porte falla en todas las cardinalidades, con dos matices: a $n$ bajo el daño es grande y sistemático,
+mientras que a cardinalidad alta ($n \ge 77$) las definiciones tipo $p_{\max}$ convergen entre sí y una parte
+de las celdas transfiere bien (Fig.~\ref{fig:por-cardinalidad}). La Proposición 3 predice que con $n = 2$
+todas las definiciones deberían ser equivalentes en orden; en los datos eso se cumple dentro del par
+$\text{jev} \leftrightarrow \text{margin}$ (misma función) y no en el resto, porque el porte directo cruza
+escalas distintas aunque el orden sea el mismo (Sección~\ref{sec:marco_teorico}).
 
-\subsection{Dónde el umbral no viaja (nivel \texttt{raw}, $q = 0.80$, tras FDR)}
+\subsection{Celdas sin transferencia tras FDR (nivel \texttt{raw}, $q = 0.80$)}
 
 \begin{table}[t]
 \centering
@@ -288,18 +299,21 @@ modelo & dataset & $n$ & $A \to B$ & $\Delta$ & IC95\,\% & cobertura B \\
 \end{tabular}}}
 \end{table}
 
-La lectura es directa: hay celdas en las que portar el umbral \textbf{pierde toda la cobertura}. Quien
-calibra al 80\,\% con una definición y despliega con otra puede terminar actuando en el 0\,\% de los casos
-(o en todos), sin ningún aviso del modelo.
+Hay celdas en las que portar el umbral pierde toda la cobertura (Tabla~\ref{tab:no-viaja}). Quien calibra al
+80\,\% con una definición y despliega con otra puede terminar actuando en el 0\,\% de los casos (o en todos),
+sin ningún aviso del modelo. La Fig.~\ref{fig:heatmap-banking77} muestra la matriz completa en el dataset de
+cardinalidad alta.
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig8-heatmap-banking77}
-\caption{Dónde el umbral no viaja: mapa de calor de la caída de cobertura en \texttt{banking77} ($n = 77$,
-nivel \texttt{raw}), con filas de definición origen y columnas de definición destino. Cuando el modelo está
-saturado, celdas enteras pierden toda la cobertura al cambiar de definición.}
+\includegraphics[width=\textwidth]{fig7-heatmap-banking77}
+\caption{$\Delta = q - \text{cobertura}_B$ al portar $\tau$ sin mapa en \texttt{banking77} ($n = 77$, nivel
+\texttt{raw}, $q = 0.80$): filas de definición origen, columnas de definición destino y escala de color
+compartida entre los cinco paneles; la diagonal no aplica. En el control Qwen, usar \texttt{ent} como origen
+pierde toda la cobertura ($\Delta = +0.80$) sea cual sea el destino, y lo inverso ocurre con \texttt{margin}
+($\Delta = -0.20$, sobre-cobertura).}
 \label{fig:heatmap-banking77}
-\end{figure}
+\end{figure*}
 
 \subsection{Hallazgos de metrología del paso 0 (contexto)}
 
@@ -307,41 +321,44 @@ La corrida de verificación sobre \texttt{typed-decisions} dejó, además, dos r
 literatura del ecosistema y que son parte del instrumento:
 
 \begin{enumerate}
-\item \textbf{La \texttt{choice\_confidence} de Kev es la fórmula de Jev.}
+\item La \texttt{choice\_confidence} de Kev es la fórmula de Jev.
    $(p_{\max} - 1/K)/(1 - 1/K) \equiv (K\cdot p_{\max} - 1)/(K - 1)$, verificado numéricamente para
    $K \in \{2,3,4,7,12\}$. Estaban registradas como definiciones distintas; por la Proposición 1, ese par
    transfiere el umbral de forma exacta.
-\item \textbf{El campo \texttt{output\_tokens} tiene tres significados.} Jev y Laya lo reportan como 0 (no
+\item El campo \texttt{output\_tokens} tiene tres significados. Jev y Laya lo reportan como 0 (no
    hay generación); Kev lo usa como recuento de tokens de la respuesta serializada (869\,310 en las mismas
    2\,000 decisiones). Es metrología del propio campo, no un fallo de Kev.
 \end{enumerate}
 
-Y sobre la misma corrida, el ECE cambia por completo según la definición: en \texttt{laya-typed-decisions}
-va de \textbf{0.216} con $p_{\max}$ a \textbf{0.577} con la entropía normalizada, un factor
-\textbf{2.7$\times$} sobre el mismo dato.
+Y sobre la misma corrida, el ECE depende de la definición: en \texttt{laya-typed-decisions} va de 0.216 con
+$p_{\max}$ a 0.577 con la entropía normalizada, un factor 2.7 sobre el mismo dato. El patrón no es local:
+sobre los 23 grupos, la diferencia entre la mejor y la peor definición tiene mediana 0.124 y llega a 0.361,
+y la definición mejor calibrada cambia de grupo en grupo ($p_{\max}$ en 7, \texttt{margin} en 6,
+\texttt{ent} en 6 y \texttt{jev} en 4), con la entropía normalizada como la peor en 13 de los 23
+(Fig.~\ref{fig:ece}).
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig6-ece-por-definicion}
-\caption[El mismo ECE cambia con la definición de \texttt{confidence}]{El mismo dato, dos ECE: en
-\texttt{laya-typed-decisions} el ECE va de 0.216 con $p_{\max}$ a 0.577
-con la entropía normalizada, un factor 2.7$\times$. El ECE auto-reportado no es una propiedad del modelo
-sino de la definición elegida.}
+\includegraphics[width=\textwidth]{fig8-ece-por-definicion}
+\caption[El ECE de un mismo modelo depende de la definición de \texttt{confidence}]{ECE de las cuatro
+definiciones en los 23 grupos medidos, calculado sobre las mismas filas crudas. El círculo hueco marca la
+definición con menor ECE de cada grupo: cambia de grupo en grupo y ninguna definición es la mejor calibrada
+en todos.}
 \label{fig:ece}
-\end{figure}
+\end{figure*}
 
 \subsection{Extensiones declaradas (posteriores al pre-registro)}
 
 Las cifras de las subsecciones anteriores están selladas por el pre-registro
-\texttt{10.5281/zenodo.23266795}: \textbf{23 grupos, 65\,185 decisiones, 3\,564 celdas}. Las dos mediciones de
-esta subsección son \textbf{posteriores} a ese pre-registro y se declaran aparte para no moverlas: no recalculan
+\texttt{10.5281/zenodo.23266795}: 23 grupos, 65\,185 decisiones, 3\,564 celdas. Las dos mediciones de
+esta subsección son posteriores a ese pre-registro y se declaran aparte para no moverlas: no recalculan
 la matriz sellada ni las filas crudas, se calculan como post-proceso sobre datos ya medidos o sobre un brazo
 nuevo, y llevan su fecha.
 
 \subsubsection{Quinta definición del campo: \texttt{conf\_score} (distancia al nivel modal)}
 
 La documentación de TypeSafe define para la primitiva \texttt{score} una \texttt{confidence} que no estaba entre
-las cuatro definiciones selladas:
+las cuatro definiciones selladas (Tabla~\ref{tab:extension-score}):
 \begin{equation}
 \begin{aligned}
 C_{\text{score}} &= \max\Bigl(0,\; 1 - \tfrac{1}{M}\,{\textstyle\sum_i}\, p_i\,\lvert i-m\rvert\Bigr),\\
@@ -349,9 +366,9 @@ M &= \tfrac{1}{n}\,{\textstyle\sum_i}\, \bigl\lvert i-\tfrac{n-1}{2}\bigr\rvert 
 \end{aligned}
 \end{equation}
 donde $M$ es la desviación absoluta media de la rejilla uniforme (\emph{MAD} uniforme) y $m$ el nivel modal.
-No es una variante de $C_{\text{jev}}$: $C_{\text{jev}}$ mide \textbf{concentración en el máximo};
-$C_{\text{score}}$ mide \textbf{dispersión alrededor del nivel modal}. Dos distribuciones con el mismo $p_{\max}$
-dan valores distintos. Y es \textbf{ordinal}: exige que los niveles tengan orden y distancia, así que solo se
+No es una variante de $C_{\text{jev}}$: $C_{\text{jev}}$ mide concentración en el máximo;
+$C_{\text{score}}$ mide dispersión alrededor del nivel modal. Dos distribuciones con el mismo $p_{\max}$
+dan valores distintos. Y es ordinal: exige que los niveles tengan orden y distancia, así que solo se
 mide donde el orden existe.
 
 \begin{table}[t]
@@ -382,17 +399,17 @@ Verificación contra el servicio real & $\lvert\Delta\rvert \le 0.0050$ en 800 f
 añadir un supuesto, no medir. En \texttt{wanli} (3) el orden es discutible. Se declara el límite en lugar de
 inventar la escala.
 
-\textbf{El hallazgo que añade.} La quinta definición \textbf{no tiene un sesgo estable}: es la más baja de las
-cinco en el \textbf{70.3\,\%} de las filas del control crudo Qwen y la más alta en el \textbf{92.6\,\%} de las de
+\textbf{El hallazgo que añade.} La quinta definición no tiene un sesgo estable: es la más baja de las
+cinco en el 70.3\,\% de las filas del control crudo Qwen y la más alta en el 92.6\,\% de las de
 Laya-multilingual. El signo de la discrepancia depende del modelo, no de la definición --- que es exactamente el
 objeto de este trabajo, ahora con una definición más en la lista.
 
 \subsubsection{Brazo pagado: el modelo detrás del campo}
 
 Hasta aquí todo se midió sobre pesos abiertos. El servicio real de TypeSafe (\texttt{jev-1.13.0}, una petición
-por ítem) se midió sobre los mismos cinco datasets y se publica como brazo aparte: \textbf{14\,277 decisiones},
-gasto \textbf{USD 0.79}, con \texttt{probabilities} y \texttt{confidence} redondeadas a \textbf{0.01} por el
-servicio.
+por ítem) se midió sobre los mismos cinco datasets y se publica como brazo aparte: 14\,277 decisiones,
+gasto USD 0.79, con \texttt{probabilities} y \texttt{confidence} redondeadas a 0.01 por el
+servicio (Tabla~\ref{tab:brazo-pagado}).
 
 \begin{table}[t]
 \centering
@@ -415,19 +432,19 @@ dataset & $n$ & ítems & accuracy & tokens de salida \\
 \end{tabular}}
 \end{table}
 
-Dos observaciones de metrología del propio campo. (i) El contador \texttt{output\_tokens} \textbf{no es cero} en
+Dos observaciones de metrología del propio campo. (i) El contador \texttt{output\_tokens} no es cero en
 el servicio (7\,092\,972 en total), a diferencia de los brazos de pesos abiertos: el campo \emph{tokens de
 salida} no distingue por sí solo un modelo de decisión de uno generativo; esa lectura solo vale donde se controla
-la implementación. (ii) La confianza que el servicio \textbf{devuelve} coincide con la definición que la
+la implementación. (ii) La confianza que el servicio devuelve coincide con la definición que la
 especificación le asigna a cada primitiva: $C_{\text{score}}$ en las filas \texttt{score} ($\lvert\Delta\rvert
 \le 0.0050$ sobre 800 filas) y $C_{\text{jev}}$ en las de \texttt{choice} (600 filas). La especificación describe
 el servicio real, no una reconstrucción.
 
-Sumado a los brazos abiertos, el conjunto tiene \textbf{79\,462 decisiones} y una brecha mediana de
-\textbf{0.273} (p90 0.435) --- el mismo orden que la cifra sellada de 0.288, ahora con seis modelos.
+Sumado a los brazos abiertos, el conjunto tiene 79\,462 decisiones y una brecha mediana de
+0.273 (p90 0.435) --- el mismo orden que la cifra sellada de 0.288, ahora con seis modelos.
 
 \textbf{El porte del umbral con la rejilla de 0.01.} Error absoluto medio del porte sobre las celdas con mapa
-cerrado (nivel \texttt{raw}, las tres $q$; 420 celdas):
+cerrado (nivel \texttt{raw}, las tres $q$; 420 celdas; Tabla~\ref{tab:porte-pagado}):
 
 \begin{table}[t]
 \centering
@@ -453,16 +470,16 @@ global & 420 & 0.2392 & 0.0124 & 19.3$\times$ \\
 \end{tabular}}}
 \end{table}
 
-La lectura es en dos partes, y la segunda corrige la intuición. (i) El porte \textbf{directo} de Jev (0.1735) es
-de los mejores, pero \textbf{no el mejor}: el checkpoint \texttt{laya/multilingual} transfiere mejor (0.1315) sin
+El resultado se lee en dos partes, y la segunda corrige la intuición. (i) El porte directo de Jev (0.1735) es
+de los mejores, pero no el mejor: el checkpoint \texttt{laya/multilingual} transfiere mejor (0.1315) sin
 ser el modelo de referencia del campo. Comparar $\lvert\Delta\rvert$ directo entre modelos mezcla dos causas ---la
-definición y la calidad del modelo--- y por eso el titular de este trabajo es el par de definiciones, no el
-modelo. (ii) El porte \textbf{con mapa} de Jev es \textbf{4.6 a 9.3 veces} el de los checkpoints abiertos (0.0130
-frente a 0.0014--0.0028) y su factor directo/mapa es \textbf{13.4$\times$}, un orden de magnitud menor que el de
+definición y la calidad del modelo--- y por eso la unidad de análisis de este trabajo es el par de
+definiciones, no el modelo. (ii) El porte con mapa de Jev es 4.6 a 9.3 veces el de los checkpoints abiertos (0.0130
+frente a 0.0014--0.0028) y su factor directo/mapa es 13.4$\times$, un orden de magnitud menor que el de
 ellos (75--174$\times$). La causa está medida: la rejilla de 0.01 reasigna masa a valores empatados y
-\textbf{2.5\,\%} de los ítems de prueba de Jev comparten el umbral, frente a \textbf{0.1\,\%} en los abiertos
+2.5\,\% de los ítems de prueba de Jev comparten el umbral, frente a 0.1\,\% en los abiertos
 (25$\times$), con 4 de 72 celdas por encima del 5\,\% de empate frente a 0 en las abiertas. El mapa cerrado sigue
-siendo válido (Proposición~1); lo que la rejilla degrada es la \textbf{resolución del umbral}, no la equivalencia
+siendo válido (Proposición~1); lo que la rejilla degrada es la resolución del umbral, no la equivalencia
 entre definiciones.
 
 \emph{Fuentes:} \path{results/matrix/EXTENSION_CONF_SCORE.md} y

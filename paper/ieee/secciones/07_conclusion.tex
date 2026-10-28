@@ -3,13 +3,15 @@
 
 \subsection{Conclusión}
 
-El ecosistema abierto de modelos de decisión tipo Jev comparte un nombre de campo, \texttt{confidence}, y una promesa: que sirve para fijar un umbral de actuación. La medición sobre \textbf{23 grupos, 65\,185 decisiones y 3\,564 celdas} muestra que esa promesa \textbf{no viaja entre implementaciones}. Sobre la \textbf{misma} distribución, la definición de \texttt{confidence} más alta y la más baja difieren con mediana \textbf{0.288} y máximo \textbf{0.848}. Portar el umbral tal cual (copiar la cifra) se equivoca del orden de \textbf{cien veces} más que portarlo con el mapa matemático cuando este existe (0.2337 contra 0.0021, sobre las 312 celdas del nivel principal \texttt{raw} sin empates dominantes). Y en las celdas de peor caso, el porte directo pierde \textbf{toda} la cobertura: quien calibra al 80\,\% con una definición puede terminar actuando en el 0\,\% con otra.
+El ecosistema abierto de modelos de decisión tipo Jev comparte un nombre de campo, \texttt{confidence}, y una promesa: que sirve para fijar un umbral de actuación. La medición sobre 23 grupos, 65\,185 decisiones y 3\,564 celdas muestra que esa promesa no viaja entre implementaciones. Sobre la misma distribución, la definición de \texttt{confidence} más alta y la más baja difieren con mediana 0.288 y máximo 0.848. Portar el umbral tal cual (copiar la cifra) se equivoca del orden de cien veces más que portarlo con el mapa matemático cuando este existe (0.2337 contra 0.0021, sobre las 312 celdas del nivel principal \texttt{raw} sin empates dominantes). Y en las celdas de peor caso, el porte directo pierde toda la cobertura: quien calibra al 80\,\% con una definición puede terminar actuando en el 0\,\% con otra.
 
-El resultado tiene dos capas. La \textbf{escala} hace que el número no viaje aunque el orden se preserve; la \textbf{forma} hace que entre clases de definiciones distintas no exista ni número ni mapa. Dos pares que se creían distintos resultan ser la \textbf{misma} fórmula (la \texttt{choice\_confidence} de Kev es la de Jev; con $n=2$, $C_{\mathrm{Jev}}$ y el margen coinciden), lo que da transferencia exacta donde otros ven incompatibilidad.
+El resultado tiene dos capas. La escala hace que el número no viaje aunque el orden se preserve; la forma hace que entre clases de definiciones distintas no exista ni número ni mapa. Dos pares que la documentación registra como definiciones distintas resultan ser la misma fórmula (la \texttt{choice\_confidence} de Kev es la de Jev; con $n=2$, $C_{\mathrm{Jev}}$ y el margen coinciden), lo que da transferencia exacta donde otros ven incompatibilidad.
 
-El aporte no es el hallazgo de que las implementaciones discrepan, que era de esperar. El aporte es el \textbf{instrumento} que permite cuantificar y corregir esa discrepancia, y que sigue valiendo aunque cada premisa particular se cierre.
+El aporte no es el hallazgo de que las implementaciones discrepan, que era de esperar. El aporte es el instrumento que permite cuantificar y corregir esa discrepancia, y que sigue valiendo aunque cada premisa particular se cierre.
 
 \subsection{Artefactos entregados}
+
+La Tabla~\ref{tab:artefactos} lista cada artefacto con su identificador y su estado.
 
 \begin{table}[htbp]
 \centering
@@ -42,13 +44,13 @@ Todo el conjunto se regenera con \texttt{python -m pytest tests/ -q} seguido de 
 El arco completo tiene tres etapas, y esta tesis cubre la primera.
 
 \begin{itemize}
-\item \textbf{Tesis 1 (este trabajo, medida).} El instrumento: medir y cuantificar la transferencia de umbrales entre las definiciones incompatibles del campo \texttt{confidence}.
-\item \textbf{Tesis 2 (mecanismo).} Una vez medido el problema, inducir calibración en el objetivo de entrenamiento, no solo por ajuste post-hoc. La pregunta heredada es por qué el término de RL de RLCD no bastó, que la literatura reciente ya exploró y que aquí se da por ocupada.
-\item \textbf{Taller de Tesis (teoría).} Las condiciones necesarias y suficientes para que una regla de puntuación estrictamente propia induzca un umbral que viaje entre definiciones.
+\item Tesis 1 (este trabajo, medida). El instrumento: medir y cuantificar la transferencia de umbrales entre las definiciones incompatibles del campo \texttt{confidence}.
+\item Tesis 2 (mecanismo). Una vez medido el problema, inducir calibración en el objetivo de entrenamiento, no solo por ajuste post-hoc. La pregunta heredada es por qué el término de RL de RLCD no bastó, que la literatura reciente ya exploró y que aquí se da por ocupada.
+\item Taller de Tesis (teoría). Las condiciones necesarias y suficientes para que una regla de puntuación estrictamente propia induzca un umbral que viaje entre definiciones.
 \end{itemize}
 
 Extensiones inmediatas del instrumento: medir los modelos de 4B a 9B en el Mac Mini, incorporar las definiciones opacas cuando exista una forma de tratarlas, y repetir la matriz cuando aparezcan nuevas implementaciones (el instrumento está diseñado para eso, no para un conjunto fijo de modelos).
 
 \subsection{Disponibilidad}
 
-Repositorio \textbf{público} \url{github.com/Arbues/tesis1-jev-confidence} (Apache-2.0 el código, CC-BY-4.0 el paper y la documentación). El pre-registro con el diseño congelado tiene DOI \textbf{10.5281/zenodo.23266795}.
+Repositorio público \url{github.com/Arbues/tesis1-jev-confidence} (Apache-2.0 el código, CC-BY-4.0 el paper y la documentación). El pre-registro con el diseño congelado tiene DOI 10.5281/zenodo.23266795.

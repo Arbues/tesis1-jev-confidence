@@ -102,6 +102,85 @@ def heatmap_por_dataset(filas, out_dir, nivel="raw", q=0.8):
             print(f"[figura] {nombre}.png/pdf ({len(modelos)} paneles)")
 
 
+def heatmap_paper(filas, base_salida, dataset="banking77", nivel="raw", q=0.8,
+                  ancho=7.1, alto=4.3, n_objetivo=None):
+    """Heatmap a la medida del paper (dos columnas IEEE, 7.1 in), en rejilla 3+2.
+
+    Diferencias con `heatmap_por_dataset` (que sigue siendo la figura del informe, a 4.2 in por
+    panel): aquí la figura se dibuja **al tamaño final impreso** (regla R1 de
+    `docs/plan-edicion-textual.md` §1b), con fuente 7 pt, **una** barra de color compartida —que ocupa
+    la sexta celda de la rejilla—, sin `suptitle` (regla R2) y la diagonal muda.
+
+    Cinco paneles en una sola fila no caben: a 1.42 in por panel, las etiquetas de columna
+    (`pmax`, `jev`, `ent`, `margin`) y los valores `±0.80` se solapan (verificado el 28-oct-2026).
+    Con 3 columnas el panel mide 2.2 in y todo entra a 7 pt.
+
+    Escribe `{base_salida}.pdf` y `.png`. Devuelve un dict con lo que dibujó.
+    """
+    sub = [r for r in filas if r.get("dataset") == dataset and r.get("nivel") == nivel
+           and abs(float(r["q"]) - q) < 1e-9]
+    if not sub:
+        print(f"[figura] sin celdas para {dataset}/{nivel}/q={q}: se omite el heatmap del paper")
+        return None
+    ns = sorted({int(r["n"]) for r in sub})
+    n = int(n_objetivo) if n_objetivo is not None else ns[0]
+    modelos = sorted({r["modelo"] for r in sub if int(r["n"]) == n})
+    if not modelos:
+        print(f"[figura] sin modelos para {dataset}/n={n}: se omite el heatmap del paper")
+        return None
+    matrices = {m: _matriz_delta([r for r in sub if r["modelo"] == m], n) for m in modelos}
+    validas = [M for M in matrices.values() if not np.all(np.isnan(M))]
+    if not validas:
+        print(f"[figura] sin matriz para {dataset}/n={n}: se omite el heatmap del paper")
+        return None
+    vmax = max(max(float(np.nanmax(np.abs(M))) for M in validas), 1e-6)
+
+    cmap = plt.get_cmap("RdBu_r").copy()
+    cmap.set_bad("0.85")
+    ncols = 3
+    nrows = int(np.ceil((len(modelos) + 1) / ncols))   # +1 = celda de la barra de color
+    fig, axes = plt.subplots(nrows, ncols, figsize=(ancho, alto), squeeze=False,
+                             layout="constrained")
+    plano = axes.ravel()
+    im = None
+    for j, modelo in enumerate(modelos):
+        ax = plano[j]
+        M = matrices[modelo]
+        im = ax.imshow(np.ma.masked_invalid(M), cmap=cmap, vmin=-vmax, vmax=vmax)
+        ax.set_xticks(range(len(DEFS)), DEFS, fontsize=7)
+        ax.set_yticks(range(len(DEFS)), DEFS, fontsize=7)
+        ax.tick_params(length=0, pad=1.5)
+        if j % ncols == 0:
+            ax.set_ylabel("origen (A)", fontsize=7)
+        ax.set_xlabel("destino (B)", fontsize=7, labelpad=1.5)
+        corto = modelo.split("/")[-1] if "/" in modelo else modelo
+        if modelo.startswith("Qwen"):
+            corto = "Qwen 0.8B (control)"
+        ax.set_title(corto, fontsize=7, pad=2)
+        for a in range(len(DEFS)):
+            for b in range(len(DEFS)):
+                if a == b or np.isnan(M[a, b]):
+                    continue
+                color = "white" if abs(M[a, b]) > 0.6 * vmax else "black"
+                ax.text(b, a, f"{M[a, b]:+.2f}", ha="center", va="center", fontsize=7,
+                        color=color)
+    for k in range(len(modelos), nrows * ncols):
+        plano[k].set_axis_off()
+    if im is None:
+        return None
+    cb = fig.colorbar(im, ax=plano[len(modelos)], shrink=0.62, aspect=14, pad=0.02)
+    cb.set_ticks([-vmax, -vmax / 2, 0.0, vmax / 2, vmax])
+    cb.set_label("Δ = q − cobertura$_{B}$", fontsize=7)
+    cb.ax.tick_params(labelsize=6.5, length=2)
+    # (el layout lo resuelve `layout="constrained"`; llamar a tight_layout aquí lanzaría RuntimeError)
+    for ext in ("pdf", "png"):
+        fig.savefig(f"{base_salida}.{ext}")
+    plt.close(fig)
+    print(f"[figura] {os.path.basename(base_salida)}.pdf/.png ({len(modelos)} paneles, "
+          f"{ancho}x{alto} in)")
+    return {"dataset": dataset, "n": n, "q": q, "paneles": len(modelos), "vmax": round(vmax, 4)}
+
+
 def figura_mapa(filas, out_dir, nivel="raw", q=0.8):
     """Δ directo contra Δ con mapa: el número no viaja, el mapa sí (Proposición 1)."""
     sub = [r for r in filas if r["nivel"] == nivel and abs(float(r["q"]) - q) < 1e-9

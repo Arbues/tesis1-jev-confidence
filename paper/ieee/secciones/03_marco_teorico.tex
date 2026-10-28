@@ -13,7 +13,7 @@ modo que $p_{(1)} = p_{\max}$.
 
 \subsection{El campo \texttt{confidence} como función de la distribución}
 
-Cada implementación define \texttt{confidence} como una función distinta de $p$ y de $n$:
+Cada implementación define \texttt{confidence} como una función distinta de $p$ y de $n$ (Tabla~\ref{tab:campo_confidence}):
 
 \begin{table}[t]
 \centering
@@ -35,7 +35,7 @@ margen & $C_{\mathrm{mar}}(p) = p_{(1)} - p_{(2)}$ & $[0,1]$ & derivados \\
 \end{table}
 
 Para una misma $p$, estas funciones toman valores distintos. Esta es la fuente de la incompatibilidad de
-umbrales: el umbral es un punto en el \textbf{rango} de una función, y los rangos no coinciden.
+umbrales: el umbral es un punto en el rango de una función, y los rangos no coinciden (Tabla~\ref{tab:cuatro_numeros}).
 
 \begin{table}[t]
 \centering
@@ -53,25 +53,25 @@ $(0.0118, 0.4629, 0.5253)$ & 0.288 & 0.320 & 0.525 & 0.062 \\
 
 \subsection{Calibración frente a discriminación}
 
-La \textbf{calibración} pregunta si el número es \emph{creíble}: $P(\hat{y} = y \mid C = c) = c$ para todo
-$c$. La \textbf{discriminación} pregunta si el número \emph{ordena bien}: si los aciertos reciben valores de
+La calibración pregunta si el número es \emph{creíble}: $P(\hat{y} = y \mid C = c) = c$ para todo
+$c$. La discriminación pregunta si el número \emph{ordena bien}: si los aciertos reciben valores de
 $C$ más altos que los errores, y se mide con AUROC$(C, a)$. Un modelo puede discriminar bien y estar
 des-calibrado, y dos definiciones pueden discriminar idéntico y calibrar distinto: por eso el trabajo
-reporta \textbf{ambas}. El ECE (Error de Calibración Esperado) con $M$ bins $B_m$ es
+reporta ambas. El ECE (Error de Calibración Esperado) con $M$ bins $B_m$ es
 
 \[
 \mathrm{ECE} = \sum_m \frac{\lvert B_m\rvert}{N}\cdot \lvert \mathrm{acc}(B_m) - \mathrm{conf}(B_m)\rvert,
 \]
 
-y se calcula en dos esquemas, bins de \textbf{igual ancho} y de \textbf{igual masa}, porque el número
+y se calcula en dos esquemas, bins de igual ancho y de igual masa, porque el número
 cambia entre ellos \cite{naeini2015,guo2017}. Como métricas de error probabilístico se usan la
-\textbf{Brier} multiclase $\mathrm{Brier} = (1/N)\sum_i \sum_k (p_{ik} - y_{ik})^2$ \cite{brier1950} y la
-\textbf{NLL} $-(1/N)\sum_i \log p_i(y_i)$.
+Brier multiclase $\mathrm{Brier} = (1/N)\sum_i \sum_k (p_{ik} - y_{ik})^2$ \cite{brier1950} y la
+NLL $-(1/N)\sum_i \log p_i(y_i)$.
 
 \subsection{Equivalencia en orden y transferencia exacta}
 
-El punto teórico del trabajo es que la incompatibilidad \textbf{no} es uniforme: algunas definiciones están
-relacionadas por una transformación monótona, y entonces el umbral transfiere \textbf{exacto}; otras no lo
+El punto teórico del trabajo es que la incompatibilidad no es uniforme: algunas definiciones están
+relacionadas por una transformación monótona, y entonces el umbral transfiere exacto; otras no lo
 están. Lo fijamos en tres proposiciones (demostraciones y comprobación numérica en
 \texttt{paper/03\_especificacion\_confidence.md}).
 
@@ -100,10 +100,10 @@ incompatibilidad de umbrales es un fenómeno exclusivo de $n \ge 3$ con distribu
 \end{quote}
 
 \textbf{Consecuencia: el fallo tiene dos capas.} Si dos definiciones son equivalentes en orden pero viven en
-escalas distintas (por ejemplo $C_{\mathrm{Jev}}$ y $C_{\max}$), el \textbf{número} no viaja aunque el
-\textbf{mapa} sí: existe traducción exacta $\phi^{-1}$. Si además pertenecen a \textbf{clases} distintas
+escalas distintas (por ejemplo $C_{\mathrm{Jev}}$ y $C_{\max}$), el número no viaja aunque el
+mapa sí: existe traducción exacta $\phi^{-1}$. Si además pertenecen a clases distintas
 (por ejemplo $p_{\max}$ y la entropía), no existe ni número ni mapa, y el porte directo es una extrapolación
-inválida. Esta distinción, entre la capa de \textbf{escala} y la capa de \textbf{forma}, es la que explica
+inválida. Esta distinción, entre la capa de escala y la capa de forma, es la que explica
 por qué el resultado no se puede resumir con un promedio y se documenta en
 \texttt{docs/erratas\_especificacion.md}.
 
@@ -117,17 +117,17 @@ Dados un origen $A$, un destino $B$, una cobertura objetivo $q \in (0, 1)$ y un 
   objetivo).
 \item Portarlo al destino de una de dos maneras:
   \begin{itemize}
-  \item \textbf{porte directo:} $\tau_B := \tau_A$, que es lo que practica el ecosistema;
-  \item \textbf{porte con mapa:} $\tau_B := \psi(\tau_A)$, con $\psi$ el mapa cerrado $A \to B$, que
-    \textbf{solo existe} dentro de una clase de equivalencia y a cardinalidad fija (por ejemplo
+  \item porte directo: $\tau_B := \tau_A$, que es lo que practica el ecosistema;
+  \item porte con mapa: $\tau_B := \psi(\tau_A)$, con $\psi$ el mapa cerrado $A \to B$, que
+    solo existe dentro de una clase de equivalencia y a cardinalidad fija (por ejemplo
     $\psi = \phi^{-1}$ para \texttt{jev} $\to$ \texttt{pmax}).
   \end{itemize}
 \item Medir en el conjunto de prueba la cobertura efectiva $\mathrm{cobertura}_B(\tau_A)$ y la precisión.
 \end{enumerate}
 
-La \textbf{degradación} $\Delta(A \to B) = q - \mathrm{cobertura}_B(\tau_A)$ es la celda de la matriz. Se
-repite por modelo, por dataset y por cardinalidad. El mismo procedimiento se puede aplicar \textbf{entre
-datasets} (umbral ajustado en un dataset $A$ y aplicado en otro $B$), que es el eje donde \cite{jebadiah}
+La degradación $\Delta(A \to B) = q - \mathrm{cobertura}_B(\tau_A)$ es la celda de la matriz. Se
+repite por modelo, por dataset y por cardinalidad. El mismo procedimiento se puede aplicar entre
+datasets (umbral ajustado en un dataset $A$ y aplicado en otro $B$), que es el eje donde \cite{jebadiah}
 observó que la calibración no viaja y \cite{arXiv2609.33843} lo cuantificó dentro de la definición
 $p_{\max}$. Este trabajo recorre el eje distinto, el de las definiciones.
 
@@ -135,7 +135,7 @@ $p_{\max}$. Este trabajo recorre el eje distinto, el de las definiciones.
 
 Con probabilidad de acierto $p$, coste de error $C_{\mathrm{err}}$ y coste de escalar $C_{\mathrm{esc}}$,
 actuar conviene si $(1-p)\cdot C_{\mathrm{err}} < C_{\mathrm{esc}}$, es decir
-$p > 1 - C_{\mathrm{esc}}/C_{\mathrm{err}}$ \cite{chow1970}. Esta frontera \textbf{presupone} que $p$ es una
+$p > 1 - C_{\mathrm{esc}}/C_{\mathrm{err}}$ \cite{chow1970}. Esta frontera presupone que $p$ es una
 probabilidad calibrada. Cuando el umbral se elige como cuantil de una \texttt{confidence} mal especificada,
 la política efectiva deja de ser la óptima para el coste real: la métrica de la matriz es, en el fondo, la
 pérdida de utilidad del despliegue.
@@ -146,7 +146,7 @@ RLCD (ruido gaussiano de media cero en los logits, regla estrictamente propia, R
 grupo, temperatura post-hoc) es el mecanismo que produce estas \texttt{confidence}. La teoría garantiza que
 reportar honestamente es el óptimo bajo una regla propia \cite{gneiting2007}; el análisis de septiembre de
 2026 muestra que, en la práctica, el término RL equivale al gradiente de una cross-entropy suavizada con
-ruido, de modo que la inferencia sin ruido sale \textbf{sobre-confiada}
-\cite{arXiv2609.38850,lakoreai2026}. Esto explica \textbf{por qué} hace falta medir la calibración, pero no
+ruido, de modo que la inferencia sin ruido sale sobre-confiada
+\cite{arXiv2609.38850,lakoreai2026}. Esto explica por qué hace falta medir la calibración, pero no
 es el objeto de este trabajo: aquí no se propone un objetivo de entrenamiento, se construye el instrumento
 que mide su resultado.

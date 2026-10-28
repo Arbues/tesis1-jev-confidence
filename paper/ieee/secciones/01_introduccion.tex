@@ -2,26 +2,26 @@
 \label{sec:introduccion}
 
 Los modelos de lenguaje grandes responden generando texto: la secuencia de tokens \emph{es} la respuesta y
-su longitud es el costo. En septiembre de 2026 apareció una familia distinta. Los \textbf{modelos de
-decisión} (o modelos \emph{System One}) reciben una pregunta y un conjunto \textbf{cerrado y etiquetado} de
-opciones, y responden con \textbf{una opción y una probabilidad}, sin emitir texto: terminan la inferencia
+su longitud es el costo. En septiembre de 2026 apareció una familia distinta. Los modelos de
+decisión (o modelos \emph{System One}) reciben una pregunta y un conjunto cerrado y etiquetado de
+opciones, y responden con una opción y una probabilidad, sin emitir texto: terminan la inferencia
 con un \emph{readout} de logits en la posición de cada etiqueta permitida \cite{jev2026blog,jev2026docs}.
 Su costo de salida es nulo ---el proveedor no cobra los tokens de salida---, su latencia es de decenas de milisegundos, y
 se ofrecen como el componente que decide \guillemotleft qué hacer\guillemotright{} dentro de un sistema
 mayor: clasificar, enrutar, verificar, abstenerse.
 
 Jev, de TypeSafe, abrió la categoría el 18 de septiembre de 2026 \cite{jev2026blog}. En menos de un mes
-floreció un ecosistema \textbf{open-source} de pesos abiertos que replica su contrato: \textbf{Laya} (421M,
-la única implementación que publica el bucle de entrenamiento RLCD completo) \cite{layaRepo}, \textbf{Kev}
+floreció un ecosistema open-source de pesos abiertos que replica su contrato: Laya (421M,
+la única implementación que publica el bucle de entrenamiento RLCD completo) \cite{layaRepo}, Kev
 como familia entrenable \cite{kevRepo}, y una decena de derivados (Nimble, SemIf, Jeff, jev-lite, AnyJev,
 entre otros) \cite{nimble,semif,jeff,jevLite,anyjev}. Todos exponen el mismo campo:
-\textbf{\texttt{confidence}}.
+\texttt{confidence}.
 
 Ese campo es el que hace útil al modelo. Un despliegue típico no usa la etiqueta a secas: fija un
-\textbf{umbral} sobre \texttt{confidence} y decide \emph{actuar}, o \emph{escalar a un humano} cuando el
-modelo no está seguro \cite{chow1970,geifman2017}. El umbral, por tanto, \textbf{es} la política. Y aquí
-está el problema: aunque el campo se llame igual en todo el ecosistema, \textbf{su definición no es la
-misma}.
+umbral sobre \texttt{confidence} y decide \emph{actuar}, o \emph{escalar a un humano} cuando el
+modelo no está seguro \cite{chow1970,geifman2017}. El umbral, por tanto, es la política. Y aquí
+está el problema: aunque el campo se llame igual en todo el ecosistema, su definición no es la
+misma (Tabla~\ref{tab:definiciones}).
 
 \begin{table}[t]
 \centering
@@ -43,43 +43,43 @@ otros derivados & margen, prior aprendido & $p_{(1)} - p_{(2)}$, \dots \\
 \end{table}
 
 El efecto es inmediato: una sola distribución sobre tres opciones, $(0.0118, 0.4629, 0.5253)$, produce
-\textbf{tres valores distintos} de \texttt{confidence}: 0.288 con la fórmula de Jev, 0.3199 con la entropía
+tres valores distintos de \texttt{confidence}: 0.288 con la fórmula de Jev, 0.3199 con la entropía
 de Laya y 0.5253 con $p_{\max}$ \cite{rohitghumare}. Es el mismo dato y el número cambia según quién lo
-calcule. Un umbral calibrado sobre una definición, portado a otra, \textbf{no significa lo mismo}, y el
+calcule. Un umbral calibrado sobre una definición, portado a otra, no significa lo mismo, y el
 ecosistema los porta entre modelos como si fueran intercambiables.
 
 La afirmación cualitativa \guillemotleft los umbrales no transfieren\guillemotright{} ya circula en
-anécdotas \cite{jebadiah}. Lo que \textbf{no existe} es la medición sistemática: \textbf{cuánto} se degrada
+anécdotas \cite{jebadiah}. Lo que no existe es la medición sistemática: cuánto se degrada
 la cobertura y la precisión del umbral al portarlo entre definiciones, modelos y datasets. Esa tabla es la
 que este trabajo construye, y la construye con un instrumento que se regenera con un comando.
 
 \textbf{Contribuciones.}
 
 \begin{enumerate}
-\item Una \textbf{especificación formal} de cada definición de \texttt{confidence} en uso, como función de
+\item Una especificación formal de cada definición de \texttt{confidence} en uso, como función de
   la distribución devuelta y de la cardinalidad $n$ (dominio, rango, monotonía), con tres
-  \textbf{proposiciones} que separan las definiciones que son \emph{equivalentes en orden} (transferencia
+  proposiciones que separan las definiciones que son \emph{equivalentes en orden} (transferencia
   exacta de umbral) de las que no lo son, y que muestran que la incompatibilidad aparece solo a partir de
   $n = 3$.
-\item La librería \textbf{\texttt{jev-conf-metrics}}, que implementa todas las definiciones y las métricas de
-  calibración y discriminación, con \textbf{67 tests de conformidad} contra salidas publicadas.
-\item La \textbf{matriz de transferencia de umbrales} (definición origen $\times$ definición destino
-  $\times$ modelo $\times$ dataset), el \textbf{dataset de 65\,185 mediciones crudas} con versión y hash por
-  fila, las \textbf{figuras} y los \textbf{scripts regeneradores} que la reproducen sin GPU.
-\item El \textbf{pre-registro} de la cobertura objetivo, las definiciones y los datasets antes de la corrida
+\item La librería \texttt{jev-conf-metrics}, que implementa todas las definiciones y las métricas de
+  calibración y discriminación, con 67 tests de conformidad contra salidas publicadas.
+\item La matriz de transferencia de umbrales (definición origen $\times$ definición destino
+  $\times$ modelo $\times$ dataset), el dataset de 65\,185 mediciones crudas con versión y hash por
+  fila, las figuras y los scripts regeneradores que la reproducen sin GPU.
+\item El pre-registro de la cobertura objetivo, las definiciones y los datasets antes de la corrida
   principal (DOI \texttt{10.5281/zenodo.23266795}).
 \end{enumerate}
 
-Con ese instrumento, el trabajo \textbf{mide} y responde: sobre 65\,185 decisiones medidas con cinco
-configuraciones de modelo, la definición más alta y la más baja de la \textbf{misma} distribución difieren
-con mediana \textbf{0.288}; y portar el umbral sin traducirlo se equivoca del orden de \textbf{cien veces}
+Con ese instrumento, el trabajo mide y responde: sobre 65\,185 decisiones medidas con cinco
+configuraciones de modelo, la definición más alta y la más baja de la misma distribución difieren
+con mediana 0.288; y portar el umbral sin traducirlo se equivoca del orden de cien veces
 más que portarlo con el mapa matemático cuando este existe.
 
 El trabajo no reporta un hallazgo sobre si la calibración \guillemotleft viaja\guillemotright{} o no:
-entrega el \textbf{instrumento con el que se mide}. Es el patrón de \cite{guo2017}, que no descubrió que las
-redes modernas están des-calibradas, sino que dio la métrica y la corrección que el campo entero cita. La
-aportación sobrevive al hueco: cualquiera que afirme que los umbrales no transfieren tendrá que
-\textbf{citar la matriz}, no reemplazarla.
+entrega el instrumento con el que se mide. Es el patrón de \cite{guo2017}, que no descubrió que las
+redes modernas están des-calibradas, sino que dio la métrica y la corrección que el campo entero cita. Toda afirmación
+posterior sobre la transferencia de umbrales puede contrastarse contra esta matriz, que se regenera con un
+comando y declara el hash de cada fila medida.
 
 \textbf{Organización.} La Sección 2 sitúa el trabajo frente a la calibración, las reglas de puntuación
 propias, la predicción selectiva y el ecosistema Jev-OSS. La Sección 3 fija el marco teórico: definiciones,

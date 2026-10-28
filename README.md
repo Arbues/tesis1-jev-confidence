@@ -79,6 +79,10 @@ propiedad + objeto + alcance + tipo de método. **El título quedó fijado al ce
 | `results/matrix/EXTENSION_CONF_SCORE.md` | La **5.ª definición** (`conf_score`, MAD_unif) medida sobre `sst5` + su CSV | **vigente** |
 | `src/matriz/extension_conf_score.py` · `correr_pagado.sh` · `correr_matriz_pagado.sh` · `correr_matriz_paralela.sh` · `fusionar_matriz_paralela.py` | Extensión declarada, corrida del brazo pagado y matriz combinada (serie y paralela) | **vigente** |
 | `docs/plan-visibilidad.md` | Plan de visibilidad: diagnóstico de las 5 puertas + 4 decisiones del autor | **vigente** |
+| `docs/auditoria-figuras-2026-10-28.md` | **Auditoría de las 8 figuras**: qué muestran, qué verifican, legibilidad medida y qué arreglar (con los números recalculados) | **vigente** |
+| `docs/auditoria-estilo-2026-10-28.md` | **Auditoría de redacción**: conteos y veredicto de cada marca de escritura asistida, con evidencia `archivo:línea` | **vigente** |
+| `docs/plan-edicion-textual.md` | **Plan de edición aplicado** (texto + figuras): qué se cambió, qué no se toca y por qué | **vigente** |
+| `docs/limpiar_negritas.py` · `docs/citar_flotantes.py` · `docs/auditoria-figuras-verifica.py` · `docs/auditoria-ece-por-grupo.py` | Scripts reproducibles de la auditoría (negritas, referencias cruzadas, números de las figuras, ECE por grupo) | **vigente** |
 | `paper/02_referencias_pendientes.md` | Verificaciones D4 (cerradas) + **estándar único de citas** + nota de Roby | **vigente** |
 | `contexto/` | Investigación previa (veredicto de Jev/TypeSafe y costos); su §3.1 lo corrige `notes/pago-jev-api-costos-2026-10-12.md` | contexto |
 | `src/figuras_paper.py` | Genera las 8 figuras del paper desde los artefactos medidos | vigente |
@@ -263,6 +267,15 @@ verificado en Crossref, y se fijó un **estándar único de citas** para todo el
 **`conf_score` (MAD_unif)** entró como **extensión declarada** (11 tests nuevos, `results/matrix/EXTENSION_CONF_SCORE.md`)
 · los conteos de tests corregidos de 37 a **63** en la documentación viva · smoke test del brazo pagado verificado
 contra la API real.
+
+**Cerrado el 28-oct-2026 (auditoría de figuras y texto):** las 8 figuras se regeneraron a la medida final
+(3.45 in / 7.10 in, fuente 7 pt, sin título interno) y dos se rediseñaron para que muestren tendencia —
+`fig4` pasó de scatter a CDF pareada y `fig6` de porcentaje a |Δ| mediana en escala log; `fig8` es nueva
+(ECE × 4 definiciones × 23 grupos: spread mediano 0.124, la mejor calibrada cambia de grupo en grupo).
+En el texto se quitaron **187 negritas de prosa**, 5 títulos-eslogan pasaron a descriptivos, los 14
+flotantes se citan con `\ref` (antes **ninguno**), 11 captions dejaron de argumentar y se corrigieron
+cuatro errores factuales (entre ellos «triplica» cuando es 2.2×). El PDF recompiló a **13 páginas**,
+67 tests siguen pasando.
 
 **Cerrado el 25-oct-2026 (parte B):** las dos extensiones entraron al paper como **subsección declarada §5.8**
 (quinta definición `conf_score` y brazo pagado con la tabla por modelo y la causa medida de los empates de umbral),
