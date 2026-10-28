@@ -237,7 +237,7 @@
       "M13 · el abstract no tiene fuente en paper/secciones/ (vive solo en main.tex).",
       "M19 · bh_fdr no filtra NaN (API pública; hoy lo tapan los dos llamadores).",
       "Bloque B (cosméticos y robustez): notación log/ln y C_jev/C_Jev, DEF-1..DEF-8 en §7, `\\texttt` dentro de un .md, ref de la Fig. 4 mal situada, barras invisibles en Fig. 3, IQR truncado en Fig. 6, aritmética de negritas y «14 flotantes» en este archivo, fecha 08-oct del pre-registro en varios docs, plan del repo nuevo en pendientes[5], conf_score no re-exportado en __init__.py, ejemplo de la librería (0.2428/0.2148), guía de cierre con tareas ya cerradas, «12 páginas» en docs.",
-      "AGENTS.md: la escritura está bloqueada por el guard de archivos de instrucciones (la aprobación no llegó). Quedan sin aplicar: línea 118 (67 -> 69 tests), 132 (0.1307 -> 0.1735, 4.6–9.3x), 135 («todavía no están dentro del paper»), 139 («tres erratas» -> E1–E8), 143 (08-oct -> 09-oct), 145 (11 -> 13 págs) y 146 (pendiente 6 ya hecho)."
+      "AGENTS.md: APLICADO el 28-oct-2026 (escritura autorizada por el autor). Corregidas las seis líneas obsoletas: 118 (67 -> 69 tests), 132 (0.1307 -> 0.1735, 4.6–9.3x), 135 («ya están dentro del paper»), 139 («tres erratas» -> E1–E8), 143 (08-oct -> 09-oct), 145 (11 -> 13 págs), 146 (pendiente 6 ya hecho) y la nota de la rama `feat/matriz-transferencia` (ya no existe)."
     ],
     "auditorias": [
       "docs/auditoria-figuras-2026-10-28.md — las 8 figuras del PDF: contenido verificado contra los artefactos (31 números), legibilidad medida en el PDF (5.0-5.8 pt; heatmap 1.5-3.5 pt), redundancia con las tablas, 4 errores de pie de figura y 0 referencias cruzadas a figuras/tablas",

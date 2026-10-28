@@ -101,6 +101,7 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 - **Ramas (09-oct-2026):** `main` es la buena y ya trae el paper (§4–§7) y la auditoría del `L0`. La rama
   **`feat/matriz-transferencia` está OBSOLETA** (historial previo al rebase sobre `main`): **no usarla ni
   fusionarla**, se conserva solo por historial. El trabajo vigente salió de `fix/auditoria-l0-y-cifras`.
+  (Comprobado el 28-oct-2026: esa rama ya no existe ni en local ni en `origin`.)
 - **Visibilidad:** el repositorio es **público** desde el 10-oct-2026 (Apache-2.0 el código, CC-BY-4.0 el
   paper y la documentación).
 
@@ -114,8 +115,8 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
    de Laya reproducidas con |Δ| ≤ 0.003. Informe: `results/paso0_informe.md`.
 3. **Congelado** (04-oct-2026): definiciones, datasets y cobertura objetivo → `paper/00_plan_del_paper.md` §10.
 4. **Especificación formal**: ✅ `paper/03_especificacion_confidence.md` (DEF-1..DEF-8, Proposiciones 1–3).
-   Tres erratas corregidas y documentadas en `docs/erratas_especificacion.md` (E3, menor).
-5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (67 tests, `--selftest` OK).
+   Erratas E1–E8 documentadas en `docs/erratas_especificacion.md`.
+5. **Librería `jev-conf-metrics`**: ✅ `src/jev_conf_metrics/` (69 tests, `--selftest` OK).
 6. **Matriz de transferencia**: ✅ **MEDIDA** en su corrida confirmatoria (la que declara el pre-registro).
    23 grupos (5 configuraciones de modelo × 5 datasets), 65.185 decisiones, 3.564 celdas.
    Informe: `results/matrix/RESUMEN_MATRIZ.md`; figuras y CSV en `results/matrix/`. Resultado central:
@@ -129,21 +130,21 @@ consume. Nunca dependas de datos generados en una sola máquina que no estén en
 | Extensión | Dónde | Números |
 |---|---|---|
 | **`conf_score` (MAD_unif)**, 5.ª definición | `definiciones.py` → `CONFIDENCES_EXT` (**no** en `CONFIDENCES`); `results/matrix/EXTENSION_CONF_SCORE.md` | sst5, 5.505 decisiones · brecha 0.272 → **0.290** · ECE `score` 0.241 |
-| **Brazo pagado** (API TypeSafe `jev-1.13.0`) | `results/pagado/` (14.277 filas) · `results/matrix_pagado/` (2.880 celdas, 6 modelos) | ~USD 0.79 · rejilla 0.01 · Jev \|Δ\| directo **0.1307** y con mapa **0.0130** (6–9× peor que los locales) |
+| **Brazo pagado** (API TypeSafe `jev-1.13.0`) | `results/pagado/` (14.277 filas) · `results/matrix_pagado/` (2.880 celdas, 6 modelos) | ~USD 0.79 · rejilla 0.01 · Jev \|Δ\| directo **0.1735** (segundo; el más bajo es `laya/multilingual`, 0.1315) y con mapa **0.0130** (4.6–9.3× peor que los locales) |
 
 Ninguna de las dos toca el núcleo sellado: `results/crudos/` y `results/matrix/` se regeneran idénticos.
-**Todavía no están dentro del paper** (§1–§7): integrarlas es la parte B pendiente.
+**Ya están dentro del paper** como subsección declarada §5.8 (25-oct-2026).
 
 ### Pendiente, en orden
 
 | # | Qué falta | Quién | Nota |
 |---|---|---|---|
-| 1 | ~~DOI del pre-registro~~ | autor | ✅ **10.5281/zenodo.23266795** (Zenodo, 08-oct-2026) |
+| 1 | ~~DOI del pre-registro~~ | autor | ✅ **10.5281/zenodo.23266795** (Zenodo, 09-oct-2026) |
 | 2 | ~~Corrida confirmatoria~~ | agente | ✅ hecha: 23 grupos, 65.185 filas, 3.564 celdas |
-| 3 | ~~Redacción §4–§7~~ | agente (t440) | ✅ escrita (09-oct-2026). **Pendiente: revisión del autor + formato IEEE** |
+| 3 | ~~Redacción §4–§7~~ | agente (t440) | ✅ escrita (09-oct-2026) y ✅ maquetada en IEEE (`paper/ieee/main.pdf`, 13 págs). **Pendiente solo la revisión del autor** |
 | 4 | ~~Brazo pagado~~ | agente | ✅ 14.277 decisiones, USD 0.79 (20-oct-2026) |
-| 5 | ~~Referencias + estándar de citas~~ | agente | ✅ `roby1965` + `jose2009` con DOI; PDF 11 págs, 36 ítems, 0 citas sin resolver |
-| 6 | **Integrar las extensiones al paper** (parte B) | agente | §5 subsección declarada + conteo de tests en §1/§7 |
+| 5 | ~~Referencias + estándar de citas~~ | agente | ✅ `roby1965` + `jose2009` con DOI; PDF 13 págs, 36 ítems, 0 citas sin resolver |
+| 6 | ~~Integrar las extensiones al paper~~ (parte B) | agente | ✅ hecho el 25-oct-2026: §5.8 declarada + conteo de tests en §1/§7 |
 | 7 | **Leer §1–§7** y decidir si el PDF lo representa | autor | es lo único que cierra la Tesis 1 |
 | 8 | Extensión al **Mac Mini**: Jeff-1, SemIf, jev-lite, Nimble-9B (sin licencia declarada), tinyjev | agente (Mac) | no caben en 6 GB de VRAM |
 
